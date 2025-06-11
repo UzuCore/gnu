@@ -1,5 +1,8 @@
 <?php
 include_once('./_common.php');
+// 튜닝
+header('Cache-Control: max-age=300');
+header('Keep-Alive: timeout=60, max=100');
 
 define('_INDEX_', true);
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가

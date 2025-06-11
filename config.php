@@ -39,7 +39,7 @@ define('G5_DB_ENGINE', '');
 // Set Database table default Charset
 // utf8, utf8mb4 등 지정 가능 기본값은 utf8, 설치전에 utf8mb4 으로 수정 시 모든 테이블에 이모지 입력이 가능합니다.
 // utf8mb4 인코딩은 MySQL 또는 MariaDB 5.5 버전 이상을 요구합니다.
-define('G5_DB_CHARSET', 'utf8');
+define('G5_DB_CHARSET', 'utf8mb4');
 
 /*
 www.sir.kr 과 sir.kr 도메인은 서로 다른 도메인으로 인식합니다. 쿠키를 공유하려면 .sir.kr 과 같이 입력하세요.
@@ -194,7 +194,7 @@ define('G5_MYSQL_PASSWORD_LENGTH', 41);         // mysql password length 41, old
 
 // SQL 에러를 표시할 것인지 지정
 // 에러를 표시하려면 true 로 변경
-define('G5_DISPLAY_SQL_ERROR', false);
+define('G5_DISPLAY_SQL_ERROR', true);
 
 // escape string 처리 함수 지정
 // addslashes 로 변경 가능

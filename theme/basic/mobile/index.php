@@ -18,6 +18,7 @@ $sql = " select bo_table
 if(!$is_admin) {
     $sql .= " and a.bo_use_cert = '' ";
 }
+$sql .= " and a.bo_table not in ('notice', 'gallery', 'want') ";     //공지사항과 갤러리 게시판은 제외
 $sql .= " order by b.gr_order, a.bo_order ";
 $result = sql_query($sql);
 for ($i=0; $row=sql_fetch_array($result); $i++) {
