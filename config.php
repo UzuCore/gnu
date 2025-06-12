@@ -215,7 +215,7 @@ define('G5_THUMB_JPG_QUALITY', 90);
 define('G5_THUMB_PNG_COMPRESS', 5);
 
 // 모바일 기기에서 DHTML 에디터 사용여부를 설정합니다.
-define('G5_IS_MOBILE_DHTML_USE', false);
+define('G5_IS_MOBILE_DHTML_USE', true);
 
 // MySQLi 사용여부를 설정합니다.
 define('G5_MYSQLI_USE', true);
