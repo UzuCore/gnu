@@ -72,7 +72,7 @@ if(is_file($skin_file)) {
         } else {
             $sfl = "qa_subject";
         }
-        $sql_search .= " and ('{$sfl}' like '%{$stx}%') ";
+        $sql_search .= " and (`{$sfl}` like '%{$stx}%') ";
     }
     // $stx = trim($stx);
     // if($stx) {

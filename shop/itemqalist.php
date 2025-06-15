@@ -14,7 +14,7 @@ if (G5_IS_MOBILE) {
 $g5['title'] = '상품문의';
 include_once('./_head.php');
 
-$sql_common = " from '{$g5['g5_shop_item_qa_table']}' a join '{$g5['g5_shop_item_table']}' b on (a.it_id=b.it_id) ";
+$sql_common = " from `{$g5['g5_shop_item_qa_table']}` a join `{$g5['g5_shop_item_table']}` b on (a.it_id=b.it_id) ";
 $sql_search = " where (1) ";
 
 if(!$sfl)

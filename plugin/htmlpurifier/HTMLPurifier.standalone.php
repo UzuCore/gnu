@@ -5418,9 +5418,9 @@ class HTMLPurifier_Generator
             // angled brackets, quotes or spaces.  However, when parsing
             // HTML (for example, when you assign to innerHTML), it
             // treats backticks as quotes.  Thus,
-            //      <img alt="''" />
+            //      <img alt="``" />
             // becomes
-            //      <img alt='' />
+            //      <img alt=`` />
             // becomes
             //      <img alt='' />
             // Fortunately, all we need to do is trigger an appropriate
@@ -5434,7 +5434,7 @@ class HTMLPurifier_Generator
             // don't process user input with innerHTML or you don't plan
             // on supporting Internet Explorer.
             if ($this->_innerHTMLFix) {
-                if (strpos($value, ''') !== false) {
+                if (strpos($value, '`') !== false) {
                     // check if correct quoting style would not already be
                     // triggered
                     if (strcspn($value, '"\' <>') === strlen($value)) {
@@ -17148,7 +17148,7 @@ class HTMLPurifier_HTMLModule_SafeScripting extends HTMLPurifier_HTMLModule
         $script = $this->addElement(
             'script',
             'Inline',
-            'Optional:', // Not 'Empty' to not allow to autoclose the <script /> tag @see https://www.w3.org/TR/html4/interact/scripts.html
+            'Optional:', // Not `Empty` to not allow to autoclose the <script /> tag @see https://www.w3.org/TR/html4/interact/scripts.html
             null,
             array(
                 // While technically not required by the spec, we're forcing
@@ -18560,7 +18560,7 @@ class HTMLPurifier_Injector_Linkify extends HTMLPurifier_Injector
         // but with @cscott's backtracking fix and also
         // the Unicode characters un-Unicodified.
         $bits = preg_split(
-            '/\\b((?:[a-z][\\w\\-]+:(?:\\/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}\\/)(?:[^\\s()<>]|\\((?:[^\\s()<>]|(?:\\([^\\s()<>]+\\)))*\\))+(?:\\((?:[^\\s()<>]|(?:\\([^\\s()<>]+\\)))*\\)|[^\\s'!()\\[\\]{};:\'".,<>?\x{00ab}\x{00bb}\x{201c}\x{201d}\x{2018}\x{2019}]))/iu',
+            '/\\b((?:[a-z][\\w\\-]+:(?:\\/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}\\/)(?:[^\\s()<>]|\\((?:[^\\s()<>]|(?:\\([^\\s()<>]+\\)))*\\))+(?:\\((?:[^\\s()<>]|(?:\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:\'".,<>?\x{00ab}\x{00bb}\x{201c}\x{201d}\x{2018}\x{2019}]))/iu',
             $token->data, -1, PREG_SPLIT_DELIM_CAPTURE);
 
         if ($bits === false) {

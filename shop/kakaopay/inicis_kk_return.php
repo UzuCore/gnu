@@ -16,7 +16,7 @@ if( ($request_mid != $default['de_kakaopay_mid']) ){
     alert("요청된 mid 와 설정된 mid 가 틀립니다.");
 }
 
-$orderNumber = isset($_POST['orderNumber']) ? preg_replace("/[ #\&\+%@=\/\\\:;,\.'\"\^'~|\!\?\*$#<>()\[\]\{\}]/i", "", strip_tags($_POST['orderNumber'])) : 0;
+$orderNumber = isset($_POST['orderNumber']) ? preg_replace("/[ #\&\+%@=\/\\\:;,\.'\"\^`~|\!\?\*$#<>()\[\]\{\}]/i", "", strip_tags($_POST['orderNumber'])) : 0;
 $session_order_num = get_session('ss_order_id');
 
 if( !$orderNumber ){

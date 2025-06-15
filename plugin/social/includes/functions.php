@@ -255,7 +255,7 @@ function social_user_profile_replace( $mb_id, $provider, $profile ){
         }
     }
     
-    $fields  = ''' . implode( '', '', array_keys( $table_data ) ) . ''';
+    $fields  = '`' . implode( '`, `', array_keys( $table_data ) ) . '`';
     $values = implode( ", ", array_values( $table_data )  );
 
     $sql = "REPLACE INTO {$g5['social_profile_table']} ($fields) VALUES ($values) ";
@@ -402,7 +402,7 @@ function social_relace_nick($nick=''){
 
     if( empty($nick) ) return '';
 
-    return preg_replace("/[ #\&\+\-%@=\/\\\:;,\.'\"\^'~\_|\!\?\*$#<>()\[\]\{\}]/i", "", $nick);
+    return preg_replace("/[ #\&\+\-%@=\/\\\:;,\.'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "", $nick);
 }
 
 function social_get_error_msg($type){

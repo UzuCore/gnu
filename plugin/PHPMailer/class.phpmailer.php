@@ -253,7 +253,7 @@ class PHPMailer
 
     /**
      * Whether to enable TLS encryption automatically if a server supports it,
-     * even if 'SMTPSecure' is not set to 'tls'.
+     * even if `SMTPSecure` is not set to 'tls'.
      * Be aware that in PHP >= 5.6 this requires that the server's certificates are valid.
      * @var boolean
      */
@@ -318,11 +318,11 @@ class PHPMailer
      * SMTP class debug output mode.
      * Debug output level.
      * Options:
-     * * '0' No output
-     * * '1' Commands
-     * * '2' Data and commands
-     * * '3' As 2 plus connection status
-     * * '4' Low-level data output
+     * * `0` No output
+     * * `1` Commands
+     * * `2` Data and commands
+     * * `3` As 2 plus connection status
+     * * `4` Low-level data output
      * @var integer
      * @see SMTP::$do_debug
      */
@@ -331,9 +331,9 @@ class PHPMailer
     /**
      * How to handle debug output.
      * Options:
-     * * 'echo' Output plain-text as-is, appropriate for CLI
-     * * 'html' Output escaped, line breaks converted to '<br>', appropriate for browser output
-     * * 'error_log' Output to error log as configured in php.ini
+     * * `echo` Output plain-text as-is, appropriate for CLI
+     * * `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
+     * * `error_log` Output to error log as configured in php.ini
      *
      * Alternatively, you can provide a callable expecting two params: a message string and the debug level:
      * <code>
@@ -355,7 +355,7 @@ class PHPMailer
     /**
      * Whether to split multiple to addresses into multiple messages
      * or send them all in one message.
-     * Only supported in 'mail' and 'sendmail' transports, not in SMTP.
+     * Only supported in `mail` and `sendmail` transports, not in SMTP.
      * @var boolean
      */
     public $SingleTo = false;
@@ -425,7 +425,7 @@ class PHPMailer
 
     /**
      * DKIM private key string.
-     * If set, takes precedence over '$DKIM_private'.
+     * If set, takes precedence over `$DKIM_private`.
      * @var string
      */
     public $DKIM_private_string = '';
@@ -1052,12 +1052,12 @@ class PHPMailer
      * Check that a string looks like an email address.
      * @param string $address The email address to check
      * @param string|callable $patternselect A selector for the validation pattern to use :
-     * * 'auto' Pick best pattern automatically;
-     * * 'pcre8' Use the squiloople.com pattern, requires PCRE > 8.0, PHP >= 5.3.2, 5.2.14;
-     * * 'pcre' Use old PCRE implementation;
-     * * 'php' Use PHP built-in FILTER_VALIDATE_EMAIL;
-     * * 'html5' Use the pattern given by the HTML5 spec for 'email' type form input elements.
-     * * 'noregex' Don't use a regex: super fast, really dumb.
+     * * `auto` Pick best pattern automatically;
+     * * `pcre8` Use the squiloople.com pattern, requires PCRE > 8.0, PHP >= 5.3.2, 5.2.14;
+     * * `pcre` Use old PCRE implementation;
+     * * `php` Use PHP built-in FILTER_VALIDATE_EMAIL;
+     * * `html5` Use the pattern given by the HTML5 spec for 'email' type form input elements.
+     * * `noregex` Don't use a regex: super fast, really dumb.
      * Alternatively you may pass in a callable to inject your own validator, for example:
      * PHPMailer::validateAddress('user@example.com', function($address) {
      *     return (strpos($address, '@') !== false);
@@ -1142,7 +1142,7 @@ class PHPMailer
                  * @link http://www.whatwg.org/specs/web-apps/current-work/#e-mail-state-(type=email)
                  */
                 return (boolean)preg_match(
-                    '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_'{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}' .
+                    '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}' .
                     '[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD',
                     $address
                 );
@@ -2355,8 +2355,8 @@ class PHPMailer
                 $body .= $this->attachAll('attachment', $this->boundary[1]);
                 break;
             default:
-                // Catch case 'plain' and case '', applies to simple 'text/plain' and 'text/html' body content types
-                //Reset the 'Encoding' property in case we changed it for line length reasons
+                // Catch case 'plain' and case '', applies to simple `text/plain` and `text/html` body content types
+                //Reset the `Encoding` property in case we changed it for line length reasons
                 $this->Encoding = $bodyEncoding;
                 $body .= $this->encodeString($this->Body, $this->Encoding);
                 break;
@@ -2793,7 +2793,7 @@ class PHPMailer
                 if (!preg_match('/[\200-\377]/', $str)) {
                     // Can't use addslashes as we don't know the value of magic_quotes_sybase
                     $encoded = addcslashes($str, "\0..\37\177\\\"");
-                    if (($str == $encoded) && !preg_match('/[^A-Za-z0-9!#$%&\'*+\/=?^_'{|}~ -]/', $str)) {
+                    if (($str == $encoded) && !preg_match('/[^A-Za-z0-9!#$%&\'*+\/=?^_`{|}~ -]/', $str)) {
                         return ($encoded);
                     } else {
                         return ("\"$encoded\"");
@@ -3710,9 +3710,9 @@ class PHPMailer
      * You should avoid this function - it's more verbose, less efficient, more error-prone and
      * harder to debug than setting properties directly.
      * Usage Example:
-     * '$mail->set('SMTPSecure', 'tls');'
+     * `$mail->set('SMTPSecure', 'tls');`
      *   is the same as:
-     * '$mail->SMTPSecure = 'tls';'
+     * `$mail->SMTPSecure = 'tls';`
      * @access public
      * @param string $name The property name to set
      * @param mixed $value The value to set the property to

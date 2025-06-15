@@ -4,7 +4,7 @@ include_once('./_common.php');
 $g5['title'] = '상품후기';
 include_once(G5_MSHOP_PATH.'/_head.php');
 
-$sql_common = " from '{$g5['g5_shop_item_use_table']}' a join '{$g5['g5_shop_item_table']}' b on (a.it_id=b.it_id) ";
+$sql_common = " from `{$g5['g5_shop_item_use_table']}` a join `{$g5['g5_shop_item_table']}` b on (a.it_id=b.it_id) ";
 $sql_search = " where a.is_confirm = '1' ";
 
 if(!$sfl)

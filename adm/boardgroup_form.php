@@ -32,7 +32,7 @@ if ($w == '') {
 }
 
 if (!isset($group['gr_device'])) {
-    sql_query(" ALTER TABLE '{$g5['group_table']}' ADD 'gr_device' ENUM('both','pc','mobile') NOT NULL DEFAULT 'both' AFTER 'gr_subject' ", false);
+    sql_query(" ALTER TABLE `{$g5['group_table']}` ADD `gr_device` ENUM('both','pc','mobile') NOT NULL DEFAULT 'both' AFTER `gr_subject` ", false);
 }
 
 // 접근회원수

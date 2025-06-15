@@ -38,7 +38,7 @@ if (!$result) {
     sql_query($sql);
 }
 
-//sql_query(" OPTIMIZE TABLE '$g5['auth_table']' ");
+//sql_query(" OPTIMIZE TABLE `$g5['auth_table']` ");
 
 // 세션을 체크하여 하루에 한번만 메일알림이 가게 합니다.
 if (str_replace('-', '', G5_TIME_YMD) !== get_session('adm_auth_update')) {
