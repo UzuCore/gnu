@@ -60,8 +60,8 @@ $sql = "select * from {$g5['g5_shop_order_table']} limit 1";
 $check_tmp = sql_fetch($sql);
 
 if(!isset($check_tmp['od_other_pay_type'])){
-    $sql = "ALTER TABLE `{$g5['g5_shop_order_table']}` 
-            ADD COLUMN `od_other_pay_type` VARCHAR(100) NOT NULL DEFAULT '' AFTER `od_settle_case`; ";
+    $sql = "ALTER TABLE '{$g5['g5_shop_order_table']}' 
+            ADD COLUMN 'od_other_pay_type' VARCHAR(100) NOT NULL DEFAULT '' AFTER 'od_settle_case'; ";
     sql_query($sql, false);
 }
 

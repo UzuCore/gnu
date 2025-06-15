@@ -78,7 +78,7 @@ class SMTP
     /**
      * The PHPMailer SMTP Version number.
      * @var string
-     * @deprecated Use the `VERSION` constant instead
+     * @deprecated Use the 'VERSION' constant instead
      * @see SMTP::VERSION
      */
     public $Version = '5.2.28';
@@ -86,7 +86,7 @@ class SMTP
     /**
      * SMTP server port number.
      * @var integer
-     * @deprecated This is only ever used as a default value, so use the `DEFAULT_SMTP_PORT` constant instead
+     * @deprecated This is only ever used as a default value, so use the 'DEFAULT_SMTP_PORT' constant instead
      * @see SMTP::DEFAULT_SMTP_PORT
      */
     public $SMTP_PORT = 25;
@@ -94,7 +94,7 @@ class SMTP
     /**
      * SMTP reply line ending.
      * @var string
-     * @deprecated Use the `CRLF` constant instead
+     * @deprecated Use the 'CRLF' constant instead
      * @see SMTP::CRLF
      */
     public $CRLF = "\r\n";
@@ -102,11 +102,11 @@ class SMTP
     /**
      * Debug output level.
      * Options:
-     * * self::DEBUG_OFF (`0`) No debug output, default
-     * * self::DEBUG_CLIENT (`1`) Client commands
-     * * self::DEBUG_SERVER (`2`) Client commands and server responses
-     * * self::DEBUG_CONNECTION (`3`) As DEBUG_SERVER plus connection status
-     * * self::DEBUG_LOWLEVEL (`4`) Low-level data output, all messages
+     * * self::DEBUG_OFF ('0') No debug output, default
+     * * self::DEBUG_CLIENT ('1') Client commands
+     * * self::DEBUG_SERVER ('2') Client commands and server responses
+     * * self::DEBUG_CONNECTION ('3') As DEBUG_SERVER plus connection status
+     * * self::DEBUG_LOWLEVEL ('4') Low-level data output, all messages
      * @var integer
      */
     public $do_debug = self::DEBUG_OFF;
@@ -114,9 +114,9 @@ class SMTP
     /**
      * How to handle debug output.
      * Options:
-     * * `echo` Output plain-text as-is, appropriate for CLI
-     * * `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
-     * * `error_log` Output to error log as configured in php.ini
+     * * 'echo' Output plain-text as-is, appropriate for CLI
+     * * 'html' Output escaped, line breaks converted to '<br>', appropriate for browser output
+     * * 'error_log' Output to error log as configured in php.ini
      *
      * Alternatively, you can provide a callable expecting two params: a message string and the debug level:
      * <code>

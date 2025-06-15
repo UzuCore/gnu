@@ -3,7 +3,7 @@ include_once('./_common.php');
 include_once(G5_SHOP_PATH.'/settle_naverpay.inc.php');
 include_once(G5_LIB_PATH.'/naverpay.lib.php');
 
-$pattern = '#[/\'\"%=*\#\(\)\|\+\&\!\$~\{\}\[\]`;:\?\^\,]#';
+$pattern = '#[/\'\"%=*\#\(\)\|\+\&\!\$~\{\}\[\]';:\?\^\,]#';
 $post_naverpay_form = isset($_POST['naverpay_form']) ? clean_xss_tags($_POST['naverpay_form']) : '';
 
 $is_collect = false;    //착불체크 변수 초기화

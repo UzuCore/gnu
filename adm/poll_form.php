@@ -24,7 +24,7 @@ if ($w == '') {
 }
 
 if (!isset($po['po_use'])) {
-    sql_query(" alter table `{$g5['poll_table']}` add `po_use` tinyint not null default '0' after `mb_ids` ", false);
+    sql_query(" alter table '{$g5['poll_table']}' add 'po_use' tinyint not null default '0' after 'mb_ids' ", false);
 }
 
 $g5['title'] = $html_title;

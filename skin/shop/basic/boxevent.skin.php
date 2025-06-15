@@ -34,7 +34,7 @@ if(sql_num_rows($hresult)) {
 
         // 이벤트 상품
         $sql2 = " select b.*
-            from `{$g5['g5_shop_event_item_table']}` a left join `{$g5['g5_shop_item_table']}` b on (a.it_id = b.it_id)
+            from '{$g5['g5_shop_event_item_table']}' a left join '{$g5['g5_shop_item_table']}' b on (a.it_id = b.it_id)
             where a.ev_id = '{$row['ev_id']}'
             order by it_id desc
             limit 0, 3 ";
