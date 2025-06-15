@@ -19,9 +19,9 @@ class G5_Hybrid_Authentication {
         }
 
         /*
-        $key = 'hauth.' . $action; // either `hauth_start` or `hauth_done`
+        $key = 'hauth.' . $action; // either 'hauth_start' or 'hauth_done'
 
-        $_REQUEST[ $key ] = $provider; // provider will be something like `facebook` or `google`
+        $_REQUEST[ $key ] = $provider; // provider will be something like 'facebook' or 'google'
         */
 
         G5_Hybrid_Endpoint::process();

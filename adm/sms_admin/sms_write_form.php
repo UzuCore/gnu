@@ -5,7 +5,7 @@ $group = array();
 $qry = sql_query("select * from {$g5['sms5_form_group_table']} order by fg_name");
 while ($res = sql_fetch_array($qry)) array_push($group, $res);
 
-$res = sql_fetch("select count(*) as cnt from `{$g5['sms5_form_table']}` where fg_no=0");
+$res = sql_fetch("select count(*) as cnt from '{$g5['sms5_form_table']}' where fg_no=0");
 $no_count = isset($res['cnt']) ? $res['cnt'] : 0;
 
 $fg_no = isset($_REQUEST['fg_no']) ? (int) $_REQUEST['fg_no'] : 0;

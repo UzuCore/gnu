@@ -104,7 +104,7 @@ if ($g5_install || $is_install === false) {
     eval("\$file = \"$file\";");
 
     $file = preg_replace('/^--.*$/m', '', $file);
-    $file = preg_replace('/`g5_([^`]+`)/', '`'.$table_prefix.'$1', $file);
+    $file = preg_replace('/'g5_([^']+')/', '''.$table_prefix.'$1', $file);
     $f = explode(';', $file);
     for ($i=0; $i<count($f); $i++) {
         if (trim($f[$i]) == '') {
@@ -121,7 +121,7 @@ if($g5_shop_install) {
     $file = implode('', file('./gnuboard5shop.sql'));
 
     $file = preg_replace('/^--.*$/m', '', $file);
-    $file = preg_replace('/`g5_shop_([^`]+`)/', '`'.$g5_shop_prefix.'$1', $file);
+    $file = preg_replace('/'g5_shop_([^']+')/', '''.$g5_shop_prefix.'$1', $file);
     $f = explode(';', $file);
     for ($i=0; $i<count($f); $i++) {
         if (trim($f[$i]) == '') {
@@ -153,7 +153,7 @@ if ($g5_install || $is_install === false) {
         $image_extension .= "|webp";
     }
 
-    $sql = " insert into `{$table_prefix}config`
+    $sql = " insert into '{$table_prefix}config'
                 set cf_title = '".G5_VERSION."',
                     cf_theme = 'basic',
                     cf_admin = '$admin_id',
@@ -222,14 +222,14 @@ if ($g5_install || $is_install === false) {
     sql_query($sql, true, $dblink);
 
     // 1:1문의 설정
-    $sql = " insert into `{$table_prefix}qa_config`
+    $sql = " insert into '{$table_prefix}qa_config'
                 ( qa_title, qa_category, qa_skin, qa_mobile_skin, qa_use_email, qa_req_email, qa_use_hp, qa_req_hp, qa_use_editor, qa_subject_len, qa_mobile_subject_len, qa_page_rows, qa_mobile_page_rows, qa_image_width, qa_upload_size, qa_insert_content )
               values
                 ( '1:1문의', '회원|포인트', 'basic', 'basic', '1', '0', '1', '0', '1', '60', '30', '15', '15', '600', '1048576', '' ) ";
     sql_query($sql, true, $dblink);
 
     // 관리자 회원가입
-    $sql = " insert into `{$table_prefix}member`
+    $sql = " insert into '{$table_prefix}member'
                 set mb_id = '$admin_id',
                      mb_password = '".get_encrypt_string($admin_pass)."',
                      mb_name = '$admin_name',
@@ -246,12 +246,12 @@ if ($g5_install || $is_install === false) {
     sql_query($sql, true, $dblink);
 
     // 내용관리 생성
-    sql_query(" insert into `{$table_prefix}content` set co_id = 'company', co_html = '1', co_subject = '회사소개', co_content= '<p align=center><b>회사소개에 대한 내용을 입력하십시오.</b></p>', co_skin = 'basic', co_mobile_skin = 'basic' ", true, $dblink);
-    sql_query(" insert into `{$table_prefix}content` set co_id = 'privacy', co_html = '1', co_subject = '개인정보 처리방침', co_content= '<p align=center><b>개인정보 처리방침에 대한 내용을 입력하십시오.</b></p>', co_skin = 'basic', co_mobile_skin = 'basic' ", true, $dblink);
-    sql_query(" insert into `{$table_prefix}content` set co_id = 'provision', co_html = '1', co_subject = '서비스 이용약관', co_content= '<p align=center><b>서비스 이용약관에 대한 내용을 입력하십시오.</b></p>', co_skin = 'basic', co_mobile_skin = 'basic' ", true, $dblink);
+    sql_query(" insert into '{$table_prefix}content' set co_id = 'company', co_html = '1', co_subject = '회사소개', co_content= '<p align=center><b>회사소개에 대한 내용을 입력하십시오.</b></p>', co_skin = 'basic', co_mobile_skin = 'basic' ", true, $dblink);
+    sql_query(" insert into '{$table_prefix}content' set co_id = 'privacy', co_html = '1', co_subject = '개인정보 처리방침', co_content= '<p align=center><b>개인정보 처리방침에 대한 내용을 입력하십시오.</b></p>', co_skin = 'basic', co_mobile_skin = 'basic' ", true, $dblink);
+    sql_query(" insert into '{$table_prefix}content' set co_id = 'provision', co_html = '1', co_subject = '서비스 이용약관', co_content= '<p align=center><b>서비스 이용약관에 대한 내용을 입력하십시오.</b></p>', co_skin = 'basic', co_mobile_skin = 'basic' ", true, $dblink);
 
     // FAQ Master
-    sql_query(" insert into `{$table_prefix}faq_master` set fm_id = '1', fm_subject = '자주하시는 질문' ", true, $dblink);
+    sql_query(" insert into '{$table_prefix}faq_master' set fm_id = '1', fm_subject = '자주하시는 질문' ", true, $dblink);
 
     // 그누보드, 영카트 통합으로 인하여 게시판그룹을 커뮤니티(community)로 생성 (NaviGator님,210624)
     // $tmp_gr_id = defined('G5_YOUNGCART_VER') ? 'shop' : 'community';
@@ -260,7 +260,7 @@ if ($g5_install || $is_install === false) {
     $tmp_gr_subject = '커뮤니티';
 
     // 게시판 그룹 생성
-    sql_query(" insert into `{$table_prefix}group` set gr_id = '$tmp_gr_id', gr_subject = '$tmp_gr_subject' ", true, $dblink);
+    sql_query(" insert into '{$table_prefix}group' set gr_id = '$tmp_gr_id', gr_subject = '$tmp_gr_subject' ", true, $dblink);
 
     // 게시판 생성
     $tmp_bo_subject = array ("공지사항", "질문답변", "자유게시판", "갤러리");
@@ -281,7 +281,7 @@ if ($g5_install || $is_install === false) {
             $download_bo_point = $download_point;
         }
 
-        $sql = " insert into `{$table_prefix}board`
+        $sql = " insert into '{$table_prefix}board'
                     set bo_table = '$tmp_bo_table[$i]',
                         gr_id = '$tmp_gr_id',
                         bo_subject = '$tmp_bo_subject[$i]',
@@ -378,7 +378,7 @@ if($g5_shop_install) {
     $list_img_height = 225;
 
     // default 설정 (쇼핑몰 설정)
-    $sql = " insert into `{$g5_shop_prefix}default`
+    $sql = " insert into '{$g5_shop_prefix}default'
                 set de_admin_company_name = '회사명',
                     de_admin_company_saupja_no = '123-45-67890',
                     de_admin_company_owner = '대표자명',

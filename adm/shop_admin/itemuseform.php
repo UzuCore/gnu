@@ -19,10 +19,10 @@ if (!$is['is_id'])
 
 // 사용후기 의 답변 필드 추가
 if (!isset($is['is_reply_subject'])) {
-    sql_query(" ALTER TABLE `{$g5['g5_shop_item_use_table']}`
-                ADD COLUMN `is_reply_subject` VARCHAR(255) NOT NULL DEFAULT '' AFTER `is_confirm`,
-                ADD COLUMN `is_reply_content` TEXT NOT NULL AFTER `is_reply_subject`,
-                ADD COLUMN `is_reply_name` VARCHAR(25) NOT NULL DEFAULT '' AFTER `is_reply_content`
+    sql_query(" ALTER TABLE '{$g5['g5_shop_item_use_table']}'
+                ADD COLUMN 'is_reply_subject' VARCHAR(255) NOT NULL DEFAULT '' AFTER 'is_confirm',
+                ADD COLUMN 'is_reply_content' TEXT NOT NULL AFTER 'is_reply_subject',
+                ADD COLUMN 'is_reply_name' VARCHAR(25) NOT NULL DEFAULT '' AFTER 'is_reply_content'
                 ", true);
 }
 

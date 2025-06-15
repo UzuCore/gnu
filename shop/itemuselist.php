@@ -14,7 +14,7 @@ if (G5_IS_MOBILE) {
 $g5['title'] = '사용후기';
 include_once('./_head.php');
 
-$sql_common = " from `{$g5['g5_shop_item_use_table']}` a join `{$g5['g5_shop_item_table']}` b on (a.it_id=b.it_id) ";
+$sql_common = " from '{$g5['g5_shop_item_use_table']}' a join '{$g5['g5_shop_item_table']}' b on (a.it_id=b.it_id) ";
 $sql_search = " where a.is_confirm = '1' ";
 
 if(!$sfl)

@@ -294,11 +294,11 @@ class item_list
 
             if ($this->event) {
                 $sql_select = " select {$this->fields} ";
-                $sql_common = " from `{$g5['g5_shop_event_item_table']}` a left join `{$g5['g5_shop_item_table']}` b on (a.it_id = b.it_id) ";
+                $sql_common = " from '{$g5['g5_shop_event_item_table']}' a left join '{$g5['g5_shop_item_table']}' b on (a.it_id = b.it_id) ";
                 $where[] = " a.ev_id = '{$this->event}' ";
             } else {
                 $sql_select = " select {$this->fields} ";
-                $sql_common = " from `{$g5['g5_shop_item_table']}` ";
+                $sql_common = " from '{$g5['g5_shop_item_table']}' ";
             }
             $sql_where = " where " . implode(" and ", $where);
             $sql_limit = " limit " . $this->from_record . " , " . ($this->list_mod * $this->list_row);
@@ -659,7 +659,7 @@ function it_img_upload($srcfile, $filename, $dir)
         @chmod($dir, G5_DIR_PERMISSION);
     }
 
-    $pattern = "/[#\&\+\-%@=\/\\:;,'\"\^`~\|\!\?\*\$#<>\(\)\[\]\{\}]/";
+    $pattern = "/[#\&\+\-%@=\/\\:;,'\"\^'~\|\!\?\*\$#<>\(\)\[\]\{\}]/";
 
     $filename = preg_replace("/\s+/", "", $filename);
     $filename = preg_replace( $pattern, "", $filename);
@@ -1262,7 +1262,7 @@ function get_goods($cart_id)
     $goods['it_id'] = $row['it_id'];
     $goods['full_name']= $goods['name'] = addslashes($row['it_name']);
     // 특수문자제거
-    $goods['full_name'] = preg_replace ("/[ #\&\+\-%@=\/\\\:;,\.'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",  $goods['full_name']);
+    $goods['full_name'] = preg_replace ("/[ #\&\+\-%@=\/\\\:;,\.'\"\^'~\_|\!\?\*$#<>()\[\]\{\}]/i", "",  $goods['full_name']);
 
     // 상품건수
     $row = sql_fetch(" select count(*) as cnt from {$g5['g5_shop_cart_table']} where od_id = '$cart_id' ");
@@ -2510,7 +2510,7 @@ function before_check_cart_price($s_cart_id, $is_ct_select_condition=false, $is_
         $select_where_add = " and ct_select = '0' ";
     }
 
-    $sql = " select * from `{$g5['g5_shop_cart_table']}` where od_id = '$s_cart_id' {$select_where_add} ";
+    $sql = " select * from '{$g5['g5_shop_cart_table']}' where od_id = '$s_cart_id' {$select_where_add} ";
 
     $result = sql_query($sql);
     $check_need_update = false;
@@ -2573,11 +2573,11 @@ function before_check_cart_price($s_cart_id, $is_ct_select_condition=false, $is_
             $conditions = array();
 
             foreach ($update_querys as $column => $value) {
-                $conditions[] = "`{$column}` = '{$value}'";
+                $conditions[] = "'{$column}' = '{$value}'";
             }
 
             if( $col_querys = implode(',', $conditions) ) {
-                $sql_query = "update `{$g5['g5_shop_cart_table']}` set {$col_querys} where it_id = '{$it['it_id']}' and od_id = '$s_cart_id' and ct_id =  '{$row['ct_id']}' ";
+                $sql_query = "update '{$g5['g5_shop_cart_table']}' set {$col_querys} where it_id = '{$it['it_id']}' and od_id = '$s_cart_id' and ct_id =  '{$row['ct_id']}' ";
                 sql_query($sql_query, false);
             }
         }
@@ -2675,18 +2675,18 @@ function add_order_post_log($msg='', $code='error'){
     }
 
     if ( $code === 'error' ) {
-        $result = sql_query("describe `{$g5['g5_shop_post_log_table']}`");
+        $result = sql_query("describe '{$g5['g5_shop_post_log_table']}'");
         while ($row = sql_fetch_array($result)){
             if( $row['Field'] === 'ol_msg' && $row['Type'] === 'varchar(255)' ){
-                sql_query("ALTER TABLE `{$g5['g5_shop_post_log_table']}` MODIFY ol_msg TEXT NOT NULL;", false);
-                sql_query("ALTER TABLE `{$g5['g5_shop_post_log_table']}` DROP PRIMARY KEY;", false);
-                sql_query("ALTER TABLE `{$g5['g5_shop_post_log_table']}` ADD `log_id` int(11) NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`log_id`);", false);
+                sql_query("ALTER TABLE '{$g5['g5_shop_post_log_table']}' MODIFY ol_msg TEXT NOT NULL;", false);
+                sql_query("ALTER TABLE '{$g5['g5_shop_post_log_table']}' DROP PRIMARY KEY;", false);
+                sql_query("ALTER TABLE '{$g5['g5_shop_post_log_table']}' ADD 'log_id' int(11) NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY ('log_id');", false);
                 break;
             }
         }
     }
 
-    $sql = "insert into `{$g5['g5_shop_post_log_table']}`
+    $sql = "insert into '{$g5['g5_shop_post_log_table']}'
             set oid = '$od_id',
             mb_id = '{$member['mb_id']}',
             post_data = '$post_data',
@@ -2699,16 +2699,16 @@ function add_order_post_log($msg='', $code='error'){
         sql_query(" delete from {$g5['g5_shop_post_log_table']} where ol_datetime < '".date('Y-m-d H:i:s', strtotime('-15 day', G5_SERVER_TIME))."' ", false);
     } else {
         if(!sql_query(" DESC {$g5['g5_shop_post_log_table']} ", false)) {
-            sql_query(" CREATE TABLE IF NOT EXISTS `{$g5['g5_shop_post_log_table']}` (
-                          `log_id` int(11) NOT NULL AUTO_INCREMENT,
-                          `oid` bigint(20) unsigned NOT NULL,
-                          `mb_id` varchar(255) NOT NULL DEFAULT '',
-                          `post_data` text NOT NULL,
-                          `ol_code` varchar(255) NOT NULL DEFAULT '',
-                          `ol_msg` text NOT NULL,
-                          `ol_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-                          `ol_ip` varchar(25) NOT NULL DEFAULT '',
-                          PRIMARY KEY (`log_id`)
+            sql_query(" CREATE TABLE IF NOT EXISTS '{$g5['g5_shop_post_log_table']}' (
+                          'log_id' int(11) NOT NULL AUTO_INCREMENT,
+                          'oid' bigint(20) unsigned NOT NULL,
+                          'mb_id' varchar(255) NOT NULL DEFAULT '',
+                          'post_data' text NOT NULL,
+                          'ol_code' varchar(255) NOT NULL DEFAULT '',
+                          'ol_msg' text NOT NULL,
+                          'ol_datetime' datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+                          'ol_ip' varchar(25) NOT NULL DEFAULT '',
+                          PRIMARY KEY ('log_id')
                         ) ENGINE=MyISAM DEFAULT CHARSET=utf8; ", false);
         }
     }
@@ -2731,7 +2731,7 @@ function is_inicis_order_pay($type){
 
     if( $default['de_pg_service'] === 'inicis' && get_session('P_TID') ){
         $tid = preg_replace('/[^A-Za-z0-9_\-]/', '', get_session('P_TID'));
-        $sql = "select P_TID from `{$g5['g5_shop_inicis_log_table']}` where P_TID = '$tid' and P_STATUS = 'cancel' ";
+        $sql = "select P_TID from '{$g5['g5_shop_inicis_log_table']}' where P_TID = '$tid' and P_STATUS = 'cancel' ";
 
         $row = sql_fetch($sql);
 

@@ -157,27 +157,27 @@ for ($i=0; $row=sql_fetch_array($result); $i++)
 
 // 재입고알림 설정 필드 추가
 if(!sql_query(" select it_stock_sms from {$g5['g5_shop_item_table']} limit 1 ", false)) {
-    sql_query(" ALTER TABLE `{$g5['g5_shop_item_table']}`
-                    ADD `it_stock_sms` tinyint(4) NOT NULL DEFAULT '0' AFTER `it_stock_qty` ", true);
+    sql_query(" ALTER TABLE '{$g5['g5_shop_item_table']}'
+                    ADD 'it_stock_sms' tinyint(4) NOT NULL DEFAULT '0' AFTER 'it_stock_qty' ", true);
 }
 
 // 추가옵션 포인트 설정 필드 추가
 if(!sql_query(" select it_supply_point from {$g5['g5_shop_item_table']} limit 1 ", false)) {
-    sql_query(" ALTER TABLE `{$g5['g5_shop_item_table']}`
-                    ADD `it_supply_point` int(11) NOT NULL DEFAULT '0' AFTER `it_point_type` ", true);
+    sql_query(" ALTER TABLE '{$g5['g5_shop_item_table']}'
+                    ADD 'it_supply_point' int(11) NOT NULL DEFAULT '0' AFTER 'it_point_type' ", true);
 }
 
 // 상품메모 필드 추가
 if(!sql_query(" select it_shop_memo from {$g5['g5_shop_item_table']} limit 1 ", false)) {
-    sql_query(" ALTER TABLE `{$g5['g5_shop_item_table']}`
-                    ADD `it_shop_memo` text NOT NULL AFTER `it_use_avg` ", true);
+    sql_query(" ALTER TABLE '{$g5['g5_shop_item_table']}'
+                    ADD 'it_shop_memo' text NOT NULL AFTER 'it_use_avg' ", true);
 }
 
 // 지식쇼핑 PID 필드추가
 // 상품메모 필드 추가
 if(!sql_query(" select ec_mall_pid from {$g5['g5_shop_item_table']} limit 1 ", false)) {
-    sql_query(" ALTER TABLE `{$g5['g5_shop_item_table']}`
-                    ADD `ec_mall_pid` varchar(255) NOT NULL AFTER `it_shop_memo` ", true);
+    sql_query(" ALTER TABLE '{$g5['g5_shop_item_table']}'
+                    ADD 'ec_mall_pid' varchar(255) NOT NULL AFTER 'it_shop_memo' ", true);
 }
 
 $pg_anchor ='<ul class="anchor">
@@ -198,15 +198,15 @@ $pg_anchor ='<ul class="anchor">
 
 // 쿠폰적용안함 설정 필드 추가
 if(!sql_query(" select it_nocoupon from {$g5['g5_shop_item_table']} limit 1", false)) {
-    sql_query(" ALTER TABLE `{$g5['g5_shop_item_table']}`
-                    ADD `it_nocoupon` tinyint(4) NOT NULL DEFAULT '0' AFTER `it_use` ", true);
+    sql_query(" ALTER TABLE '{$g5['g5_shop_item_table']}'
+                    ADD 'it_nocoupon' tinyint(4) NOT NULL DEFAULT '0' AFTER 'it_use' ", true);
 }
 
 // 스킨필드 추가
 if(!sql_query(" select it_skin from {$g5['g5_shop_item_table']} limit 1", false)) {
-    sql_query(" ALTER TABLE `{$g5['g5_shop_item_table']}`
-                    ADD `it_skin` varchar(255) NOT NULL DEFAULT '' AFTER `ca_id3`,
-                    ADD `it_mobile_skin` varchar(255) NOT NULL DEFAULT '' AFTER `it_skin` ", true);
+    sql_query(" ALTER TABLE '{$g5['g5_shop_item_table']}'
+                    ADD 'it_skin' varchar(255) NOT NULL DEFAULT '' AFTER 'ca_id3',
+                    ADD 'it_mobile_skin' varchar(255) NOT NULL DEFAULT '' AFTER 'it_skin' ", true);
 }
 ?>
 

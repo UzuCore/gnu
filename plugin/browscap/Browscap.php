@@ -187,7 +187,7 @@ class Browscap
 
     /**
      * An associative array of associative arrays in the format
-     * `$arr['wrapper']['option'] = $value` passed to stream_context_create()
+     * '$arr['wrapper']['option'] = $value' passed to stream_context_create()
      * when building a stream resource.
      *
      * Proxy settings are stored in this variable.

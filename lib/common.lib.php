@@ -12,7 +12,7 @@ include_once(dirname(__FILE__) .'/pbkdf2.compat.php');
 /**
  * 마이크로타임을 반환
  * @return float
- * @deprecated use `microtime(true)`
+ * @deprecated use 'microtime(true)'
  */
 function get_microtime()
 {
@@ -263,7 +263,7 @@ function url_auto_link($str)
     // http://sir.kr/pg_lecture/463
     $attr_nofollow = (function_exists('check_html_link_nofollow') && check_html_link_nofollow('url_auto_link')) ? ' rel="nofollow"' : '';
     $str = str_replace(array("&lt;", "&gt;", "&amp;", "&quot;", "&nbsp;", "&#039;"), array("\t_lt_\t", "\t_gt_\t", "&", "\"", "\t_nbsp_\t", "'"), $str);
-    //$str = preg_replace("`(?:(?:(?:href|src)\s*=\s*(?:\"|'|)){0})((http|https|ftp|telnet|news|mms)://[^\"'\s()]+)`", "<A HREF=\"\\1\" TARGET='{$config['cf_link_target']}'>\\1</A>", $str);
+    //$str = preg_replace("'(?:(?:(?:href|src)\s*=\s*(?:\"|'|)){0})((http|https|ftp|telnet|news|mms)://[^\"'\s()]+)'", "<A HREF=\"\\1\" TARGET='{$config['cf_link_target']}'>\\1</A>", $str);
     $str = preg_replace("/([^(href=\"?'?)|(src=\"?'?)]|\(|^)((http|https|ftp|telnet|news|mms):\/\/[a-zA-Z0-9\.-]+\.[가-힣\xA1-\xFEa-zA-Z0-9\.:&#!=_\?\/~\+%@;\-\|\,\(\)]+)/i", "\\1<A HREF=\"\\2\" TARGET=\"{$config['cf_link_target']}\" $attr_nofollow>\\2</A>", $str);
     $str = preg_replace("/(^|[\"'\s(])(www\.[^\"'\s()]+)/i", "\\1<A HREF=\"http://\\2\" TARGET=\"{$config['cf_link_target']}\" $attr_nofollow>\\2</A>", $str);
     $str = preg_replace("/[0-9a-z_-]+@[a-z0-9._-]{4,}/i", "<a href=\"mailto:\\0\" $attr_nofollow>\\0</a>", $str);
@@ -676,7 +676,7 @@ function html_purifier($html)
 
     /*
      * HTMLPurifier 설정을 변경할 수 있는 Event hook
-     * 리스너에서는 첫번째 인자($config)로 `HTMLPurifier_Config` 객체를 받을 수 있다
+     * 리스너에서는 첫번째 인자($config)로 'HTMLPurifier_Config' 객체를 받을 수 있다
      */
     run_event('html_purifier_config', $config, array(
         'html' => $html,
@@ -1745,8 +1745,8 @@ function sql_query($sql, $error=G5_DISPLAY_SQL_ERROR, $link=null)
     // union의 사용을 허락하지 않습니다.
     //$sql = preg_replace("#^select.*from.*union.*#i", "select 1", $sql);
     $sql = preg_replace("#^select.*from.*[\s\(]+union[\s\)]+.*#i ", "select 1", $sql);
-    // `information_schema` DB로의 접근을 허락하지 않습니다.
-    $sql = preg_replace("#^select.*from.*where.*`?information_schema`?.*#i", "select 1", $sql);
+    // 'information_schema' DB로의 접근을 허락하지 않습니다.
+    $sql = preg_replace("#^select.*from.*where.*'?information_schema'?.*#i", "select 1", $sql);
 
     $is_debug = get_permission_debug_show();
     
@@ -1937,7 +1937,7 @@ function sql_field_names($table, $link=null)
 
     $columns = array();
 
-    $sql = " select * from `$table` limit 1 ";
+    $sql = " select * from '$table' limit 1 ";
     $result = sql_query($sql, $link);
 
     if(function_exists('mysqli_fetch_field') && G5_MYSQLI_USE) {
@@ -2364,7 +2364,7 @@ function verify_mb_key($member)
 
 /**
  * 회원의 클라이언트 검증 키 생성
- * 클라이언트 키를 다시 생성하여 생성된 키는 `ss_mb_key` 세션에 저장됨
+ * 클라이언트 키를 다시 생성하여 생성된 키는 'ss_mb_key' 세션에 저장됨
  * @param array $member 로그인 된 회원의 정보. 가입일시(mb_datetime)를 반드시 포함해야 한다.
  */
 function generate_mb_key($member)
@@ -2877,7 +2877,7 @@ class html_process {
             sql_query(" delete from {$g5['login_table']} where lo_datetime < '".date("Y-m-d H:i:s", G5_SERVER_TIME - (60 * $config['cf_login_minutes']))."' ");
 
             // 부담(overhead)이 있다면 테이블 최적화
-            //$row = sql_fetch(" SHOW TABLE STATUS FROM `$mysql_db` LIKE '$g5['login_table']' ");
+            //$row = sql_fetch(" SHOW TABLE STATUS FROM '$mysql_db' LIKE '$g5['login_table']' ");
             //if ($row['Data_free'] > 0) sql_query(" OPTIMIZE TABLE $g5['login_table'] ");
         }
 
@@ -3089,16 +3089,16 @@ function insert_member_cert_history($mb_id, $name, $hp, $birth, $type)
     
     // 멤버 본인인증 정보 변경 내역 테이블 없을 경우 생성
     if(isset($g5['member_cert_history_table']) && !sql_query(" DESC {$g5['member_cert_history_table']} ", false)) {
-        sql_query(" CREATE TABLE IF NOT EXISTS `{$g5['member_cert_history_table']}` (
-                        `ch_id` int(11) NOT NULL auto_increment,
-                        `mb_id` varchar(20) NOT NULL DEFAULT '',
-                        `ch_name` varchar(255) NOT NULL DEFAULT '',
-                        `ch_hp` varchar(255) NOT NULL DEFAULT '',
-                        `ch_birth` varchar(255) NOT NULL DEFAULT '',
-                        `ch_type` varchar(20) NOT NULL DEFAULT '',
-                        `ch_datetime` datetime NOT NULL default '0000-00-00 00:00:00',
-                        PRIMARY KEY (`ch_id`),
-                        KEY `mb_id` (`mb_id`)
+        sql_query(" CREATE TABLE IF NOT EXISTS '{$g5['member_cert_history_table']}' (
+                        'ch_id' int(11) NOT NULL auto_increment,
+                        'mb_id' varchar(20) NOT NULL DEFAULT '',
+                        'ch_name' varchar(255) NOT NULL DEFAULT '',
+                        'ch_hp' varchar(255) NOT NULL DEFAULT '',
+                        'ch_birth' varchar(255) NOT NULL DEFAULT '',
+                        'ch_type' varchar(20) NOT NULL DEFAULT '',
+                        'ch_datetime' datetime NOT NULL default '0000-00-00 00:00:00',
+                        PRIMARY KEY ('ch_id'),
+                        KEY 'mb_id' ('mb_id')
                     ) ", true);
     }
 
@@ -3373,7 +3373,7 @@ function get_search_string($stx)
     $stx_pattern[] = '#\.*/+#';
     $stx_pattern[] = '#\\\*#';
     $stx_pattern[] = '#\.{2,}#';
-    $stx_pattern[] = '#[/\'\"%=*\#\(\)\|\+\&\!\$~\{\}\[\]`;:\?\^\,]+#';
+    $stx_pattern[] = '#[/\'\"%=*\#\(\)\|\+\&\!\$~\{\}\[\]';:\?\^\,]+#';
 
     $stx_replace = array();
     $stx_replace[] = '';
@@ -3635,7 +3635,7 @@ function login_password_check($mb, $pass, $hash)
         if( sql_password($pass) === $hash ){
 
             if( ! isset($mb['mb_password2']) ){
-                $sql = "ALTER TABLE `{$g5['member_table']}` ADD `mb_password2` varchar(255) NOT NULL default '' AFTER `mb_password`";
+                $sql = "ALTER TABLE '{$g5['member_table']}' ADD 'mb_password2' varchar(255) NOT NULL default '' AFTER 'mb_password'";
                 sql_query($sql);
             }
             

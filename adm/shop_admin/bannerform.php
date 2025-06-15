@@ -34,8 +34,8 @@ else
 
 // 접속기기 필드 추가
 if(!sql_query(" select bn_device from {$g5['g5_shop_banner_table']} limit 0, 1 ")) {
-    sql_query(" ALTER TABLE `{$g5['g5_shop_banner_table']}`
-                    ADD `bn_device` varchar(10) not null default '' AFTER `bn_url` ", true);
+    sql_query(" ALTER TABLE '{$g5['g5_shop_banner_table']}'
+                    ADD 'bn_device' varchar(10) not null default '' AFTER 'bn_url' ", true);
     sql_query(" update {$g5['g5_shop_banner_table']} set bn_device = 'pc' ", true);
 }
 
