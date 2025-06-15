@@ -181,13 +181,13 @@ function add_shop_admin_dbupgrade($is_check){
     global $g5;
 
     // 내용 관리 짧은 주소
-    $sql = " SHOW COLUMNS FROM '{$g5['g5_shop_item_table']}' LIKE 'it_seo_title' ";
+    $sql = " SHOW COLUMNS FROM `{$g5['g5_shop_item_table']}` LIKE 'it_seo_title' ";
     $row = sql_fetch($sql);
 
     if( !$row ){
-        sql_query("ALTER TABLE '{$g5['g5_shop_item_table']}'
-                    ADD 'it_seo_title' varchar(200) NOT NULL DEFAULT '' AFTER 'it_name',
-                    ADD INDEX 'it_seo_title' ('it_seo_title');
+        sql_query("ALTER TABLE `{$g5['g5_shop_item_table']}`
+                    ADD `it_seo_title` varchar(200) NOT NULL DEFAULT '' AFTER `it_name`,
+                    ADD INDEX `it_seo_title` (`it_seo_title`);
         ", false);
 
         $is_check = true;
@@ -219,7 +219,7 @@ function shop_seo_title_update($it_id, $is_edit=false){
         $it_seo_title = exist_seo_title_recursive('shop', generate_seo_title($item['it_name']), $g5['g5_shop_item_table'], $item['it_id']);
 
         if( isset($item['it_seo_title']) && $it_seo_title !== $item['it_seo_title'] ){
-            $sql = " update '{$g5['g5_shop_item_table']}' set it_seo_title = '{$it_seo_title}' where it_id = '{$item['it_id']}' ";
+            $sql = " update `{$g5['g5_shop_item_table']}` set it_seo_title = '{$it_seo_title}' where it_id = '{$item['it_id']}' ";
             sql_query($sql);
         }
     }

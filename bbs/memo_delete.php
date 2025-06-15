@@ -28,7 +28,7 @@ if (!$row['me_read_datetime'][0]) // 메모 받기전이면
                 and mb_memo_call = '{$row['me_send_mb_id']}' ";
     sql_query($sql);
 
-    $sql = " update '{$g5['member_table']}' set mb_memo_cnt = '".get_memo_not_read($member['mb_id'])."' where mb_id = '{$member['mb_id']}' ";
+    $sql = " update `{$g5['member_table']}` set mb_memo_cnt = '".get_memo_not_read($member['mb_id'])."' where mb_id = '{$member['mb_id']}' ";
     sql_query($sql);
 }
 

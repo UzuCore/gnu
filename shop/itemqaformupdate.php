@@ -61,7 +61,7 @@ else if ($w == "u")
         if (!$row['cnt'])
             alert("자신의 상품문의만 수정하실 수 있습니다.");
 
-        $sql = " select iq_answer from '{$g5['g5_shop_item_qa_table']}' where mb_id = '{$member['mb_id']}' and iq_id = '$iq_id' ";
+        $sql = " select iq_answer from `{$g5['g5_shop_item_qa_table']}` where mb_id = '{$member['mb_id']}' and iq_id = '$iq_id' ";
         $row = sql_fetch($sql);
 
         if (isset($row['iq_answer']) && $row['iq_answer']) {

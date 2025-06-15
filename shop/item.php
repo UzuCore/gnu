@@ -175,12 +175,12 @@ if (isset($row['it_id']) && $row['it_id']) {
 $star_score = get_star_image($it['it_id']);
 
 // 관리자가 확인한 사용후기의 개수를 얻음
-$sql = " select count(*) as cnt from '{$g5['g5_shop_item_use_table']}' where it_id = '{$it_id}' and is_confirm = '1' ";
+$sql = " select count(*) as cnt from `{$g5['g5_shop_item_use_table']}` where it_id = '{$it_id}' and is_confirm = '1' ";
 $row = sql_fetch($sql);
 $item_use_count = $row['cnt'];
 
 // 상품문의의 개수를 얻음
-$sql = " select count(*) as cnt from '{$g5['g5_shop_item_qa_table']}' where it_id = '{$it_id}' ";
+$sql = " select count(*) as cnt from `{$g5['g5_shop_item_qa_table']}` where it_id = '{$it_id}' ";
 $row = sql_fetch($sql);
 $item_qa_count = $row['cnt'];
 

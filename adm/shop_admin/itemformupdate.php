@@ -507,7 +507,7 @@ if ($w == "" || $w == "u")
 if($option_count) {
     $comma = '';
     $sql = " INSERT INTO {$g5['g5_shop_item_option_table']}
-                    ( 'io_id', 'io_type', 'it_id', 'io_price', 'io_stock_qty', 'io_noti_qty', 'io_use' )
+                    ( `io_id`, `io_type`, `it_id`, `io_price`, `io_stock_qty`, `io_noti_qty`, `io_use` )
                 VALUES ";
     for($i=0; $i<$option_count; $i++) {
         $sql .= $comma . " ( '".sql_real_escape_string($_POST['opt_id'][$i])."', '0', '$it_id', '".sql_real_escape_string($_POST['opt_price'][$i])."', '".sql_real_escape_string($_POST['opt_stock_qty'][$i])."', '".sql_real_escape_string($_POST['opt_noti_qty'][$i])."', '".sql_real_escape_string($_POST['opt_use'][$i])."' )";
@@ -521,7 +521,7 @@ if($option_count) {
 if($supply_count) {
     $comma = '';
     $sql = " INSERT INTO {$g5['g5_shop_item_option_table']}
-                    ( 'io_id', 'io_type', 'it_id', 'io_price', 'io_stock_qty', 'io_noti_qty', 'io_use' )
+                    ( `io_id`, `io_type`, `it_id`, `io_price`, `io_stock_qty`, `io_noti_qty`, `io_use` )
                 VALUES ";
     for($i=0; $i<$supply_count; $i++) {
         $sql .= $comma . " ( '".sql_real_escape_string($_POST['spl_id'][$i])."', '1', '$it_id', '".sql_real_escape_string($_POST['spl_price'][$i])."', '".sql_real_escape_string($_POST['spl_stock_qty'][$i])."', '".sql_real_escape_string($_POST['spl_noti_qty'][$i])."', '".sql_real_escape_string($_POST['spl_use'][$i])."' )";

@@ -1,7 +1,7 @@
 <?php
 include_once('./_common.php');
 
-$pattern = '#[/\'\"%=*\#\(\)\|\+\&\!\$~\{\}\[\]';:\?\^\,]#';
+$pattern = '#[/\'\"%=*\#\(\)\|\+\&\!\$~\{\}\[\]`;:\?\^\,]#';
 
 $it_id  = isset($_POST['it_id']) ? preg_replace($pattern, '', $_POST['it_id']) : '';
 //$opt_id = isset($_POST['opt_id']) ? preg_replace($pattern, '', $_POST['opt_id']) : '';

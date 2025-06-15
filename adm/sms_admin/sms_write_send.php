@@ -6,10 +6,10 @@ auth_check_menu($auth, $sub_menu, "w");
 
 check_admin_token();
 
-$result = sql_query("describe '{$g5['sms5_write_table']}'");
+$result = sql_query("describe `{$g5['sms5_write_table']}`");
 while ($row = sql_fetch_array($result)){
     if( $row['Field'] === 'wr_message' && $row['Type'] === 'varchar(255)' ){
-        sql_query("ALTER TABLE '{$g5['sms5_write_table']}' MODIFY wr_message TEXT NOT NULL;", false);
+        sql_query("ALTER TABLE `{$g5['sms5_write_table']}` MODIFY wr_message TEXT NOT NULL;", false);
         break;
     }
 }
