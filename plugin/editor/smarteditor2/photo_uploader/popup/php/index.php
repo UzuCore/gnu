@@ -10,9 +10,9 @@
  * http://www.opensource.org/licenses/MIT
  */
 include_once("./_common.php");
+@include_once("./JSON.php");
 
 if( !function_exists('json_encode') ) {
-    @include_once("./JSON.php");
     function json_encode($data) {
         $json = new Services_JSON();
         return( $json->encode($data) );
@@ -40,8 +40,6 @@ if( isset($_GET['_nonce']) && ft_nonce_is_valid( $_GET['_nonce'] , 'smarteditor'
 }
 
 if( $is_editor_upload ) {
-    
-    run_event('smarteditor_photo_upload', $data_dir, $data_url);
 
     require('UploadHandler.php');
     $options = array(

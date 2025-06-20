@@ -26,7 +26,6 @@ class UploadHandler
         "image/jpg"       => array("imagecreatefromjpeg", "imagejpeg"),
         "image/jpeg"      => array("imagecreatefromjpeg", "imagejpeg"),
         "image/png"       => array("imagecreatefrompng", "imagepng"),
-        "image/webp"      => array("imagecreatefromwebp", "imagewebp"),
         "image/bmp"       => array("imagecreatefromwbmp", "imagewbmp")
     );
 
@@ -94,10 +93,10 @@ class UploadHandler
             // is enabled, set to 0 to disable chunked reading of files:
             'readfile_chunk_size' => 10 * 1024 * 1024, // 10 MiB
             // Defines which files can be displayed inline when downloaded:
-            'inline_file_types' => '/\.(gif|jpe?g|bmp|png|webp)$/i',
+            'inline_file_types' => '/\.(gif|jpe?g|bmp|png)$/i',
             // Defines which files (based on their names) are accepted for upload:
             //'accept_file_types' => '/.+$/i',
-            'accept_file_types' => '/\.(gif|jpe?g|bmp|png|webp)$/i',
+            'accept_file_types' => '/\.(gif|jpe?g|bmp|png)$/i',
             // The php.ini settings upload_max_filesize and post_max_size
             // take precedence over the following max_file_size setting:
             'max_file_size' => null,
@@ -105,7 +104,7 @@ class UploadHandler
             // The maximum number of files for the upload directory:
             'max_number_of_files' => null,
             // Defines which files are handled as image files:
-            'image_file_types' => '/\.(gif|jpe?g|bmp|png|webp)$/i',
+            'image_file_types' => '/\.(gif|jpe?g|bmp|png)$/i',
             'is_resize' => (defined('SMARTEDITOR_UPLOAD_RESIZE') && SMARTEDITOR_UPLOAD_RESIZE) ? true : false,
             'resize_max_width' => (defined('SMARTEDITOR_UPLOAD_MAX_WIDTH') && SMARTEDITOR_UPLOAD_MAX_WIDTH) ? SMARTEDITOR_UPLOAD_MAX_WIDTH : 800,
             'resize_max_height' => (defined('SMARTEDITOR_UPLOAD_MAX_HEIGHT') && SMARTEDITOR_UPLOAD_MAX_HEIGHT) ? SMARTEDITOR_UPLOAD_MAX_HEIGHT : 800,
@@ -186,7 +185,7 @@ class UploadHandler
                 $this->head();
                 break;
             case 'GET':
-                if( isset($_GET['del']) && $_GET['del'] ){
+                if( $_GET['del'] ){
                     $this->delete();
                 } else { 
                     $this->get();
@@ -216,20 +215,14 @@ class UploadHandler
             substr($_SERVER['SCRIPT_NAME'],0, strrpos($_SERVER['SCRIPT_NAME'], '/'));
     }
 
-    protected function get_user_id($is_add=true) {
-        global $member;
-
-        if(session_id() == '') {
-            @session_start();
-        }
-        
-        $add_str = ($is_add && isset($member['mb_id']) && $member['mb_id']) ? $member['mb_id'] : '';
-        return session_id().$add_str;
+    protected function get_user_id() {
+        @session_start();
+        return session_id();
     }
 
     protected function get_user_path() {
         if ($this->options['user_dirs']) {
-            return $this->get_user_id(false).'/';
+            return $this->get_user_id().'/';
         }
         return '';
     }
@@ -368,19 +361,16 @@ class UploadHandler
 
     function get_config_bytes($val) {
         $val = trim($val);
-        $val_strlen = strlen($val)-1;
-        $last = isset($val[$val_strlen]) ? strtolower($val[$val_strlen]) : '';
-
-        $bytes = (int) preg_replace('/[^0-9]/', '', $val);
+        $last = strtolower($val[strlen($val)-1]);
         switch($last) {
             case 'g':
-                $bytes *= 1024;
+                $val *= 1024;
             case 'm':
-                $bytes *= 1024;
+                $val *= 1024;
             case 'k':
-                $bytes *= 1024;
+                $val *= 1024;
         }
-        return $this->fix_integer_overflow($bytes);
+        return $this->fix_integer_overflow($val);
     }
 
     protected function validate($uploaded_file, $file, $error, $index) {
@@ -470,14 +460,13 @@ class UploadHandler
         );
     }
 
-    protected function get_unique_filename($file_path, $name, $size, $type, $error, $index, $content_range) {
+    protected function get_unique_filename($file_path, $name, $size, $type, $error,
+            $index, $content_range) {
         while(is_dir($this->get_upload_path($name))) {
             $name = $this->upcount_name($name);
         }
-
-        $content_range_byte = isset($content_range[1]) ? (int) $content_range[1] : 0;
         // Keep an existing filename if this is part of a chunked upload:
-        $uploaded_bytes = $this->fix_integer_overflow($content_range_byte);
+        $uploaded_bytes = $this->fix_integer_overflow(intval($content_range[1]));
         while(is_file($this->get_upload_path($name))) {
             if ($uploaded_bytes === $this->get_file_size(
                     $this->get_upload_path($name))) {
@@ -488,7 +477,8 @@ class UploadHandler
         return $name;
     }
 
-    protected function trim_file_name($file_path, $name, $size, $type, $error, $index, $content_range) {
+    protected function trim_file_name($file_path, $name, $size, $type, $error,
+            $index, $content_range) {
         // Remove path information and dots around the filename, to prevent uploading
         // into different directories or replacing hidden system files.
         // Also remove control characters and spaces (\x00..\x20) around the filename:
@@ -499,10 +489,10 @@ class UploadHandler
         }
         // Add missing file extension for known image types:
         if (strpos($name, '.') === false &&
-                preg_match('/^image\/(gif|jpe?g|png|webp)/', $type, $matches)) {
+                preg_match('/^image\/(gif|jpe?g|png)/', $type, $matches)) {
             $name .= '.'.$matches[1];
         }
-        if (function_exists('exif_imagetype') && $file_path) {
+        if (function_exists('exif_imagetype')) {
             switch(@exif_imagetype($file_path)){
                 case IMAGETYPE_JPEG:
                     $extensions = array('jpg', 'jpeg');
@@ -512,9 +502,6 @@ class UploadHandler
                     break;
                 case IMAGETYPE_GIF:
                     $extensions = array('gif');
-                    break;
-                case IMAGETYPE_WEBP:
-                    $extensions = array('webp');
                     break;
             }
             // Adjust incorrect image file extensions:
@@ -531,10 +518,12 @@ class UploadHandler
         return $name;
     }
 
-    protected function get_file_name($file_path, $name, $size, $type, $error, $index, $content_range) {
+    protected function get_file_name($file_path, $name, $size, $type, $error,
+            $index, $content_range) {
         return $this->get_unique_filename(
             $file_path,
-            $this->trim_file_name($file_path, $name, $size, $type, $error, $index, $content_range),
+            $this->trim_file_name($file_path, $name, $size, $type, $error,
+                $index, $content_range),
             $size,
             $type,
             $error,
@@ -692,7 +681,7 @@ class UploadHandler
                 $src_func = 'imagecreatefromjpeg';
                 $write_func = 'imagejpeg';
                 $image_quality = isset($options['jpeg_quality']) ?
-                $options['jpeg_quality'] : 75;
+                    $options['jpeg_quality'] : 75;
                 break;
             case 'gif':
                 $src_func = 'imagecreatefromgif';
@@ -703,12 +692,7 @@ class UploadHandler
                 $src_func = 'imagecreatefrompng';
                 $write_func = 'imagepng';
                 $image_quality = isset($options['png_quality']) ?
-                $options['png_quality'] : 9;
-                break;
-            case 'webp':
-                $src_func = 'imagecreatefromwebp';
-                $write_func = 'imagewebp';
-                $image_quality = null;
+                    $options['png_quality'] : 9;
                 break;
             default:
                 return false;
@@ -1057,7 +1041,7 @@ class UploadHandler
         }
         if (count($failed_versions)) {
             $file->error = $this->get_error_message('image_resize')
-                    .' ('.implode(', ', $failed_versions).')';
+                    .' ('.implode($failed_versions,', ').')';
         }
         // Free memory:
         $this->destroy_image_object($file_path);
@@ -1076,8 +1060,6 @@ class UploadHandler
 
     protected function reprocessImage($file_path, $callback)
     {
-        if( ! $file_path ) return;
-
         // Extracting mime type using getimagesize
         try {
             $image_info = getimagesize($file_path);
@@ -1092,16 +1074,11 @@ class UploadHandler
               //throw new Exception("Invalid image MIME type");
               return false;
             }
-            
+
             $image_from_file = self::$MIME_TYPES_PROCESSORS[$mime_type][0];
             $image_to_file = self::$MIME_TYPES_PROCESSORS[$mime_type][1];
 
-            // webp 의 경우 gd-webp cannot allocate temporary buffer 오류가 발생하여 webp 이미지가 업로드 되지 않을 수 있음
-            // $reprocessed_image = imagecreatefromwebp($file_path); 이 코드로 웹서버의 error_log 에서 확인해 볼 수 있음
-            // https://stackoverflow.com/questions/61394477/php-e-error-gd-webp-cannot-allocate-temporary-buffer
-            // 움직이는 webp 이미지나 큰사이즈의 webp 이미지에 대한 해결 방안은 아직 없는 것 같다
             $reprocessed_image = @$image_from_file($file_path);
-            // error_log("\$image_from_file = '$image_from_file',  \$image_to_file = '$image_to_file', \$reprocessed_image = '$reprocessed_image', \$file_path ='$file_path' ");
 
             if (!$reprocessed_image) {
               //throw new Exception("Unable to create reprocessed image from file");
@@ -1123,9 +1100,11 @@ class UploadHandler
         return true;
     }
 
-    protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null) {
+    protected function handle_file_upload($uploaded_file, $name, $size, $type, $error,
+            $index = null, $content_range = null) {
         $file = new \stdClass();
-        $file->oriname = $this->get_file_name($uploaded_file, $name, $size, $type, $error, $index, $content_range);
+        $file->oriname = $this->get_file_name($uploaded_file, $name, $size, $type, $error,
+            $index, $content_range);
         
         $filename_ext = pathinfo($name, PATHINFO_EXTENSION);
         $file->name = $this->get_file_passname().'_'.str_replace(".", "_", $this->get_microtime()).".".$filename_ext;
@@ -1197,10 +1176,6 @@ class UploadHandler
                     $image_width_height = $this->get_image_size($file_path);
                     $file->width = $image_width_height[0];
                     $file->height = $image_width_height[1];
-
-                    if( function_exists('run_replace') ){
-                        $file->url = run_replace('get_editor_upload_url', $file->url, $file_path, $file);
-                    }
                 } else {    //로빈아빠님이 알려주심, 이미지 업로드 체크
                     unlink($file_path);
                     $file->error = $this->get_error_message('accept_file_types');
@@ -1302,8 +1277,6 @@ class UploadHandler
                 return 'image/png';
             case 'gif':
                 return 'image/gif';
-            case 'webp':
-                return 'image/webp';
             default:
                 return '';
         }
@@ -1468,11 +1441,6 @@ class UploadHandler
             if( substr($file_name, 0 , 32) != $this->get_file_passname() ) continue;    //session_id() 와 비교하여 틀리면 지우지 않음
             $file_path = $this->get_upload_path($file_name);
             $success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
-
-            if( function_exists('run_event') ){
-                run_event('delete_editor_file', $file_path, $success);
-            }
-
             if ($success) {
                 foreach($this->options['image_versions'] as $version => $options) {
                     if (!empty($version)) {

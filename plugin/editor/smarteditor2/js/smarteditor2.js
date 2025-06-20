@@ -20339,23 +20339,18 @@ nhn.husky.HuskyCore.mixin(nhn.husky.SE2M_TableEditor, {
 	
 	addCSSClass : function(sClassName, sClassRule){
 		var oDoc = this.oApp.getWYSIWYGDocument();
-
-        try {
-            if(oDoc.styleSheets[0] && oDoc.styleSheets[0].addRule){
-                // IE
-                oDoc.styleSheets[0].addRule("." + sClassName, sClassRule);
-            }else{
-                // FF
-                var elHead = oDoc.getElementsByTagName("HEAD")[0]; 
-                var elStyle = oDoc.createElement ("STYLE"); 
-                //styleElement.type = "text / css"; 
-                elHead.appendChild (elStyle); 
-                
-                elStyle.sheet.insertRule("." + sClassName + " { "+sClassRule+" }", 0);
-            }
-        } catch (e) {
-            //console.log(e);
-        }
+		if(oDoc.styleSheets[0] && oDoc.styleSheets[0].addRule){
+			// IE
+			oDoc.styleSheets[0].addRule("." + sClassName, sClassRule);
+		}else{
+			// FF
+			var elHead = oDoc.getElementsByTagName("HEAD")[0]; 
+			var elStyle = oDoc.createElement ("STYLE"); 
+			//styleElement.type = "text / css"; 
+			elHead.appendChild (elStyle); 
+			
+			elStyle.sheet.insertRule("." + sClassName + " { "+sClassRule+" }", 0);
+		}
 	},
 	
 	// [SMARTEDITORSUS-1533]
