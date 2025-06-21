@@ -442,32 +442,16 @@ box-sizing:content-box;
     -moz-box-shadow: none !important;
     background: #fff !important;
 }
-
 .cke_bottom {
-    background: #f9f9f9 !important;
-}
-
-.cke_path_item {
-    color: #333 !important;
-    font-weight: bold;
-}
-
-.cke_resizer {
+    border-top: none !important;
     background: none !important;
-    border: 0 !important;
-    width: 16px !important;
-    height: 16px !important;
-    box-sizing: border-box !important;
-    /* 아래는 CKEditor 스킨에서 기본으로 제공하는 삼각형 아이콘 CSS */
-    border-right: 4px solid #cccccc !important;
-    border-bottom: 4px solid #cccccc !important;
-    border-bottom-right-radius: 2px !important;
-    background: none !important;
+    box-shadow: none !important;
+	background: #fff !important;
 }
 
 /* CKEditor 5 */
 .ck.ck-editor__editable {
-	min-height: 400px !important;
+	min-height: 330px !important;
 }
 .ck-editor__editable {
     border: 1px solid #d0d3db !important;

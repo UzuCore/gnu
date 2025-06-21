@@ -52,18 +52,18 @@ if ($wr_content == '') {
 }
 
 $wr_link1 = '';
-if (isset($_POST['wr_link1'])) {
+/*if (isset($_POST['wr_link1'])) {
     $wr_link1 = substr($_POST['wr_link1'],0,1000);
     $wr_link1 = trim(strip_tags($wr_link1));
     $wr_link1 = preg_replace("#[\\\]+$#", "", $wr_link1);
-}
+}*/
 
 $wr_link2 = '';
-if (isset($_POST['wr_link2'])) {
+/*if (isset($_POST['wr_link2'])) {
     $wr_link2 = substr($_POST['wr_link2'],0,1000);
     $wr_link2 = trim(strip_tags($wr_link2));
     $wr_link2 = preg_replace("#[\\\]+$#", "", $wr_link2);
-}
+}*/
 
 $msg = implode('<br>', $msg);
 if ($msg) {
