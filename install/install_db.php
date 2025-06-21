@@ -187,7 +187,7 @@ if ($g5_install || $is_install === false) {
                     cf_mobile_member_skin = 'basic',
                     cf_faq_skin = 'basic',
                     cf_mobile_faq_skin = 'basic',
-                    cf_editor = 'smarteditor2',
+                    cf_editor = 'ckeditor542',
                     cf_captcha_mp3 = 'basic',
                     cf_register_level = '2',
                     cf_register_point = '1000',
