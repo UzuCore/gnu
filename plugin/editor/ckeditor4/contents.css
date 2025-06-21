@@ -1,78 +1,55 @@
 /*
-Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
-For licensing, see LICENSE.md or http://ckeditor.com/license
+Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 
 body
 {
 	/* Font */
-	font-family: Arial,"돋움",Dotum;
+	/* Emoji fonts are added to visualise them nicely in Internet Explorer. */
+	font-family: sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	font-size: 12px;
 
 	/* Text color */
 	color: #333;
 
-	/* Remove the background color to make it transparent */
+	/* Remove the background color to make it transparent. */
 	background-color: #fff;
 
 	margin: 20px;
 }
 
-@media all and (min-width:701px) {
-    body {
-    	font-size: 0.875em;
-    }
-}
-
-@media all and (max-width:700px) {
-    body {
-        font-size: 1em
-    }
-}
-
 .cke_editable
 {
-	/*
 	font-size: 13px;
 	line-height: 1.6;
-	*/
 
 	/* Fix for missing scrollbars with RTL texts. (#10488) */
-	
-	font-family: "Malgun Gothic", "맑은 고딕";
-	/*font-size: 11pt;*/
-	line-height: 1.8;
 	word-wrap: break-word;
 }
 
 blockquote
 {
-	/*font-style: italic;*/
-	/*font-family: Georgia, Times, "Times New Roman", serif;*/
+	font-style: italic;
+	font-family: Georgia, Times, "Times New Roman", serif;
 	padding: 2px 0;
 	border-style: solid;
-	border-color: #000;
+	border-color: #ccc;
 	border-width: 0;
-	margin:0;
 }
 
 .cke_contents_ltr blockquote
 {
-	padding-left: 10px;
+	padding-left: 20px;
 	padding-right: 8px;
-	border-left-width: 3px;
+	border-left-width: 5px;
 }
 
 .cke_contents_rtl blockquote
 {
 	padding-left: 8px;
-	padding-right: 10px;
-	border-right-width: 3px;
-}
-
-p
-{
-	margin:0;
-	padding:0;
+	padding-right: 20px;
+	border-right-width: 5px;
 }
 
 a
@@ -84,11 +61,11 @@ ol,ul,dl
 {
 	/* IE7: reset rtl list margin. (#7334) */
 	*margin-right: 0px;
-	/* preserved spaces for list items with text direction other than the list. (#6249,#8049)*/
+	/* Preserved spaces for list items with text direction different than the list. (#6249,#8049)*/
 	padding: 0 40px;
 }
 
-h1,h2,h6
+h1,h2,h3,h4,h5,h6
 {
 	font-weight: normal;
 	line-height: 1.2;
@@ -98,11 +75,6 @@ hr
 {
 	border: 0px;
 	border-top: 1px solid #ccc;
-}
-
-p img 
-{
-	vertical-align:middle;
 }
 
 img.right
@@ -142,8 +114,7 @@ span[lang]
 figure
 {
 	text-align: center;
-	border: solid 1px #ccc;
-	border-radius: 2px;
+	outline: solid 1px #ccc;
 	background: rgba(0,0,0,0.05);
 	padding: 10px;
 	margin: 10px 20px;

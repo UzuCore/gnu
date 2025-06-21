@@ -391,11 +391,14 @@ box-shadow:2px 2px 3px 0px rgba(0,0,0,0.2)}
 
 /* CKEditor 5 */
 .ck.ck-editor__editable {
-	min-height: 400px !important;
+	min-height: 200px !important;
 }
 .ck-editor__editable {
     border: 1px solid #e5e5e5 !important;
     border-radius: 2px !important;
+}
+.ck.ck-powered-by {
+  display: none !important;
 }
 
 /* 게시판 */

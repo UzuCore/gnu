@@ -35,8 +35,8 @@ function editor_html($id, $content, $is_dhtml_editor=true)
     $html .= '
         <script>
             ClassicEditor.create( document.querySelector("#'.$id.'"), {
-                language: "ko", 
-                toolbar: { items: ["bold", "italic", "strikethrough", "underline", "|", "fontColor", "fontBackgroundColor", "|", "bulletedList", "numberedList", "|", "imageUpload", "mediaEmbed", "link"] }, 
+                language: "ko",
+                toolbar: { items: ["bold", "italic", "strikethrough", "underline", "|", "fontColor", "fontBackgroundColor", "|", "bulletedList", "numberedList", "|", "imageUpload", "mediaEmbed", "link"], shouldNotGroupWhenFull: true }, 
                 mediaEmbed: { previewsInData: true, removeProviders: ["instagram", "twitter", "googleMaps", "flickr", "facebook"] },
                 extraPlugins: [CKEditorUploadAdapterPlugin] 
             }).then(function(newEditor){
