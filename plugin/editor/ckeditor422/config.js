@@ -64,7 +64,7 @@ CKEDITOR.editorConfig = function(config) {
 	config.height = g5_is_mobile ? "220px" : "330px";
 
     // 업로드 URL 구성
-    let upload_url = "/plugin/editor/ckeditor4/upload.php?type=Images";
+    let upload_url = "/plugin/editor/ckeditor422/upload.php?type=Images";
     if (typeof(editor_id) != "undefined" && editor_id) upload_url += "&editor_id=" + editor_id;
     if (typeof(editor_uri) != "undefined" && editor_uri) upload_url += "&editor_uri=" + editor_uri;
     if (typeof(editor_form_name) != "undefined" && editor_form_name) upload_url += "&editor_form_name=" + editor_form_name;
