@@ -1,0 +1,16 @@
+
+#recent-emoji.emoji-recent-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-bottom: 10px;
+}
+
+#recent-emoji.emoji-recent-inline {
+    display: flex;
+    gap: 6px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    align-items: center;
+}

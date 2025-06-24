@@ -1,0 +1,30 @@
+
+.emoji-container {
+    font-family: Arial, sans-serif;
+    max-height: 320px;
+    overflow-y: auto;
+}
+.emoji-header {
+    margin: 10px;
+}
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(24px, 1fr));
+    gap: 6px;
+    padding: 10px;
+}
+.emoji-item {
+    font-size: 20px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 24px;
+}
+.emoji-item:hover {
+    background: #eee;
+    border-radius: 4px;
+}
+.emoji-title {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 5px 10px;
+}

@@ -92,4 +92,5 @@ $(function() {
 </script>
 
 <?php
+include_once(G5_PATH.'/api/api.socket.php');
 include_once(G5_THEME_PATH."/tail.sub.php");

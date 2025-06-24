@@ -372,6 +372,17 @@ box-shadow:2px 2px 3px 0px rgba(0,0,0,0.2)}
     box-shadow: none !important;
 	background: #fff !important;
 }
+.cke_notification {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 99999 !important;
+    max-width: 60%;
+    width: auto;
+    word-break: break-word;
+    text-align: center;
+}
 
 /* CKEditor 5 */
 .ck-content  {

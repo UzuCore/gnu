@@ -36,9 +36,9 @@ function editor_html($id, $content, $is_dhtml_editor = true)
                 break;
         }
 
-        $html .= "\n<script src=\"{$editor_url}/ckeditor.js?v=210624\"></script>";
+        $html .= "\n<script src=\"{$editor_url}/build/ckeditor.js?v=210624\"></script>";
         $html .= "\n<script>var g5_editor_url = '{$editor_url}';</script>";
-        $html .= "\n<script src=\"{$editor_url}/config.js?v=210624\"></script>";
+        $html .= "\n<script src=\"{$editor_url}/build/config.js?v=210624\"></script>";
         $html .= "\n<script>
         var editor_id = '{$id}';
         var editor_height = {$editor_height};
