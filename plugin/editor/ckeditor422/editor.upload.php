@@ -1,5 +1,6 @@
 <?php
 include_once("../../../common.php");
+header('Content-Type: application/json; charset=utf-8');
 
 // 오류 응답 출력
 function print_json_error($msg) {

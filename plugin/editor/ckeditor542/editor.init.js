@@ -23,7 +23,7 @@ function initCkeditor(id) {
             removeProviders: ["instagram", "twitter", "googleMaps", "flickr", "facebook"]
         },
         simpleUpload: {
-            uploadUrl: "/plugin/editor/ckeditor542/upload.editor.php"
+            uploadUrl: "/plugin/editor/ckeditor542/editor.upload.php"
         },
         /*toolbar: {
             items: [

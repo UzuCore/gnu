@@ -124,4 +124,3 @@ function chk_editor_js($id, $is_dhtml_editor = true)
     $js .= "if(typeof(editor_chk_upload) != \"undefined\" && !editor_chk_upload) { alert(\"이미지가 업로드 중 입니다.\"); return false; }\n";
     return $js;
 }
-?>

@@ -26,7 +26,7 @@ CKEDITOR.editorConfig = function(config) {
 
     config.height = g5_is_mobile ? '220px' : '330px';
 
-    let upload_url = "/plugin/editor/ckeditor422/upload.editor.php?type=Images";
+    let upload_url = "/plugin/editor/ckeditor422/editor.upload.php?type=Images";
     if (typeof(editor_id) !== "undefined") upload_url += "&editor_id=" + editor_id;
     if (typeof(editor_uri) !== "undefined") upload_url += "&editor_uri=" + editor_uri;
     if (typeof(editor_form_name) !== "undefined") upload_url += "&editor_form_name=" + editor_form_name;

@@ -1,12 +1,12 @@
 <?php
-if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
+if (!defined('_GNUBOARD_')) exit;
 
 function editor_html($id, $content, $is_dhtml_editor = true)
 {
     global $g5, $config, $w, $board, $write;
     static $js = true;
 
-    // TinyMCE 줄바꿈 처리 (CKEditor와 동일 로직)
+    // TinyMCE 줄바꿈 처리 (CKEditor와 동일)
     if (
         $is_dhtml_editor && $content &&
         (
@@ -24,10 +24,12 @@ function editor_html($id, $content, $is_dhtml_editor = true)
     $html = '<span class="sound_only">웹에디터 시작</span>';
 
     if ($is_dhtml_editor && $js) {
-        // ✅ 언어팩 경로 자동화를 위한 전역변수 전달
-        $html .= '<script>window.G5_EDITOR_URL = "' . $editor_url . '";</script>';
+        // ✅ 전역 경로 설정
+        $html = '<script>window.G5_EDITOR_URL = "' . $editor_url . '";</script>';
         $html .= '<script src="' . $editor_url . '/tinymce/tinymce.min.js"></script>';
         $html .= '<script src="' . $editor_url . '/editor.init.js"></script>';
+        $html .= '<script src="https://cdn.jsdelivr.net/gh/orthes/tinymce-emoji@latest/plugin.min.js"></script>';
+        $html .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>';
         $js = false;
     }
 
@@ -59,4 +61,3 @@ function chk_editor_js($id, $is_dhtml_editor = true)
         return "if (!{$id}_editor.value) { alert('내용을 입력해 주십시오.'); {$id}_editor.focus(); return false; }";
     }
 }
-?>
