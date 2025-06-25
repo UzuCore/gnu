@@ -154,7 +154,7 @@ function get_content_by_field($write_table, $type='bbs', $where_field='', $where
 
         $order_key = 'co_id';
     } else {
-        $check_array = array('wr_id', 'wr_num', 'wr_reply', 'wr_parent', 'wr_is_comment', 'ca_name', 'wr_option', 'wr_subject', 'wr_content', 'wr_seo_title', 'wr_link1', 'wr_link2', 'wr_hit', 'wr_good', 'wr_nogood', 'mb_id', 'wr_name', 'wr_email', 'wr_homepage', 'wr_datetime', 'wr_ip', 'wr_1', 'wr_2', 'wr_3', 'wr_4', 'wr_5', 'wr_6', 'wr_7', 'wr_8', 'wr_9', 'wr_10');
+        $check_array = array('wr_id', 'wr_num', 'wr_reply', 'wr_parent', 'wr_is_comment', 'ca_name', 'wr_option', 'wr_subject', 'wr_content', 'wr_seo_title', 'wr_link1', 'wr_link2', 'wr_hit', 'wr_good', 'wr_nogood', 'mb_id', 'wr_name', 'wr_email', 'wr_homepage', 'wr_datetime', 'wr_ip', 'wr_1', 'wr_2', 'wr_3', 'wr_4', 'wr_5', 'wr_6', 'wr_7', 'wr_8', 'wr_9', 'wr_10', 'wr_11', 'wr_12', 'wr_13', 'wr_14', 'wr_15', 'wr_16', 'wr_17', 'wr_18', 'wr_19', 'wr_20');
     }
 
     if( ! in_array($where_field, $check_array) ){

@@ -31,6 +31,16 @@ $wr_7 = isset($_POST['wr_7']) ? $_POST['wr_7'] : '';
 $wr_8 = isset($_POST['wr_8']) ? $_POST['wr_8'] : '';
 $wr_9 = isset($_POST['wr_9']) ? $_POST['wr_9'] : '';
 $wr_10 = isset($_POST['wr_10']) ? $_POST['wr_10'] : '';
+$wr_11 = isset($_POST['wr_11']) ? $_POST['wr_11'] : '';
+$wr_12 = isset($_POST['wr_12']) ? $_POST['wr_12'] : '';
+$wr_13 = isset($_POST['wr_13']) ? $_POST['wr_13'] : '';
+$wr_14 = isset($_POST['wr_14']) ? $_POST['wr_14'] : '';
+$wr_15 = isset($_POST['wr_15']) ? $_POST['wr_15'] : '';
+$wr_16 = isset($_POST['wr_16']) ? $_POST['wr_16'] : '';
+$wr_17 = isset($_POST['wr_17']) ? $_POST['wr_17'] : '';
+$wr_18 = isset($_POST['wr_18']) ? $_POST['wr_18'] : '';
+$wr_19 = isset($_POST['wr_19']) ? $_POST['wr_19'] : '';
+$wr_20 = isset($_POST['wr_20']) ? $_POST['wr_20'] : '';
 $wr_facebook_user = isset($_POST['wr_facebook_user']) ? clean_xss_tags($_POST['wr_facebook_user'], 1, 1) : '';
 $wr_twitter_user = isset($_POST['wr_twitter_user']) ? clean_xss_tags($_POST['wr_twitter_user'], 1, 1) : '';
 $wr_homepage = isset($_POST['wr_homepage']) ? clean_xss_tags($_POST['wr_homepage'], 1, 1) : '';
@@ -190,7 +200,17 @@ if ($w == 'c') // 댓글 입력
                      wr_7 = '$wr_7',
                      wr_8 = '$wr_8',
                      wr_9 = '$wr_9',
-                     wr_10 = '$wr_10' ";
+                     wr_10 = '$wr_10',
+                     wr_11 = '$wr_11',
+                     wr_12 = '$wr_12',
+                     wr_13 = '$wr_13',
+                     wr_14 = '$wr_14',
+                     wr_15 = '$wr_15',
+                     wr_16 = '$wr_16',
+                     wr_17 = '$wr_17',
+                     wr_18 = '$wr_18',
+                     wr_19 = '$wr_19',
+                     wr_20 = '$wr_20' ";
     sql_query($sql);
 
     $comment_id = sql_insert_id();
@@ -338,7 +358,17 @@ else if ($w == 'cu') // 댓글 수정
                      wr_7 = '$wr_7',
                      wr_8 = '$wr_8',
                      wr_9 = '$wr_9',
-                     wr_10 = '$wr_10'
+                     wr_10 = '$wr_10',
+                     wr_11 = '$wr_11',
+                     wr_12 = '$wr_12',
+                     wr_13 = '$wr_13',
+                     wr_14 = '$wr_14',
+                     wr_15 = '$wr_15',
+                     wr_16 = '$wr_16',
+                     wr_17 = '$wr_17',
+                     wr_18 = '$wr_18',
+                     wr_19 = '$wr_19',
+                     wr_20 = '$wr_20'
                      $sql_ip
                      $sql_secret
               where wr_id = '$comment_id' ";

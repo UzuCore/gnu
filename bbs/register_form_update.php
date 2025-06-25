@@ -63,6 +63,16 @@ $mb_7           = isset($_POST['mb_7'])             ? trim($_POST['mb_7'])      
 $mb_8           = isset($_POST['mb_8'])             ? trim($_POST['mb_8'])           : "";
 $mb_9           = isset($_POST['mb_9'])             ? trim($_POST['mb_9'])           : "";
 $mb_10          = isset($_POST['mb_10'])            ? trim($_POST['mb_10'])          : "";
+$mb_11          = isset($_POST['mb_11'])            ? trim($_POST['mb_11'])          : "";
+$mb_12          = isset($_POST['mb_12'])            ? trim($_POST['mb_12'])          : "";
+$mb_13          = isset($_POST['mb_13'])            ? trim($_POST['mb_13'])          : "";
+$mb_14          = isset($_POST['mb_14'])            ? trim($_POST['mb_14'])          : "";
+$mb_15          = isset($_POST['mb_15'])            ? trim($_POST['mb_15'])          : "";
+$mb_16          = isset($_POST['mb_16'])            ? trim($_POST['mb_16'])          : "";
+$mb_17          = isset($_POST['mb_17'])            ? trim($_POST['mb_17'])          : "";
+$mb_18          = isset($_POST['mb_18'])            ? trim($_POST['mb_18'])          : "";
+$mb_19          = isset($_POST['mb_19'])            ? trim($_POST['mb_19'])          : "";
+$mb_20          = isset($_POST['mb_20'])            ? trim($_POST['mb_20'])          : "";
 
 $mb_name        = clean_xss_tags($mb_name, 1, 1);
 $mb_email       = get_email_address($mb_email);
@@ -250,7 +260,17 @@ if ($w == '') {
                      mb_7 = '{$mb_7}',
                      mb_8 = '{$mb_8}',
                      mb_9 = '{$mb_9}',
-                     mb_10 = '{$mb_10}'
+                     mb_10 = '{$mb_10}',
+                     mb_11 = '{$mb_11}',
+                     mb_12 = '{$mb_12}',
+                     mb_13 = '{$mb_13}',
+                     mb_14 = '{$mb_14}',
+                     mb_15 = '{$mb_15}',
+                     mb_16 = '{$mb_16}',
+                     mb_17 = '{$mb_17}',
+                     mb_18 = '{$mb_18}',
+                     mb_19 = '{$mb_19}',
+                     mb_20 = '{$mb_20}'
                      {$sql_certify} ";
 
     // 이메일 인증을 사용하지 않는다면 이메일 인증시간을 바로 넣는다
@@ -371,7 +391,17 @@ if ($w == '') {
                     mb_7 = '{$mb_7}',
                     mb_8 = '{$mb_8}',
                     mb_9 = '{$mb_9}',
-                    mb_10 = '{$mb_10}'
+                    mb_10 = '{$mb_10}',
+                    mb_11 = '{$mb_11}',
+                    mb_12 = '{$mb_12}',
+                    mb_13 = '{$mb_13}',
+                    mb_14 = '{$mb_14}',
+                    mb_15 = '{$mb_15}',
+                    mb_16 = '{$mb_16}',
+                    mb_17 = '{$mb_17}',
+                    mb_18 = '{$mb_18}',
+                    mb_19 = '{$mb_19}',
+                    mb_20 = '{$mb_20}'
                     {$sql_password}
                     {$sql_nick_date}
                     {$sql_open_date}

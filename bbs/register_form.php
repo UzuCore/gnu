@@ -123,6 +123,16 @@ if ($w == "") {
     $member['mb_8']           = get_text($member['mb_8']);
     $member['mb_9']           = get_text($member['mb_9']);
     $member['mb_10']          = get_text($member['mb_10']);
+    $member['mb_11']          = get_text($member['mb_11']);
+    $member['mb_12']          = get_text($member['mb_12']);
+    $member['mb_13']          = get_text($member['mb_13']);
+    $member['mb_14']          = get_text($member['mb_14']);
+    $member['mb_15']          = get_text($member['mb_15']);
+    $member['mb_16']          = get_text($member['mb_16']);
+    $member['mb_17']          = get_text($member['mb_17']);
+    $member['mb_18']          = get_text($member['mb_18']);
+    $member['mb_19']          = get_text($member['mb_19']);
+    $member['mb_20']          = get_text($member['mb_20']);
 } else {
     alert('w 값이 제대로 넘어오지 않았습니다.');
 }

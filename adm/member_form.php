@@ -37,6 +37,16 @@ $mb = array(
     'mb_8' => null,
     'mb_9' => null,
     'mb_10' => null,
+    'mb_11' => null,
+    'mb_12' => null,
+    'mb_13' => null,
+    'mb_14' => null,
+    'mb_15' => null,
+    'mb_16' => null,
+    'mb_17' => null,
+    'mb_18' => null,
+    'mb_19' => null,
+    'mb_20' => null,
 );
 
 $sound_only = '';
@@ -91,6 +101,16 @@ if ($w == '') {
     $mb['mb_8'] = get_text($mb['mb_8']);
     $mb['mb_9'] = get_text($mb['mb_9']);
     $mb['mb_10'] = get_text($mb['mb_10']);
+    $mb['mb_11'] = get_text($mb['mb_11']);
+    $mb['mb_12'] = get_text($mb['mb_12']);
+    $mb['mb_13'] = get_text($mb['mb_13']);
+    $mb['mb_14'] = get_text($mb['mb_14']);
+    $mb['mb_15'] = get_text($mb['mb_15']);
+    $mb['mb_16'] = get_text($mb['mb_16']);
+    $mb['mb_17'] = get_text($mb['mb_17']);
+    $mb['mb_18'] = get_text($mb['mb_18']);
+    $mb['mb_19'] = get_text($mb['mb_19']);
+    $mb['mb_20'] = get_text($mb['mb_20']);
 } else {
     alert('제대로 된 값이 넘어오지 않았습니다.');
 }
@@ -565,7 +585,7 @@ add_javascript(G5_POSTCODE_JS, 0);    //다음 주소 js
                 run_event('admin_member_form_add', $mb, $w, 'table');
                 ?>
 
-                <?php for ($i = 1; $i <= 10; $i++) { ?>
+                <?php for ($i = 1; $i <= 20; $i++) { ?>
                     <tr>
                         <th scope="row"><label for="mb_<?php echo $i ?>">여분 필드 <?php echo $i ?></label></th>
                         <td colspan="3"><input type="text" name="mb_<?php echo $i ?>" value="<?php echo $mb['mb_' . $i] ?>" id="mb_<?php echo $i ?>" class="frm_input" size="30" maxlength="255"></td>

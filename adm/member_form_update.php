@@ -74,7 +74,7 @@ $check_keys = array(
     'mb_level'
 );
 
-for ($i = 1; $i <= 10; $i++) {
+for ($i = 1; $i <= 20; $i++) {
     $check_keys[] = 'mb_' . $i;
 }
 
@@ -120,7 +120,17 @@ $sql_common = "  mb_name = '{$posts['mb_name']}',
                  mb_7 = '{$posts['mb_7']}',
                  mb_8 = '{$posts['mb_8']}',
                  mb_9 = '{$posts['mb_9']}',
-                 mb_10 = '{$posts['mb_10']}' ";
+                 mb_10 = '{$posts['mb_10']}',
+                 mb_11 = '{$posts['mb_11']}',
+                 mb_12 = '{$posts['mb_12']}',
+                 mb_13 = '{$posts['mb_13']}',
+                 mb_14 = '{$posts['mb_14']}',
+                 mb_15 = '{$posts['mb_15']}',
+                 mb_16 = '{$posts['mb_16']}',
+                 mb_17 = '{$posts['mb_17']}',
+                 mb_18 = '{$posts['mb_18']}',
+                 mb_19 = '{$posts['mb_19']}',
+                 mb_20 = '{$posts['mb_20']}' ";
 
 if ($w == '') {
     $mb = get_member($mb_id);

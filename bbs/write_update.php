@@ -129,7 +129,7 @@ if (isset($_POST['notice']) && $_POST['notice']) {
     $notice = $_POST['notice'];
 }
 
-for ($i=1; $i<=10; $i++) {
+for ($i=1; $i<=20; $i++) {
     $var = "wr_$i";
     $$var = "";
     if (isset($_POST['wr_'.$i]) && settype($_POST['wr_'.$i], 'string')) {
@@ -297,7 +297,17 @@ if ($w == '' || $w == 'r') {
                      wr_7 = '$wr_7',
                      wr_8 = '$wr_8',
                      wr_9 = '$wr_9',
-                     wr_10 = '$wr_10' ";
+                     wr_10 = '$wr_10',
+                     wr_11 = '$wr_11',
+                     wr_12 = '$wr_12',
+                     wr_13 = '$wr_13',
+                     wr_14 = '$wr_14',
+                     wr_15 = '$wr_15',
+                     wr_16 = '$wr_16',
+                     wr_17 = '$wr_17',
+                     wr_18 = '$wr_18',
+                     wr_19 = '$wr_19',
+                     wr_20 = '$wr_20' ";
     sql_query($sql);
 
     $wr_id = sql_insert_id();
@@ -410,7 +420,17 @@ if ($w == '' || $w == 'r') {
                      wr_7 = '{$wr_7}',
                      wr_8 = '{$wr_8}',
                      wr_9 = '{$wr_9}',
-                     wr_10= '{$wr_10}'
+                     wr_10 = '{$wr_10}',
+                     wr_11 = '{$wr_11}',
+                     wr_12 = '{$wr_12}',
+                     wr_13 = '{$wr_13}',
+                     wr_14 = '{$wr_14}',
+                     wr_15 = '{$wr_15}',
+                     wr_16 = '{$wr_16}',
+                     wr_17 = '{$wr_17}',
+                     wr_18 = '{$wr_18}',
+                     wr_19 = '{$wr_19}',
+                     wr_20 = '{$wr_20}'
                      {$sql_ip}
                      {$sql_password}
               where wr_id = '{$wr['wr_id']}' ";
