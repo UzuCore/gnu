@@ -42,5 +42,6 @@ CREATE TABLE `__TABLE_NAME__` (
   PRIMARY KEY (`wr_id`),
   KEY `wr_seo_title` (`wr_seo_title`),
   KEY `wr_num_reply_parent` (`wr_num`,`wr_reply`,`wr_parent`),
-  KEY `wr_is_comment` (`wr_is_comment`,`wr_id`)
+  KEY `wr_is_comment` (`wr_is_comment`,`wr_id`),
+  KEY `idx_comment_fast` (`wr_parent`,`wr_is_comment`,`wr_comment`,`wr_comment_reply`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
