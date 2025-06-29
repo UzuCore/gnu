@@ -6,8 +6,6 @@
 .ol .join {width:116px;float:left;padding:15px 0;text-align:center;background:#f7f7f7;color:#6e6e6e}
 .ol #ol_be_cate:after {display:block;visibility:hidden;clear:both;content:""}
 .ol form {padding:20px}
-.ol a.btn_admin {display:inline-block;padding:0 10px;height:25px;text-decoration:none;line-height:25px;vertical-align:middle} /* 관리자 전용 버튼 */
-.ol a.btn_admin:focus, .ol a.btn_admin:hover {text-decoration:none}
 .ol .login-sns{padding-bottom:0px}
 
 #ol_before {}

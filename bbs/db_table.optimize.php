@@ -26,7 +26,7 @@ if($config['cf_popular_del'] > 0) {
 }
 
 // 설정일이 지난 최근게시물 삭제
-if($config['cf_new_del'] > 0) {
+/*if($config['cf_new_del'] > 0) {
     $sql = " delete from {$g5['board_new_table']} where (TO_DAYS('".G5_TIME_YMDHIS."') - TO_DAYS(bn_datetime)) > '{$config['cf_new_del']}' ";
     sql_query($sql);
     
@@ -34,7 +34,7 @@ if($config['cf_new_del'] > 0) {
     if (defined('G5_USE_OPTIMIZE_DBTABLE') && G5_USE_OPTIMIZE_DBTABLE) {
         sql_query(" OPTIMIZE TABLE `{$g5['board_new_table']}` ");
     }
-}
+}*/
 
 // 설정일이 지난 쪽지 삭제
 if($config['cf_memo_del'] > 0) {

@@ -219,7 +219,7 @@ if ($w == 'c') // 댓글 입력
     sql_query(" update $write_table set wr_comment = wr_comment + 1, wr_last = '".G5_TIME_YMDHIS."' where wr_id = '$wr_id' ");
 
     // 새글 INSERT
-    sql_query(" insert into {$g5['board_new_table']} ( bo_table, wr_id, wr_parent, bn_datetime, mb_id ) values ( '$bo_table', '$comment_id', '$wr_id', '".G5_TIME_YMDHIS."', '{$member['mb_id']}' ) ");
+    //sql_query(" insert into {$g5['board_new_table']} ( bo_table, wr_id, wr_parent, bn_datetime, mb_id ) values ( '$bo_table', '$comment_id', '$wr_id', '".G5_TIME_YMDHIS."', '{$member['mb_id']}' ) ");
 
     // 댓글 1 증가
     sql_query(" update {$g5['board_table']} set bo_count_comment = bo_count_comment + 1 where bo_table = '$bo_table' ");
@@ -227,6 +227,20 @@ if ($w == 'c') // 댓글 입력
     // 포인트 부여
     insert_point($member['mb_id'], $board['bo_comment_point'], "{$board['bo_subject']} {$wr_id}-{$comment_id} 댓글쓰기", $bo_table, $comment_id, '댓글');
 
+    // mroonga
+	$fixed_option = (strpos($wr_option, 'secret') !== false) ? 'secret' : null;
+    $mroonga = " insert into evape_posts 
+                     set wr_id = '$comment_id',
+                     wr_parent = '$wr_id',
+                     bo_table = '$bo_table',
+                     mb_id = '{$member['mb_id']}',
+                     wr_name = '$wr_name',
+                     wr_datetime = '".G5_TIME_YMDHIS."',
+                     wr_subject = '',
+                     wr_content = '$wr_content',
+                     wr_option = ".($fixed_option === null ? "NULL" : "'$fixed_option'")."";
+    sql_query($mroonga);
+    
     // 메일발송 사용
     if ($config['cf_email_use'] && $board['bo_use_email'])
     {
@@ -374,6 +388,15 @@ else if ($w == 'cu') // 댓글 수정
               where wr_id = '$comment_id' ";
 
     sql_query($sql);
+    
+    // mroonga
+    $fixed_option = (strpos($wr_option, 'secret') !== false) ? 'secret' : null;
+    $mroonga = " update evape_posts
+                     set wr_subject = '$wr_subject',
+                     wr_content = '$wr_content',
+                     wr_option = ".($fixed_option === null ? "NULL" : "'$fixed_option'")."
+                     where bo_table = '{$bo_table}' AND wr_id = '{$comment_id}' ";
+    sql_query($mroonga);
 }
 
 // 사용자 코드 실행

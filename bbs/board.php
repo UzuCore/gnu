@@ -111,11 +111,12 @@ if ((isset($wr_id) && $wr_id) || (isset($wr_seo_title) && $wr_seo_title)) {
         }
     }
 
-    // 한번 읽은글은 브라우저를 닫기전까지는 카운트를 증가시키지 않음
+    // 한번 읽은글은 브라우저를 닫기전까지는 카운트를 증가시키지 않음 (x)
+    sql_query(" update {$write_table} set wr_hit = wr_hit + 1 where wr_id = '{$wr_id}' ");
     $ss_name = 'ss_view_'.$bo_table.'_'.$wr_id;
     if (!get_session($ss_name))
     {
-        sql_query(" update {$write_table} set wr_hit = wr_hit + 1 where wr_id = '{$wr_id}' ");
+        //sql_query(" update {$write_table} set wr_hit = wr_hit + 1 where wr_id = '{$wr_id}' ");
 
         // 자신의 글이면 통과
         if ($write['mb_id'] && $write['mb_id'] === $member['mb_id']) {

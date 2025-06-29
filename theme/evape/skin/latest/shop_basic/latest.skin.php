@@ -6,7 +6,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$latest_skin_url.'/style.css">', 
 ?>
 
 <div class="lat">
-    <strong class="lat_title"><i class="fa fa-list-ul" aria-hidden="true"></i> <a href="<?php echo G5_BBS_URL ?>/board.php?bo_table=<?php echo $bo_table ?>"><?php echo $bo_subject ?></a></strong>
+    <span class="lat_title"><i class="fa fa-list-ul" aria-hidden="true"></i> <a href="<?php echo G5_BBS_URL ?>/board.php?bo_table=<?php echo $bo_table ?>"><?php echo $bo_subject ?></a></span>
     <ul>
     <?php for ($i=0; $i<count($list); $i++) {  ?>
         <li>
@@ -14,7 +14,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$latest_skin_url.'/style.css">', 
             //echo $list[$i]['icon_reply']." ";
             echo "<a href=\"".$list[$i]['href']."\">";
             if ($list[$i]['is_notice'])
-                echo "<strong>".$list[$i]['subject']."</strong>";
+                echo "<span>".$list[$i]['subject']."</span>";
             else
                 echo $list[$i]['subject'];
 
@@ -26,7 +26,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$latest_skin_url.'/style.css">', 
             // if ($list[$i]['link']['count']) { echo "[{$list[$i]['link']['count']}]"; }
             // if ($list[$i]['file']['count']) { echo "<{$list[$i]['file']['count']}>"; }
 
-            if (isset($list[$i]['icon_new']) && $list[$i]['icon_new']) echo " <span class=\"new_icon\">NEW</span>";
+            if (isset($list[$i]['icon_new']) && $list[$i]['icon_new']) echo " ✨";
             //if (isset($list[$i]['icon_hot'])) echo " <i class=\"fa fa-heart\" aria-hidden=\"true\"></i>" ;
             //if (isset($list[$i]['icon_file'])) echo " <i class=\"fa fa-download\" aria-hidden=\"true\"></i>" ;
             //if (isset($list[$i]['icon_link'])) echo " <i class=\"fa fa-link\" aria-hidden=\"true\"></i>" ;

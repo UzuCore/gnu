@@ -18,7 +18,6 @@
 #bo_list .txt_active {color:#5d910b}
 #bo_list .txt_expired {color:#ccc}
 #bo_list tbody tr {border-left:2px solid transparent}
-#bo_list tbody tr:hover {border-left:2px solid #253dbe}
 #bo_list tbody .even td {background:#fbfbfb}
 
 #bo_cate {margin:25px 0}
@@ -54,12 +53,12 @@ box-shadow:inset 0 2px 5px rgb(33, 135, 202)}
 #bo_list_total {float:left;line-height:34px;font-size:0.92em;color:#4e546f}
 
 .btn_bo_user {float:right;margin:0;padding:0;list-style:none}
-.btn_bo_user li {float:left;width:40px;text-align:center;margin-left:5px;background:#fff}
+.btn_bo_user li {float:left;width:40px;text-align:center;margin-left:5px}
 .btn_bo_user > li {position:relative}
 .btn_bo_adm {float:left}
 .btn_bo_adm li {float:left;margin-right:5px}
 .btn_bo_adm input {padding:0 8px;border:0;background:#d4d4d4;color:#666;text-decoration:none;vertical-align:middle}
-.bo_notice td {background:#fff6fa !important;border-bottom:1px solid #f8e6ee}
+.bo_notice td {background:#fff6fa;border-bottom:1px solid #f8e6ee}
 .bo_notice td a {font-weight:bold}
 .bo_notice .notice_icon {display:inline-block;line-height:25px;border-radius:5px;font-weight:bold;color:#f9267f}
 
@@ -74,9 +73,21 @@ box-shadow:inset 0 2px 5px rgb(33, 135, 202)}
 .more_opt li i {float:right;line-height:20px}
 
 .td_num strong {color:#000}
-.bo_cate_link {float:left;display:inline-block;margin-right:10px;background:#e2eaf6;color:#3a8afd;font-weight:normal !important;height:20px;line-height:10px;padding:5px 8px;border-radius:5px;font-size:0.95em} /* 글제목줄 분류스타일 */
+.bo_cate_link {
+    float: left;
+    display: inline-block;
+    margin-right: 10px;
+    background: #efefef;
+    color: #555;
+    font-weight: normal !important;
+    height: 20px;
+    line-height: 10px;
+    padding: 4px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+} /* 글제목줄 분류스타일 */
 .bo_cate_link:hover {text-decoration:none}
-.bo_tit {display:block;color:#000;font-weight:bold}
+.bo_tit {display:block;color:#000}
 .bo_current {color:#e8180c}
 #bo_list .profile_img img {border-radius:50%}
 #bo_list .cnt_cmt {background:#e9eff5;color:#3a8afd;font-size:11px;height:16px;line-height:16px;padding:0 5px;border-radius:3px;vertical-align:middle}
@@ -250,7 +261,7 @@ box-shadow:1px 1px 5px 0px hsl(232, 36%, 96%)}
 #bo_v_share .btn i {margin-right:5px;color:#4b5259;vertical-align:middle}
 
 /* 게시판 댓글 */
-.cmt_btn {width:100%;text-align:left;border:0;border-bottom:1px solid #f0f0f0;background:#fff;font-weight:bold;margin:30px 0 0px;padding:0 0 15px}
+.cmt_btn {width:100%;text-align:left;border:0;border-bottom:1px solid #f0f0f0;font-weight:bold;margin:30px 0 0px;padding:0 0 15px}
 .cmt_btn span.total {position:relative;display:inline-block;margin-right:5px;font-size:1em;color:#3a8afd}
 .cmt_btn span.cmt_more {float:right;display:inline-block;width:15px;height:10px;background:url(./img/btn_cmt.png) no-repeat right 2px;margin-top:5px}
 .cmt_btn_op span.cmt_more {background-position:right -8px}

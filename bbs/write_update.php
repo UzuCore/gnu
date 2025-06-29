@@ -316,7 +316,7 @@ if ($w == '' || $w == 'r') {
     sql_query(" update $write_table set wr_parent = '$wr_id' where wr_id = '$wr_id' ");
 
     // 새글 INSERT
-    sql_query(" insert into {$g5['board_new_table']} ( bo_table, wr_id, wr_parent, bn_datetime, mb_id ) values ( '{$bo_table}', '{$wr_id}', '{$wr_id}', '".G5_TIME_YMDHIS."', '{$member['mb_id']}' ) ");
+    //sql_query(" insert into {$g5['board_new_table']} ( bo_table, wr_id, wr_parent, bn_datetime, mb_id ) values ( '{$bo_table}', '{$wr_id}', '{$wr_id}', '".G5_TIME_YMDHIS."', '{$member['mb_id']}' ) ");
 
     // 게시글 1 증가
     sql_query("update {$g5['board_table']} set bo_count_write = bo_count_write + 1 where bo_table = '{$bo_table}'");
@@ -334,6 +334,20 @@ if ($w == '' || $w == 'r') {
         // 답변 포인트가 많은 경우 코멘트 대신 답변을 하는 경우가 많음
         insert_point($member['mb_id'], $board['bo_comment_point'], "{$board['bo_subject']} {$wr_id} 글답변", $bo_table, $wr_id, '쓰기');
     }
+    
+    // mroonga
+	$fixed_option = (strpos($wr_option, 'secret') !== false) ? 'secret' : null;
+    $mroonga = " insert into evape_posts
+                     set wr_id = '$wr_id',
+                     wr_parent = '$wr_id',
+                     bo_table = '$bo_table',
+                     mb_id = '{$member['mb_id']}',
+                     wr_name = '$wr_name',
+                     wr_datetime = '".G5_TIME_YMDHIS."',
+                     wr_subject = '$wr_subject',
+                     wr_content = '$wr_content',
+                     wr_option = ".($fixed_option === null ? "NULL" : "'$fixed_option'")."";
+    sql_query($mroonga);
 }  else if ($w == 'u') {
     if (get_session('ss_bo_table') != $_POST['bo_table'] || get_session('ss_wr_id') != $_POST['wr_id']) {
         alert('올바른 방법으로 수정하여 주십시오.', get_pretty_url($bo_table));
@@ -462,6 +476,17 @@ if ($w == '' || $w == 'r') {
     $bo_notice = board_notice($board['bo_notice'], $wr_id, $notice);
     sql_query(" update {$g5['board_table']} set bo_notice = '{$bo_notice}' where bo_table = '{$bo_table}' ");
 
+    // mroonga
+	$fixed_option = (strpos($wr_option, 'secret') !== false) ? 'secret' : null;
+    $mroonga = " update evape_posts
+                     set mb_id = '{$member['mb_id']}',
+                     wr_name = '$wr_name',
+                     wr_subject = '$wr_subject',
+                     wr_content = '$wr_content',
+                     wr_option = ".($fixed_option === null ? "NULL" : "'$fixed_option'")."
+                     where bo_table = '{$bo_table}' AND wr_id = '{$wr_id}' "; 
+    sql_query($mroonga);
+    
     // 글을 수정한 경우에는 제목이 달라질수도 있으니 static variable 를 새로고침합니다.
     $write = get_write( $write_table, $wr['wr_id'], false);
 }

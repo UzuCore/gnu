@@ -28,17 +28,17 @@ $list_count = (is_array($list) && $list) ? count($list) : 0;
         <li class="galley_li">
             <a href="<?php echo $wr_href; ?>" class="lt_img"><?php echo run_replace('thumb_image_tag', $img_content, $thumb); ?></a>
             <?php
-            if ($list[$i]['icon_secret']) echo "<i class=\"fa fa-lock\" aria-hidden=\"true\"></i><span class=\"sound_only\">비밀글</span> ";
+            //if ($list[$i]['icon_secret']) echo "<i class=\"fa fa-lock\" aria-hidden=\"true\"></i><span class=\"sound_only\">비밀글</span> ";
 
             echo "<a href=\"".$wr_href."\"> ";
             if ($list[$i]['is_notice'])
-                echo "<strong>".$list[$i]['subject']."</strong>";
+                echo "<span>".$list[$i]['subject']."</span>";
             else
                 echo $list[$i]['subject'];
             echo "</a>";
 			
-			if ($list[$i]['icon_new']) echo "<span class=\"new_icon\">N<span class=\"sound_only\">새글</span></span>";
-            if ($list[$i]['icon_hot']) echo "<span class=\"hot_icon\">H<span class=\"sound_only\">인기글</span></span>";
+			if ($list[$i]['icon_new']) echo "✨<span class=\"sound_only\">새글</span>";
+            if ($list[$i]['icon_hot']) echo "💞<span class=\"sound_only\">인기글</span>";
 
             // if ($list[$i]['link']['count']) { echo "[{$list[$i]['link']['count']}]"; }
             // if ($list[$i]['file']['count']) { echo "<{$list[$i]['file']['count']}>"; }

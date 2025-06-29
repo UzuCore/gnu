@@ -1,14 +1,23 @@
 <?php
 if (!defined('_GNUBOARD_')) exit;
 
-include_once(G5_PHPMAILER_PATH.'/PHPMailerAutoload.php');
+include_once(G5_PHPMAILER_PATH . '/PHPMailerAutoload.php');
 
-// 메일 보내기 (파일 여러개 첨부 가능)
-// type : text=0, html=1, text+html=2
+/* ---------------------------
+   ✅ Gmail 전용 SMTP 설정
+---------------------------- */
+define('GMAIL_SMTP_HOST', 'smtp.gmail.com');
+define('GMAIL_SMTP_PORT', 587); // 또는 465
+define('GMAIL_SMTP_SECURE', 'tls'); // 'tls' 또는 'ssl'
+define('GMAIL_SMTP_USER', 'byunjaeil@gmail.com'); // Gmail 주소
+define('GMAIL_SMTP_PASS', 'ihnz dpua fsir zfdf'); // 앱 비밀번호
+
+/* ---------------------------
+   ✅ 메일 전송 함수
+---------------------------- */
 function mailer($fname, $fmail, $to, $subject, $content, $type=0, $file="", $cc="", $bcc="")
 {
     global $config;
-    global $g5;
 
     // 메일발송 사용을 하지 않는다면
     if (!$config['cf_email_use']) return;
@@ -17,36 +26,38 @@ function mailer($fname, $fmail, $to, $subject, $content, $type=0, $file="", $cc=
         $content = nl2br($content);
 
     $result = run_replace('mailer', $fname, $fmail, $to, $subject, $content, $type, $file, $cc, $bcc);
-    
-    if( is_array($result) && isset($result['return']) ){
+    if (is_array($result) && isset($result['return'])) {
         return $result['return'];
     }
 
     $mail_send_result = false;
 
     try {
-        $mail = new PHPMailer(); // defaults to using php "mail()"
-        if (defined('G5_SMTP') && G5_SMTP) {
-            $mail->IsSMTP(); // telling the class to use SMTP
-            $mail->Host = G5_SMTP; // SMTP server
-            if(defined('G5_SMTP_PORT') && G5_SMTP_PORT)
-                $mail->Port = G5_SMTP_PORT;
-        }
-        $mail->CharSet = 'UTF-8';
-        $mail->From = $fmail;
-        $mail->FromName = $fname;
-        $mail->Subject = $subject;
-        $mail->AltBody = ""; // optional, comment out and test
-        $mail->msgHTML($content);
+        $mail = new PHPMailer(true);
+
+        // Gmail SMTP 설정
+        $mail->isSMTP();
+        $mail->Host       = GMAIL_SMTP_HOST;
+        $mail->SMTPAuth   = true;
+        $mail->Username   = GMAIL_SMTP_USER;
+        $mail->Password   = GMAIL_SMTP_PASS;
+        $mail->SMTPSecure = GMAIL_SMTP_SECURE;
+        $mail->Port       = GMAIL_SMTP_PORT;
+
+        $mail->CharSet    = 'UTF-8';
+        $mail->setFrom($fmail, $fname);
         $mail->addAddress($to);
-        if ($cc)
-            $mail->addCC($cc);
-        if ($bcc)
-            $mail->addBCC($bcc);
-        //print_r2($file); exit;
-        if ($file != "") {
+        if ($cc)  $mail->addCC($cc);
+        if ($bcc) $mail->addBCC($bcc);
+
+        $mail->Subject = $subject;
+        $mail->AltBody = strip_tags($content);
+        $mail->msgHTML($content);
+
+        if (is_array($file) && !empty($file)) {
             foreach ($file as $f) {
-                $mail->addAttachment($f['path'], $f['name']);
+                if (file_exists($f['path']))
+                    $mail->addAttachment($f['path'], $f['name']);
             }
         }
 
@@ -55,9 +66,9 @@ function mailer($fname, $fmail, $to, $subject, $content, $type=0, $file="", $cc=
         if (!($mail_send_result = $mail->send())) {
             throw new Exception($mail->ErrorInfo);
         }
-        
+
     } catch (Exception $e) {
-        error_log("Mail sending error: " . $e->getMessage());
+        error_log("[Gmail 메일 전송 오류] " . $e->getMessage());
     }
 
     run_event('mail_send_result', $mail_send_result, $mail, $to, $cc, $bcc);
@@ -65,12 +76,12 @@ function mailer($fname, $fmail, $to, $subject, $content, $type=0, $file="", $cc=
     return $mail_send_result;
 }
 
-// 파일을 첨부함
+/* ---------------------------
+   ✅ 첨부파일 핸들링 함수
+---------------------------- */
 function attach_file($filename, $tmp_name)
 {
-    // 서버에 업로드 되는 파일은 확장자를 주지 않는다. (보안 취약점)
-    $dest_file = G5_DATA_PATH.'/tmp/'.str_replace('/', '_', $tmp_name);
+    $dest_file = G5_DATA_PATH . '/tmp/' . str_replace('/', '_', $tmp_name);
     move_uploaded_file($tmp_name, $dest_file);
-    $tmpfile = array("name" => $filename, "path" => $dest_file);
-    return $tmpfile;
+    return array("name" => $filename, "path" => $dest_file);
 }

@@ -26,20 +26,16 @@ $thumb_height = 150;
         <li>
             <a href="<?php echo $list[$i]['href'] ?>" class="lt_img"><?php echo $img_content; ?></a>
             <?php
-            if ($list[$i]['icon_secret']) echo "<i class=\"fa fa-lock\" aria-hidden=\"true\"></i><span class=\"sound_only\">비밀글</span> ";
+            //if ($list[$i]['icon_secret']) echo "<i class=\"fa fa-lock\" aria-hidden=\"true\"></i><span class=\"sound_only\">비밀글</span> ";
 
-            if ($list[$i]['icon_new']) echo "<span class=\"new_icon\">N<span class=\"sound_only\">새글</span></span>";
+            if ($list[$i]['icon_new']) echo "✨<span class=\"sound_only\">새글</span>";
+            if ($list[$i]['icon_hot']) echo "💞<span class=\"sound_only\">인기글</span>";
 
-            if ($list[$i]['icon_hot']) echo "<span class=\"hot_icon\">H<span class=\"sound_only\">인기글</span></span>";
-
- 
             echo "<a href=\"".$list[$i]['href']."\"> ";
             if ($list[$i]['is_notice'])
-                echo "<strong>".$list[$i]['subject']."</strong>";
+                echo "<span>".$list[$i]['subject']."</span>";
             else
                 echo $list[$i]['subject'];
-
-
 
             echo "</a>";
 

@@ -88,7 +88,7 @@ for($i=0;$i<$count_chk_bn_id;$i++)
         }
 
         // 최근게시물 삭제
-        sql_query(" delete from {$g5['board_new_table']} where bo_table = '$bo_table' and wr_parent = '{$write['wr_id']}' ");
+        //sql_query(" delete from {$g5['board_new_table']} where bo_table = '$bo_table' and wr_parent = '{$write['wr_id']}' ");
 
         // 스크랩 삭제
         sql_query(" delete from {$g5['scrap_table']} where bo_table = '$bo_table' and wr_id = '{$write['wr_id']}' ");
@@ -146,7 +146,7 @@ for($i=0;$i<$count_chk_bn_id;$i++)
         sql_query(" update {$g5['board_table']} set bo_count_comment = bo_count_comment - 1 where bo_table = '$bo_table' ");
 
         // 새글 삭제
-        sql_query(" delete from {$g5['board_new_table']} where bo_table = '$bo_table' and wr_id = '$comment_id' ");
+        //sql_query(" delete from {$g5['board_new_table']} where bo_table = '$bo_table' and wr_id = '$comment_id' ");
     }
 }
 

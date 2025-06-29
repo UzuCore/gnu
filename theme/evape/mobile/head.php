@@ -93,36 +93,6 @@ include_once(G5_LIB_PATH.'/popular.lib.php');
                 <input type="text" name="stx" id="sch_stx" placeholder="검색어를 입력해주세요" required maxlength="20">
                 <button type="submit" value="검색" id="sch_submit"><i class="fa fa-search" aria-hidden="true"></i><span class="sound_only">검색</span></button>
                 </form>
-
-                <script>
-                function fsearchbox_submit(f)
-                {
-                    var stx = f.stx.value.trim();
-                    if (stx.length < 2) {
-                        alert("검색어는 두글자 이상 입력하십시오.");
-                        f.stx.select();
-                        f.stx.focus();
-                        return false;
-                    }
-
-                    // 검색에 많은 부하가 걸리는 경우 이 주석을 제거하세요.
-                    var cnt = 0;
-                    for (var i = 0; i < stx.length; i++) {
-                        if (stx.charAt(i) == ' ')
-                            cnt++;
-                    }
-
-                    if (cnt > 1) {
-                        alert("빠른 검색을 위하여 검색어에 공백은 한개만 입력할 수 있습니다.");
-                        f.stx.select();
-                        f.stx.focus();
-                        return false;
-                    }
-                    f.stx.value = stx;
-
-                    return true;
-                }
-                </script>
             </div>
             <?php echo popular('theme/basic'); // 인기검색어 ?>
             <div id="text_size">
@@ -134,7 +104,6 @@ include_once(G5_LIB_PATH.'/popular.lib.php');
         </div>
 
         <script>
-        $(function () {
             //폰트 크기 조정 위치 지정
             var font_resize_class = get_cookie("ck_font_resize_add_class");
             if( font_resize_class == 'ts_up' ){
@@ -145,39 +114,68 @@ include_once(G5_LIB_PATH.'/popular.lib.php');
                 $("#size_up").addClass("select");
             }
 
-            $(".hd_opener").on("click", function() {
-                var $this = $(this);
-                var $hd_layer = $this.next(".hd_div");
+            $(function () {
+              const $body = $("body");
+              const $menu = $(".hd_div");
+              const SWIPE_START_MAX_RATIO = 0.3;
+              let touchStartX = 0;
+              let touchEndX = 0;
 
-                if($hd_layer.is(":visible")) {
-                    $hd_layer.hide();
-                    $this.find("span").text("열기");
-                } else {
-                    var $hd_layer2 = $(".hd_div:visible");
-                    $hd_layer2.prev(".hd_opener").find("span").text("열기");
-                    $hd_layer2.hide();
+              // 메뉴 열기 버튼 클릭 시
+              $(".hd_opener").on("click", function () {
+                const target = $(this).attr("id") === "user_btn" ? "#user_menu" : "#gnb";
+                $menu.removeClass("active");
+                $(target).addClass("active");
+                $body.addClass("hd_scroll_lock");
+              });
 
-                    $hd_layer.show();
-                    $this.find("span").text("닫기");
+              // 닫기 버튼 또는 외부 클릭 시 메뉴 닫기
+              $(".hd_closer, #container").on("click", function () {
+                $menu.removeClass("active");
+                $body.removeClass("hd_scroll_lock");
+              });
+
+              // 하위 메뉴 열기/닫기
+              $(".btn_gnb_op").on("click", function () {
+                $(this).toggleClass("btn_gnb_cl")
+                       .next(".gnb_2dul").stop().slideToggle(300);
+              });
+
+              // 스와이프 (모바일)
+              document.addEventListener("touchstart", function (e) {
+                touchStartX = e.changedTouches[0].screenX;
+              });
+              document.addEventListener("touchend", function (e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+              });
+
+              // PC 마우스 지원 (디버깅용)
+              document.addEventListener("mousedown", function (e) {
+                touchStartX = e.screenX;
+              });
+              document.addEventListener("mouseup", function (e) {
+                touchEndX = e.screenX;
+                handleSwipe();
+              });
+
+              function handleSwipe() {
+                const swipeDistance = touchEndX - touchStartX;
+                const screenWidth = window.innerWidth;
+                const maxSwipeX = screenWidth * SWIPE_START_MAX_RATIO;
+                const isOpen = $(".hd_div.active").length > 0;
+
+                if (!isOpen && touchStartX <= maxSwipeX && swipeDistance > 70) {
+                  $("#gnb").addClass("active");
+                  $body.addClass("hd_scroll_lock");
                 }
-            });
 
-            $("#container").on("click", function() {
-                $(".hd_div").hide();
-
+                if (isOpen && swipeDistance < -70) {
+                  $menu.removeClass("active");
+                  $body.removeClass("hd_scroll_lock");
+                }
+              }
             });
-
-            $(".btn_gnb_op").click(function(){
-                $(this).toggleClass("btn_gnb_cl").next(".gnb_2dul").slideToggle(300);
-                
-            });
-
-            $(".hd_closer").on("click", function() {
-                var idx = $(".hd_closer").index($(this));
-                $(".hd_div:visible").hide();
-                $(".hd_opener:eq("+idx+")").find("span").text("열기");
-            });
-        });
         </script>
         
     </div>

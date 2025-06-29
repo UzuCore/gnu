@@ -28,8 +28,6 @@ function editor_html($id, $content, $is_dhtml_editor = true)
         $html = '<script>window.G5_EDITOR_URL = "' . $editor_url . '";</script>';
         $html .= '<script src="' . $editor_url . '/tinymce/tinymce.min.js"></script>';
         $html .= '<script src="' . $editor_url . '/editor.init.js"></script>';
-        $html .= '<script src="https://cdn.jsdelivr.net/gh/orthes/tinymce-emoji@latest/plugin.min.js"></script>';
-        $html .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>';
         $js = false;
     }
 

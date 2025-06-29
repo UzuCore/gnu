@@ -27,6 +27,8 @@ ul {list-style:none}
   box-sizing:border-box;
 }
 
+
+
 /* 팝업레이어 */
 #hd_pop {z-index:1000;position:relative;margin:0 auto;width:100%;height:0}
 #hd_pop h2 {position:absolute;font-size:0;text-indent:-9999em;line-height:0;overflow:hidden}
@@ -44,10 +46,39 @@ ul {list-style:none}
 #logo {padding:10px 10px;height:60px;text-align:center}
 #logo img {vertical-align:middle;margin-top:5px;max-height:100%;width:auto}
 #gnb_open {position:absolute;top:10px;left:10px;padding:0 10px;height:40px;width:40px;border:0;background-size:70%;color:#fff;background:none;font-size:2em}
-#gnb {display:none;background:#efefef;position:fixed;top:0;left:0;z-index:99999;width:100%;max-width:400px;height:100%;overflow-y:auto;
+/*#gnb {display:none;background:#efefef;position:fixed;top:0;left:0;z-index:99999;width:100%;max-width:400px;height:100%;overflow-y:auto;
 -webkit-box-shadow:0 0 5px rgba(55,55,5,0.4);
 -moz-box-shadow:0 0 5px rgba(55,55,5,0.4);
-box-shadow:0 0 5px rgba(55,55,5,0.4)}
+box-shadow:0 0 5px rgba(55,55,5,0.4)}*/
+
+
+/* 메뉴 영역 (#gnb, #user_menu 공통) */
+.hd_div {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  background: #efefef;
+  z-index: 9999;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+  /* 효과 유지 위해 항상 display 상태는 유지 */
+}
+
+.hd_div.active {
+  transform: translateX(0);
+}
+
+body.hd_scroll_lock {
+  position: fixed;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
 
 #gnb_1dul {background:#fff}
 #gnb_1dul a {display:block;color:#000}
@@ -397,6 +428,20 @@ box-shadow:2px 2px 3px 0px rgba(0,0,0,0.2)}
 }
 .ck.ck-powered-by {
   display: none !important;
+}
+
+/* TinyMCE */
+/* 드래그앤드롭 영역 숨김 */
+.tox-dialog__body .tox-dropzone {
+    display: none !important;
+}
+/* 업로드 탭메뉴 숨김 */
+.tox-dialog__body-nav {
+    display: none !important;
+}
+/* 업로드 사이즈 입력 숨김 */
+.tox-dialog__body .tox-form__group:nth-of-type(3) {
+    display: none !important;
 }
 
 /* 게시판 */

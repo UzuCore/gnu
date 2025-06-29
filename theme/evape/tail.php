@@ -60,7 +60,7 @@ if(G5_COMMUNITY_USE === false) {
     
     
     <button type="button" id="top_btn">
-    	<i class="fa fa-arrow-up" aria-hidden="true"></i><span class="sound_only">상단으로</span>
+    	<i class="ri-arrow-up-s-line"></i><span class="sound_only">상단으로</span>
     </button>
     <script>
     $(function() {
@@ -88,9 +88,23 @@ if ($config['cf_analytics']) {
 $(function() {
     // 폰트 리사이즈 쿠키있으면 실행
     font_resize("container", get_cookie("ck_font_resize_rmv_class"), get_cookie("ck_font_resize_add_class"));
+    
+    // 스크롤 위치에 따라 #top_btn 표시
+  $(window).on("scroll", function () {
+    if ($(this).scrollTop() > 200) {
+          $("#top_btn").addClass("show");
+        } else {
+          $("#top_btn").removeClass("show");
+        }
+      });
+
+      // 상단으로 이동
+      $("#top_btn").on("click", function () {
+        $("html, body").animate({ scrollTop: 0 }, 400);
+      });
 });
 </script>
 
 <?php
-include_once(G5_PATH.'/api/api.socket.php');
+//include_once(G5_PATH.'/api/api.socket.php');
 include_once(G5_THEME_PATH."/tail.sub.php");
