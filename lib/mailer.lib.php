@@ -6,11 +6,7 @@ include_once(G5_PHPMAILER_PATH . '/PHPMailerAutoload.php');
 /* ---------------------------
    ✅ Gmail 전용 SMTP 설정
 ---------------------------- */
-define('GMAIL_SMTP_HOST', 'smtp.gmail.com');
-define('GMAIL_SMTP_PORT', 587); // 또는 465
-define('GMAIL_SMTP_SECURE', 'tls'); // 'tls' 또는 'ssl'
-define('GMAIL_SMTP_USER', 'byunjaeil@gmail.com'); // Gmail 주소
-define('GMAIL_SMTP_PASS', 'ihnz dpua fsir zfdf'); // 앱 비밀번호
+include_once('/var/www/server.config.php');
 
 /* ---------------------------
    ✅ 메일 전송 함수

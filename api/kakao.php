@@ -1,14 +1,13 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+include_once('../common.php');
 include_once('/var/www/server.config.php');
+if (!$is_admin) return;
 
 if (!isset($_GET['code'])) {
     // 1. 최초 접근: 카카오 인증 URL 안내
     $auth_url = "https://kauth.kakao.com/oauth/authorize?response_type=code"
-        . "&client_id={$client_id}"
-        . "&redirect_uri=" . urlencode($redirect_uri)
+        . "&client_id=" . KAKAO_CLIENT_ID
+        . "&redirect_uri=" . urlencode(KAKAO_REDIRECT_URI)
         . "&scope=talk_message";
     echo "<h2>1. 카카오 인증</h2>";
     echo "<a href='{$auth_url}' target='_blank' style='font-size:20px; color:#fff; background:#0076ff; padding:10px 20px; border-radius:5px; text-decoration:none;'>카카오 인증하러 가기</a>";
@@ -19,8 +18,8 @@ if (!isset($_GET['code'])) {
     $url = "https://kauth.kakao.com/oauth/token";
     $postData = [
         "grant_type" => "authorization_code",
-        "client_id" => $client_id,
-        "redirect_uri" => $redirect_uri,
+        "client_id" => KAKAO_CLIENT_ID,
+        "redirect_uri" => KAKAO_REDIRECT_URI,
         "code" => $code
     ];
 
