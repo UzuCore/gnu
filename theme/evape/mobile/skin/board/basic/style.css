@@ -48,6 +48,48 @@
 #bo_list th:nth-of-type(2) {width:100px}
 #bo_list td:nth-of-type(2) {text-align:center}
 
+/* 갤러리 목록 */
+#bo_gall h2 {margin:0;padding:0;width:0;height:0;font-size:0;line-height:0;overflow:hidden}
+
+#bo_gall #gall_allchk {}
+
+#bo_gall #gall_ul {margin:10px 0 0;padding:0 10px;list-style:none}
+#bo_gall #gall_ul:after {display:block;visibility:hidden;clear:both;content:""}
+
+#bo_cate h2 {width:0;height:0;font-size:0;line-height:0;overflow:hidden}
+#bo_cate ul {background:#fff;padding-left:1px;border-bottom:1px solid #d9dce3;zoom:1}
+#bo_cate ul:after {display:block;visibility:hidden;clear:both;content:""} 
+#bo_cate li {display:inline-block;float:left}
+#bo_cate a {display:block;line-height:24px;padding:15px}
+#bo_cate #bo_cate_on {display:inline-block;position:relative;color:#3a8afd}
+#bo_cate #bo_cate_on:after {content:"";position:absolute;left:0;bottom:0;width:100%;height:4px;display:inline-block;background:#3a8afd}
+
+#bo_gall .gall_li {float:left;;width:50%;padding:5px}
+#bo_gall .gall_li_wr {position:relative;}
+#bo_gall .gall_li_chk {display:inline-block;position:absolute;top:10px;left:10px}
+#bo_gall .gall_li:nth-child(2n+1) {clear:both}
+#bo_gall .gall_li .gall_img img, #bo_gall .gall_li .gall_img video{width:100%;height:auto}
+#bo_gall .gall_li .gall_img .no_img,
+#bo_gall .gall_li .gall_notice {display:block;background:#eaeaea;color:#d0d0d0;font-size:3em;text-align:center;padding:25% 0}
+
+#bo_gall .gall_now .gall_text_href a {color:#ff3061}
+
+#bo_gall .gall_href a:link, #bo_gall .gall_href a:focus, #bo_gall .gall_href a:hover {text-decoration:none}
+#bo_gall .gall_href strong, #bo_gall .gall_href span {display:block;width:174px;height:124px;background:#f7f7f7;text-align:center;line-height:8em}
+
+#bo_gall .gall_text_href {padding:10px 0;display:block}
+#bo_gall .gall_li_tit {display:block;margin:5px 0;font-weight:bold}
+#bo_gall .bo_cate_link {display:inline-block;background:#e2eaf6;padding:0 5px;line-height:20px;border-radius:5px;font-weight:bold;font-size:11px;color:#3ca1ff !important;text-decoration:none;/*font-size:0.92em*/} /* 글제목줄 분류스타일 */
+#bo_gall .profile_img img {border-radius:50%}
+#bo_gall .new_icon {display:inline-block;width:16px;line-height:16px;font-size:0.833em;color:#23db79;background:#b9ffda;text-align:center;border-radius:2px;margin:0 4px;font-weight:bold;vertical-align:middle}
+
+.bo_cmt {background:#e9eff5;color:#3a8afd;font-size:11px;height:16px;line-height:16px;padding:0 5px;border-radius:3px;vertical-align:middle}
+
+#bo_gall .gall_info {padding:5px 0 0;color:#646464;font-size:0.92em}
+#bo_gall .gall_info:after {display:block;visibility:hidden;clear:both;content:""} 
+#bo_gall .gall_info strong {display:inline-block;margin-right:3px}
+#bo_gall .gall_info i {display:inline-block;margin-left:5px}
+
 /* 게시판 목록 공통 */
 #bo_list {}
 #bo_list li {background:#fff}

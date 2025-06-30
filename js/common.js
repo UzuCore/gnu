@@ -294,6 +294,7 @@ $(document).ready(function(){
  * 포인트 창
  **/
 var win_point = function(href) {
+	var href = href + "?pp=y";
     var new_win = window.open(href, 'win_point', 'left=100,top=100,width=600, height=600, scrollbars=1');
     new_win.focus();
 }
@@ -302,6 +303,7 @@ var win_point = function(href) {
  * 쪽지 창
  **/
 var win_memo = function(href) {
+	var href = href + "?pp=y";
     var new_win = window.open(href, 'win_memo', 'left=100,top=100,width=620,height=500,scrollbars=1');
     new_win.focus();
 }
@@ -323,6 +325,7 @@ var check_goto_new = function(href, event) {
  * 메일 창
  **/
 var win_email = function(href) {
+	var href = href + "?pp=y";
     var new_win = window.open(href, 'win_email', 'left=100,top=100,width=600,height=580,scrollbars=1');
     new_win.focus();
 }
