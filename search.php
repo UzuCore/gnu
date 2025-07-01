@@ -4,6 +4,8 @@ include_once(G5_PATH . '/head.php');
 include_once(G5_PATH . '/search.config.php');
 
 $search_stx = isset($_GET['stx']) ? trim($_GET['stx']) : '';
+$page_jump = $is_mobile ? 3 : 10;
+$page_display_count = $is_mobile ? 3 : 10;
 
 $options = [
     'stx' => $search_stx,
@@ -12,8 +14,8 @@ $options = [
     'sort' => $_GET['sort'] ?? 'date_desc',
     'search_type' => $_GET['search_type'] ?? 'subject_content',
     'rows' => 15,
-    'page_jump' => 5,
-    'page_display_count' => 5,
+    'page_jump' => $page_jump,
+    'page_display_count' => $page_display_count,
     'excluded_bo_tables' => $excluded_bo_tables,
     'excluded_ids' => $excluded_ids,
     'excluded_names' => $excluded_names,
@@ -42,24 +44,27 @@ $board_list = get_board_list();
 }
 
 .search-form input[type="text"] {
-    padding: 10px;
-    font-size: 1.3em;
+    padding: 9px;
+    font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 3px;
     flex-grow: 2;
     min-width: 300px;
+    height: 36px;
 }
 
 .search-form select,
 .search-form button {
-    padding: 8px;
-    font-size: 1em;
+    padding: 6px;
+    font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 3px;
+    height: 36px;
 }
 
 .search-form button {
     background-color: #225577;
+    border: 1px solid #225577;
     color: white;
     font-weight: bold;
     cursor: pointer;
@@ -92,36 +97,16 @@ $board_list = get_board_list();
 
 ul.results { margin: 0; padding: 0; list-style: none; }
 .results li { padding: 22px 0; border-bottom: 1px solid #eee; min-height: 62px; }
-.results li .title { font-weight: bold; font-size: 1.1em; color: #225577; text-decoration: none; }
-.results li .content-preview { font-size: .9rem; color: #444; margin-top: 4px; }
+.results li .title { font-weight: bold; font-size: 1.05rem; color: #225577; text-decoration: none; }
+.results li .content-preview { font-size: 1rem; color: #444; margin-top: 4px; }
 .no-content { color: #999; font-style: italic; }
 
 mark {
     background: #ff005a;
     color: #fff;
-    border-radius: 3px;
     font-weight: bold;
-    padding: 0 3px;
-    box-shadow: 0 1px 4px #fbe7ef80;
-}
-
-.pagination {
-    text-align: center;
-    margin-top: 20px;
-}
-.pagination a {
-    display: inline-block;
-    padding: 8px 14px;
+    padding: 2px 5px 3px;
     margin: 0 2px;
-    background: #f0f0f0;
-    border-radius: 3px;
-    color: #333;
-    text-decoration: none;
-}
-.pagination a.current {
-    background: #225577;
-    color: #fff;
-    font-weight: bold;
 }
 
 .notice-max-result {
@@ -135,15 +120,92 @@ mark {
     display: inline-block;
 }
 
+.pagination {
+  display: flex;
+  gap: 8px;
+  margin: 20px 0 24px 0;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: inherit;
+}
+
+.pagination a,
+.pagination span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 38px;
+  padding: 0 8px;
+  background: #f2f3f6;
+  color: #666;
+  font-size: 1.10rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition: background 0.12s, color 0.12s;
+}
+
+.pagination a.current,
+.pagination span.current {
+  background: #288aff;
+  color: #fff;
+  font-weight: bold;
+  cursor: default;
+  pointer-events: none;
+}
+
+.pagination .disabled {
+  background: #f2f3f6;
+  color: #c5c7cd;
+  cursor: not-allowed;
+  pointer-events: none;
+  font-weight: normal;
+}
+
+.pagination a:not(.current):not(.disabled):hover {
+  background: #e6f0ff;
+  color: #288aff;
+}
+
+/* 모바일 대응 (원하는대로 수정 가능) */
+@media (max-width: 600px) {
+  .pagination a,
+  .pagination span {
+    min-width: 32px;
+    height: 32px;
+    font-size: 1rem;
+    padding: 0 4px;
+    border-radius: 5px;
+  }
+}
+
+
+.dark-mode .results li { border-bottom: 1px solid #2c2c2c }
+.dark-mode .results li .title { color: #557799 }
+.dark-mode .results li .content-preview { color:#fff }
+.dark-mode .no-content { color: #999 }
+.dark-mode .search-form input,
+.dark-mode .search-form select {
+    border: 1px solid #2c2c2c;
+    background: #2c2c2c;
+    color: #999;
+}
+
+
+
 /* 스켈레톤 */
 .skeleton-list { margin: 0; padding: 0; }
 .skeleton-item { display: flex; flex-direction: column; gap: 6px; padding: 22px 0; border-bottom: 1px solid #eee; min-height: 62px; }
 .skeleton-title, .skeleton-content, .skeleton-meta { background: #e7e7ec; border-radius: 3px; }
 .skeleton-title { width: 40%; height: 18px; animation: skeleton 1s infinite alternate; }
-.skeleton-content { width: 95%; height: 15px; animation: skeleton 1s .1s infinite alternate; }
+.skeleton-content { width: 100%; height: 15px; animation: skeleton 1s .1s infinite alternate; }
 .skeleton-meta { width: 22%; height: 12px; margin-top: 3px; animation: skeleton 1s .2s infinite alternate; }
 
-@keyframes skeleton { from { opacity: 0.7; } to { opacity: 0.3; } }
+@keyframes skeleton { from { opacity: 0.6; } to { opacity: 0.3; } }
 </style>
 
 <div class="search-wrap">
@@ -151,7 +213,7 @@ mark {
         <input type="text" name="stx" value="<?=htmlspecialchars($search_stx)?>" placeholder="두 글자 이상의 키워드를 입력하세요">
         <div class="select-group">
             <select name="bo_table">
-                <option value="">전체 게시판</option>
+                <option value="">전체게시판</option>
                 <?php foreach($board_list as $id => $subject): ?>
                     <?php if (in_array($id, $excluded_bo_tables)) continue; ?>
                     <option value="<?=htmlspecialchars($id)?>" <?=($options['bo_table'] === $id) ? 'selected' : ''?>><?=htmlspecialchars($subject)?></option>
@@ -222,13 +284,15 @@ function fetchSearch(page) {
         html = '<li>검색 결과가 없습니다.</li>';
       } else {
         $.each(data.items, function(i, row) {
-          html += '<li><a class="title" href="' + row.url + '">' + row.subject + '</a><br><span class="content-preview">' + row.preview + '</span><br><small>' + row.name + ' / ' + row.date + '</small></li>';
+          html += '<li><a class="title" href="' + row.url + '">' + row.subject + '</a>';
+          html += row.is_comment ? '&nbsp;' : '<br>';
+          html += '<span class="content-preview">' + row.preview + '</span><br><small>' + row.name + ' / ' + row.date + '</small></li>';
         });
       }
       $('#results-list').html(html);
       $('#search-pagination').html(data.pagination);
 
-      let msg = `<span style="font-size:1.08em; font-weight:bold;">검색 결과: ${data.show_count}건</span>`;
+      let msg = `<span style="font-size:.9rem;">검색 결과: ${data.show_count}건</span>`;
       if (data.notice) msg += `<div class="notice-max-result">${data.notice}</div>`;
       setTopMessage(msg);
 

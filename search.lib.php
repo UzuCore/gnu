@@ -36,29 +36,41 @@ function get_highlighted_text($text, $stx) {
 }
 
 // (4) AJAX 페이지네이션 생성
-function render_pagination($total, $page, $rows, $jump, $base_url, $page_display_count = 5) {
+function render_pagination($total, $page, $rows, $jump, $base_url, $page_display_count = 10) {
     if ($rows <= 0) $rows = 10;
     $pages = max(1, ceil($total / $rows));
     $html = '<div class="pagination">';
-    if ($page > 1) {
-        $html .= "<a href='#' class='page-link' data-page='1'>1</a>";
-        $prev = max(1, $page - $jump);
-        $html .= "<a href='#' class='page-link' data-page='{$prev}'>&laquo;</a>";
+    $current_block = (int)(($page - 1) / $page_display_count);
+    $start = $current_block * $page_display_count + 1;
+    $end = min($pages, ($current_block + 1) * $page_display_count);
+
+    // 맨 앞 블록이면 « ‹를 아예 출력하지 않음
+    if ($start > 1) {
+        $html .= "<a href='#' class='page-link' data-page='1' title='처음'>&laquo;</a>";
+        $prev_block = $start - $page_display_count;
+        $html .= "<a href='#' class='page-link' data-page='{$prev_block}' title='이전'>&lsaquo;</a>";
     }
-    $start = max(1, min($page - floor($page_display_count / 2), $pages - $page_display_count + 1));
-    $end = min($pages, $start + $page_display_count - 1);
+
+    // 페이지 숫자
     for ($i = $start; $i <= $end; $i++) {
-        $cls = ($i == $page) ? 'class="current"' : '';
-        $html .= "<a href='#' class='page-link' data-page='{$i}' {$cls}>{$i}</a>";
+        if ($i == $page) {
+            $html .= "<span class='current'>{$i}</span>";
+        } else {
+            $html .= "<a href='#' class='page-link' data-page='{$i}'>{$i}</a>";
+        }
     }
-    if ($page < $pages) {
-        $next = min($pages, $page + $jump);
-        $html .= "<a href='#' class='page-link' data-page='{$next}'>&raquo;</a>";
-        $html .= "<a href='#' class='page-link' data-page='{$pages}'>{$pages}</a>";
+
+    // 맨 끝 블록이면 › »를 아예 출력하지 않음
+    if ($end < $pages) {
+        $next_block = $end + 1;
+        $html .= "<a href='#' class='page-link' data-page='{$next_block}' title='다음'>&rsaquo;</a>";
+        $html .= "<a href='#' class='page-link' data-page='{$pages}' title='끝'>&raquo;</a>";
     }
+
     $html .= '</div>';
     return $html;
 }
+
 
 // (5) 실질적 AJAX/메인 검색 결과 추출
 function get_search_results($opts) {

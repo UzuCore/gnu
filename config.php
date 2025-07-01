@@ -232,7 +232,7 @@ define('G5_VISIT_BROWSCAP_USE', false);
 표시되는 부분은 \\1 과 같이 사용하시면 되고 숨길 부분은 ♡등의
 다른 문자를 적어주시면 됩니다.
 */
-define('G5_IP_DISPLAY', '\\1.♡.\\3.\\4');
+define('G5_IP_DISPLAY', '\\1.x.\\3.\\4');
 
 // KAKAO 우편번호 서비스 CDN
 define('G5_POSTCODE_JS', '<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" async></script>');

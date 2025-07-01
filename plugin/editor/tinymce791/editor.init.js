@@ -23,7 +23,8 @@ function initTinymce(selectorId) {
                 'undo redo | fontselect fontsizeselect bold underline strikethrough forecolor backcolor | link image media charmap emoticons | fullscreen '
             ],
             content_style: `
-                body { font-family:Malgun Gothic,Arial,sans-serif; font-size:14px; }
+                body { font-size:11pt;line-height:1.8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR", NanumGothic, 나눔고딕, Malgun Gothic, 맑은 고딕,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji" }
+				p {margin:0}
 				img { max-width:100%; height:auto; display:block; }
             `,
             branding: false,
@@ -40,8 +41,8 @@ function initTinymce(selectorId) {
             setup: function(editor) {
 				editor.on('init', function() {
 					// 최초 로딩시, 기본 폰트와 폰트사이즈를 에디터 selection/caret에 적용
-					editor.execCommand('FontName', false, 'Malgun Gothic,Arial,sans-serif');
-					editor.execCommand('FontSize', false, '14pt');
+					//editor.execCommand('FontName', false, 'Noto Sans KR,sans-serif');
+					//editor.execCommand('FontSize', false, '12pt');
 				}),
 				
                 // fontselect (글꼴)
@@ -49,14 +50,16 @@ function initTinymce(selectorId) {
                     text: '글꼴',
                     fetch: function(callback) {
                         callback([
-                            { type: 'menuitem', text: '맑은 고딕', onAction: () => editor.execCommand('FontName', false, 'Malgun Gothic,Arial,sans-serif') },
-                            { type: 'menuitem', text: '굴림', onAction: () => editor.execCommand('FontName', false, 'Gulim') },
-                            { type: 'menuitem', text: '돋움', onAction: () => editor.execCommand('FontName', false, 'Dotum') },
-                            { type: 'menuitem', text: '바탕', onAction: () => editor.execCommand('FontName', false, 'Batang') },
-                            { type: 'menuitem', text: 'Arial', onAction: () => editor.execCommand('FontName', false, 'Arial,Helvetica,sans-serif') },
-                            { type: 'menuitem', text: 'Times New Roman', onAction: () => editor.execCommand('FontName', false, 'Times New Roman,Times,serif') },
-                            { type: 'menuitem', text: 'Courier New', onAction: () => editor.execCommand('FontName', false, 'Courier New,Courier,monospace') }
-                        ]);
+							{ type: 'menuitem', text: 'Noto Sans KR', onAction: () => editor.execCommand('FontName', false, 'Noto Sans KR,sans-serif') },
+							{ type: 'menuitem', text: '나눔고딕',    onAction: () => editor.execCommand('FontName', false, 'NanumGothic,나눔고딕,ans-serif') },
+							{ type: 'menuitem', text: '맑은 고딕',   onAction: () => editor.execCommand('FontName', false, 'Malgun Gothic,맑은 고딕,sans-serif') },
+							{ type: 'menuitem', text: '굴림',        onAction: () => editor.execCommand('FontName', false, 'Gulim,굴림,sans-serif') },
+							{ type: 'menuitem', text: '돋움',        onAction: () => editor.execCommand('FontName', false, 'Dotum,돋움,sans-serif') },
+							{ type: 'menuitem', text: '바탕',        onAction: () => editor.execCommand('FontName', false, 'Batang,바탕,sans-serif') },
+							{ type: 'menuitem', text: 'Arial',       onAction: () => editor.execCommand('FontName', false, 'Arial,sans-serif') },
+							{ type: 'menuitem', text: 'Times New Roman', onAction: () => editor.execCommand('FontName', false, 'Times New Roman,sans-serif') },
+							{ type: 'menuitem', text: 'Courier New', onAction: () => editor.execCommand('FontName', false, 'Courier New,sans-serif') }
+						]);
                     }
                 });
 

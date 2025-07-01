@@ -154,21 +154,32 @@ include_once(G5_LIB_PATH.'/popular.lib.php');
         });
     });
     
-    // 다크모드
+    // 다크모드 적용(페이지 로드시)
     document.addEventListener('DOMContentLoaded', function () {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark') {
             document.body.classList.add('dark-mode');
         }
     });
-    
-    // 다크모드 토글
+
+    // 다크모드 토글 (버튼 클릭 시)
     document.getElementById('toggle-dark').addEventListener('click', function () {
         document.body.classList.toggle('dark-mode');
-        
-        // 저장 (선택)
         const isDark = document.body.classList.contains('dark-mode');
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+        // wr_content textarea가 있고 display:none 상태면 새로고침
+        const wrContent = document.querySelector('[name="wr_content"]');
+        if (wrContent) {
+            const style = window.getComputedStyle(wrContent);
+            if (
+                style.display === 'none' ||
+                style.visibility === 'hidden' ||
+                style.opacity === '0'
+            ) {
+                location.reload();
+            }
+        }
     });
     </script>
 </div>

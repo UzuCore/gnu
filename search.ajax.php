@@ -7,6 +7,9 @@ include_once(G5_PATH . '/search.lib.php');
 include_once(G5_PATH . '/search.config.php');
 
 // 파라미터 입력 받기
+$page_jump = $is_mobile ? 3 : 10;
+$page_display_count = $is_mobile ? 3 : 10;
+
 $options = [
     'stx' => $_GET['stx'] ?? '',
     'bo_table' => $_GET['bo_table'] ?? '',
@@ -14,8 +17,8 @@ $options = [
     'sort' => $_GET['sort'] ?? 'date_desc',
     'search_type' => $_GET['search_type'] ?? 'subject_content',
     'rows' => 15,
-    'page_jump' => 5,
-    'page_display_count' => 5,
+    'page_jump' => $page_jump,
+    'page_display_count' => $page_display_count,
     'excluded_bo_tables' => $excluded_bo_tables,
     'excluded_ids' => $excluded_ids,
     'excluded_names' => $excluded_names,
@@ -47,8 +50,9 @@ $items_arr = [];
 foreach($res['items'] as $row){
     $items_arr[] = [
         'url' => G5_BBS_URL.'/board.php?bo_table='.urlencode($row['bo_table']).'&wr_id='.urlencode($row['wr_id']),
+        'is_comment' => $row['wr_id'] != $row['wr_parent'] ? 1 : 0,
         'subject' => get_highlighted_text($row['wr_subject'] ?: '[댓글]', $options['stx']),
-        'preview' => $row['image_icons'] . $row['wr_content_preview'],
+        'preview' => $row['wr_content_preview'] . '&nbsp;' .$row['image_icons'],
         'name' => htmlspecialchars($row['wr_name']),
         'date' => substr($row['wr_datetime'],0,10)
     ];

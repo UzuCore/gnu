@@ -1,7 +1,7 @@
 <?php
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 // 게시판별
-if ($bo_table == "gallery") {
+if ($bo_table == "gallery" || $bo_table == "recipe") {
     include_once("gallery.list.skin.php");
     return;
 }
@@ -46,7 +46,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$board_skin_url.'/style.css">', 0
     <!-- 게시판 페이지 정보 및 버튼 시작 { -->
     <div id="bo_btn_top">
         <div id="bo_list_total">
-            <span>Total <?php echo number_format($total_count) ?>건</span>
+            <span>전체 <?php echo number_format($total_count) ?>건</span>
             <?php echo $page ?> 페이지
         </div>
 
@@ -108,27 +108,26 @@ add_stylesheet('<link rel="stylesheet" href="'.$board_skin_url.'/style.css">', 0
             	</label>
             </td>
             <?php } ?>
-            <td class="td_subject" style="padding-left:<?php echo $list[$i]['reply'] ? (strlen($list[$i]['wr_reply'])*10) : '0'; ?>px">
+            <td class="td_subject" style="padding-left:<?php echo $list[$i]['reply'] ? (strlen($list[$i]['wr_reply'])*10)+10 : '10'; ?>px">
                 <?php
                 if ($is_category && $list[$i]['ca_name']) {
 				?>
                 <a href="<?php echo $list[$i]['ca_name_href'] ?>" class="bo_cate_link"><?php echo $list[$i]['ca_name'] ?></a>
                 <?php } ?>
                 <div class="bo_tit">
-                    <a href="<?php echo $list[$i]['href'] ?>">
-                        <?php echo $list[$i]['icon_reply'] ?>
-                        <?php
-                            if ($list[$i]['icon_secret']) echo '<i class="ri-lock-password-fill"></i>';
-                         ?>
-                        <?php echo $list[$i]['subject'] ?>
-                    </a>
                     <?php
-                    if ($list[$i]['icon_new']) echo "✨";
-                    if ($list[$i]['icon_hot']) echo "💞";
-                    //if (isset($list[$i]['icon_file'])) echo rtrim($list[$i]['icon_file']);
-                    //if (isset($list[$i]['icon_link'])) echo rtrim($list[$i]['icon_link']);
+                        if ($list[$i]['is_notice']) echo "📌&nbsp;";
+                        echo "<a href=\"".$list[$i]['href']."\">";
+                        echo $list[$i]['icon_reply'];
+                        if ($list[$i]['icon_secret']) echo '<i class="ri-lock-password-fill"></i>';
+                        echo $list[$i]['subject'];
+                        echo "</a>&nbsp;";
+                        if ($list[$i]['icon_new']) echo "✨";
+                        if ($list[$i]['icon_hot'] && !$list[$i]['is_notice']) echo "💞";
+                        //if (isset($list[$i]['icon_file'])) echo rtrim($list[$i]['icon_file']);
+                        //if (isset($list[$i]['icon_link'])) echo rtrim($list[$i]['icon_link']);
                     ?>
-                    <?php if ($list[$i]['comment_cnt']) { ?><span class="sound_only">댓글</span><span class="cnt_cmt"><?php echo $list[$i]['wr_comment']; ?></span><span class="sound_only">개</span><?php } ?>
+                    <?php if ($list[$i]['comment_cnt']) { ?><span class="cnt_cmt">+<?php echo $list[$i]['wr_comment']; ?></span><?php } ?>
                 </div>
             </td>
             <td class="td_name sv_use"><?php echo $list[$i]['name'] ?></td>

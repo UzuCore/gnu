@@ -182,6 +182,7 @@ else
 // IP보이기 사용 여부
 $ip = "";
 $is_ip_view = $board['bo_use_ip_view'];
+$write['wr_ip'] = $write['mb_id'] == $config['cf_admin'] ? "127.0.0.1" : $write['wr_ip'];
 if ($is_admin) {
     $is_ip_view = true;
     if ($write && array_key_exists('wr_ip', $write)) {
