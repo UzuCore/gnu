@@ -257,7 +257,13 @@ function url_auto_link($str)
 {
     global $g5;
     global $config;
-
+    
+    if ($replace_str = run_replace('url_auto_link_before', '', $str)) {
+        return $replace_str;
+    }
+    
+    $ori_str = $str;
+    
     // 140326 유창화님 제안코드로 수정
     // http://sir.kr/pg_lecture/461
     // http://sir.kr/pg_lecture/463
@@ -290,7 +296,7 @@ function url_auto_link($str)
     $str = preg_replace("/\t_gt_\t/", "&gt;", $str);
     */
 
-    return run_replace('url_auto_link', $str);
+    return run_replace('url_auto_link', $str, $ori_str);
 }
 
 
@@ -1135,7 +1141,11 @@ function insert_point($mb_id, $point, $content='', $rel_table='', $rel_id='', $r
 function insert_use_point($mb_id, $point, $po_id='')
 {
     global $g5, $config;
-
+    
+    if ($replace_insert = run_replace('insert_use_point_before', '', $mb_id, $point, $po_id)) {
+        return $replace_insert;
+    }
+    
     if($config['cf_point_term'])
         $sql_order = " order by po_expire_date asc, po_id asc ";
     else
