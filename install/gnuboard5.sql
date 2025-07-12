@@ -534,7 +534,7 @@ CREATE TABLE IF NOT EXISTS `g5_member` (
   `mb_5` text NOT NULL default '',
   `mb_6` text NOT NULL default '',
   `mb_7` text NOT NULL default '',
-  `mb_9` text NOT NULL default '',
+  `mb_8` text NOT NULL default '',
   `mb_9` text NOT NULL default '',
   `mb_10` text NOT NULL default '',
   `mb_11` text NOT NULL default '',
