@@ -337,7 +337,7 @@ if ($w == '' || $w == 'r') {
     
     // mroonga
 	$fixed_option = (strpos($wr_option, 'secret') !== false) ? 'secret' : null;
-    $mroonga = " insert into evape_posts
+    $mroonga = " insert into emu_posts
                      set wr_id = '$wr_id',
                      wr_parent = '$wr_id',
                      bo_table = '$bo_table',
@@ -478,7 +478,7 @@ if ($w == '' || $w == 'r') {
 
     // mroonga
 	$fixed_option = (strpos($wr_option, 'secret') !== false) ? 'secret' : null;
-    $mroonga = " update evape_posts
+    $mroonga = " update emu_posts
                      set mb_id = '{$member['mb_id']}',
                      wr_name = '$wr_name',
                      wr_subject = '$wr_subject',

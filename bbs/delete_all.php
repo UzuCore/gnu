@@ -137,7 +137,7 @@ for ($i=$chk_count-1; $i>=0; $i--)
     sql_query(" delete from {$g5['scrap_table']} where bo_table = '$bo_table' and wr_id = '{$write['wr_id']}' ");
     
     // mroonga
-    sql_query(" delete from evape_posts where bo_table = '$bo_table' and wr_parent = '{$write['wr_id']}' ");
+    sql_query(" delete from emu_posts where bo_table = '$bo_table' and wr_parent = '{$write['wr_id']}' ");
 
     /*
     // 공지사항 삭제

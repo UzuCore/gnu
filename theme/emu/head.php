@@ -18,6 +18,50 @@ include_once(G5_LIB_PATH.'/poll.lib.php');
 include_once(G5_LIB_PATH.'/visit.lib.php');
 include_once(G5_LIB_PATH.'/connect.lib.php');
 include_once(G5_LIB_PATH.'/popular.lib.php');
+
+function getCoreTempsOnlyFromSensors() {
+    $output = [];
+    exec("sudo /usr/bin/sensors", $output);  // 전체 출력 받아오기
+
+    $temps = [];
+    foreach ($output as $line) {
+        // Core 온도 추출
+        if (preg_match('/Core\s+(\d+):\s+\+([\d\.]+)°C/', $line, $matches)) {
+            $core = $matches[1];
+            $temp = $matches[2];
+            $temps["Core {$core}"] = "{$temp}°C";
+        }
+
+        // Package 온도도 같이 보여주고 싶다면:
+        if (preg_match('/Package id 0:\s+\+([\d\.]+)°C/', $line, $matches)) {
+            $temps["Package"] = "{$matches[1]}°C";
+        }
+    }
+
+    return $temps;
+}
+
+function getLoadAverage() {
+    $load = sys_getloadavg();
+    return [
+        '1min' => $load[0],
+        '5min' => $load[1],
+        '15min' => $load[2],
+    ];
+}
+
+// 출력
+echo "<h3>💻 서버 부하율 (Load Average)</h3>";
+$load = getLoadAverage();
+echo number_format($load['1min'], 3)."<br><br>";
+
+echo "<h3>🌡️ CPU 코어 온도 (Sensors)</h3>";
+$temps = getCoreTempsOnlyFromSensors();
+if (empty($temps)) {
+    echo "❌ sensors 데이터를 읽을 수 없습니다. 웹서버 권한 또는 sensors 설치 확인 필요.";
+} else {
+    echo $temps['Package'];
+}
 ?>
 
 <!-- 상단 시작 { -->

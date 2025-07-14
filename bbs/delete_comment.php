@@ -82,7 +82,7 @@ sql_query(" update {$g5['board_table']} set bo_count_comment = bo_count_comment 
 //sql_query(" delete from {$g5['board_new_table']} where bo_table = '{$bo_table}' and wr_id = '{$comment_id}' ");
 
 // mroonga
-sql_query(" delete from evape_posts where bo_table = '{$bo_table}' and wr_id = '{$comment_id}' ");
+sql_query(" delete from emu_posts where bo_table = '{$bo_table}' and wr_id = '{$comment_id}' ");
 
 // 사용자 코드 실행
 @include_once($board_skin_path.'/delete_comment.skin.php');

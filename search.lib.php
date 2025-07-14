@@ -144,7 +144,7 @@ function get_search_results($opts) {
 
     // 본문 쿼리 (LIMIT 주의: rows만큼)
     $sql = "SELECT wr_id, wr_parent, bo_table, mb_id, wr_name, wr_datetime, wr_subject, wr_content, wr_option{$score_expr}
-            FROM evape_posts
+            FROM emu_posts
             WHERE {$where}
             {$order_by}
             LIMIT {$offset}, {$rows}";
@@ -177,7 +177,7 @@ function get_search_results($opts) {
     }
 
     // 전체 카운트 (상한 적용)
-    $sql_total = "SELECT COUNT(*) AS cnt FROM evape_posts WHERE {$where}";
+    $sql_total = "SELECT COUNT(*) AS cnt FROM emu_posts WHERE {$where}";
     $res_total = mysqli_query($conn, $sql_total);
     $total = ($res_total && ($row_total = mysqli_fetch_assoc($res_total))) ? (int)$row_total['cnt'] : 0;
     if ($total > $max_result) $total = $max_result;

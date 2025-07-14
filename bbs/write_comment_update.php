@@ -229,7 +229,7 @@ if ($w == 'c') // 댓글 입력
 
     // mroonga
 	$fixed_option = (strpos($wr_option, 'secret') !== false) ? 'secret' : null;
-    $mroonga = " insert into evape_posts 
+    $mroonga = " insert into emu_posts 
                      set wr_id = '$comment_id',
                      wr_parent = '$wr_id',
                      bo_table = '$bo_table',
@@ -391,7 +391,7 @@ else if ($w == 'cu') // 댓글 수정
     
     // mroonga
     $fixed_option = (strpos($wr_option, 'secret') !== false) ? 'secret' : null;
-    $mroonga = " update evape_posts
+    $mroonga = " update emu_posts
                      set wr_subject = '$wr_subject',
                      wr_content = '$wr_content',
                      wr_option = ".($fixed_option === null ? "NULL" : "'$fixed_option'")."
