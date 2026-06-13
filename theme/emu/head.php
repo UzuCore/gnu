@@ -84,7 +84,7 @@ function getLoadAverage() {
         <ul class="hd_login">
             <li><a href="<?php echo G5_BBS_URL ?>/new.php">전체글</a></li>
             <li><a href="<?php echo G5_BBS_URL ?>/current_connect.php" class="visit">온라인 <?php echo connect('theme/basic');?></a></li>
-            <li><a href="javascript:void(0);" id="toggle-dark"><span class="dark-icon">＊</span>다크모드</a></li>
+            <li><a href="javascript:void(0);" id="toggle-dark" aria-pressed="false"><span class="dark-icon">＊</span><span class="dark-label">다크모드</span></a></li>
             <?php if ($is_member) {  ?>
             <li><a href="<?php echo G5_BBS_URL ?>/member_confirm.php?url=<?php echo G5_BBS_URL ?>/register_form.php">회원정보</a></li>
             <li><a href="<?php echo G5_BBS_URL ?>/logout.php">로그아웃</a></li>
@@ -154,34 +154,54 @@ echo "</div>";
             </ul>
         </div>
     </nav>
-    <script>    
-    // 다크모드 적용(페이지 로드시)
-    document.addEventListener('DOMContentLoaded', function () {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-mode');
+    <script>
+    (function () {
+        const mql = window.matchMedia('(prefers-color-scheme: dark)');
+
+        // 적용할 다크 여부 판단: 사용자가 직접 고른 값(localStorage) 우선, 없으면 OS 설정 따름
+        function shouldBeDark() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark')  return true;
+            if (saved === 'light') return false;
+            return mql.matches; // 저장값 없음 → OS 다크모드 설정 자동 인식
         }
-    });
 
-    // 다크모드 토글 (버튼 클릭 시)
-    document.getElementById('toggle-dark').addEventListener('click', function () {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-
-        // wr_content textarea가 있고 display:none 상태면 새로고침
-        const wrContent = document.querySelector('[name="wr_content"]');
-        if (wrContent) {
-            const style = window.getComputedStyle(wrContent);
-            if (
-                style.display === 'none' ||
-                style.visibility === 'hidden' ||
-                style.opacity === '0'
-            ) {
-                location.reload();
+        // 다크모드 적용 + 토글 버튼 상태 동기화
+        function applyDark(isDark) {
+            document.body.classList.toggle('dark-mode', isDark);
+            const btn = document.getElementById('toggle-dark');
+            if (btn) {
+                btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+                const label = btn.querySelector('.dark-label');
+                if (label) label.textContent = isDark ? '라이트모드' : '다크모드';
             }
         }
-    });
+
+        // 즉시 적용 (이 스크립트는 body 내부에 있어 document.body 접근 가능 → 깜빡임 최소화)
+        applyDark(shouldBeDark());
+
+        // 토글 버튼 클릭 → 수동 선택 저장 + 적용
+        const btn = document.getElementById('toggle-dark');
+        if (btn) btn.addEventListener('click', function () {
+            const isDark = !document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            applyDark(isDark);
+
+            // wr_content textarea가 숨김 상태면 새로고침 (에디터 재적용)
+            const wrContent = document.querySelector('[name="wr_content"]');
+            if (wrContent) {
+                const style = window.getComputedStyle(wrContent);
+                if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') {
+                    location.reload();
+                }
+            }
+        });
+
+        // OS 다크모드 설정이 바뀌면 실시간 반영 (사용자가 수동 선택한 적 없을 때만)
+        mql.addEventListener('change', function (e) {
+            if (localStorage.getItem('theme') === null) applyDark(e.matches);
+        });
+    })();
     </script>
 </div>
 <!-- } 상단 끝 -->
