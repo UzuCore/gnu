@@ -5,6 +5,10 @@ if ($bo_table == "roms") {
     include_once("roms.list.skin.php");
     return;
 }
+if ($bo_table == "photo") {
+    include_once("gallery.list.skin.php");
+    return;
+}
 
 // 선택옵션으로 인해 셀합치기가 가변적으로 변함
 $colspan = 5;

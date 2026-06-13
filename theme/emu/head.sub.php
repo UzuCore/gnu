@@ -48,6 +48,7 @@ if (G5_IS_MOBILE) {
 if($config['cf_add_meta'])
     echo $config['cf_add_meta'].PHP_EOL;
 ?>
+<meta name="google-adsense-account" content="ca-pub-5127498998858181">
 <title><?php echo $g5_head_title; ?></title>
 <?php
 $shop_css = '';

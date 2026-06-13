@@ -11,7 +11,9 @@ if (!$is_admin) {
 }
 
 // API 설정
-define('DEEPL_API_KEY', 'dffe91f8-e220-4ab8-bff3-0c0815071818:fx');
+//define('DEEPL_API_KEY', 'dffe91f8-e220-4ab8-bff3-0c0815071818:fx');
+define('DEEPL_API_KEY', '');
+define('GOOGLE_CLOUD_API_KEY', 'AIzaSyAM8cl_TnfCb_BxOVzhMH6bt9Nimc6x1q4'); // 여기에 Google Cloud API 키 입력 (공란이면 사용 안함)
 define('SCREENSCRAPER_DEVID', 'jelos');
 define('SCREENSCRAPER_DEVPASSWORD', 'jelos');
 define('SCREENSCRAPER_SOFTNAME', 'EmulatorJS');
@@ -304,7 +306,9 @@ function fetchGameDetail($gameId) {
 
 // ===== 번역 함수 =====
 function translateWithDeepL($text, $isTitle = false) {
-    if (empty($text)) return '';
+    if (empty($text) || empty(DEEPL_API_KEY) || DEEPL_API_KEY === 'YOUR_DEEPL_API_KEY') {
+        return '';
+    }
     
     $data = http_build_query([
         'auth_key' => DEEPL_API_KEY,
@@ -331,6 +335,101 @@ function translateWithDeepL($text, $isTitle = false) {
     }
     
     return '';
+}
+
+function translateWithGoogleCloud($text, $isTitle = false) {
+    if (empty($text) || empty(GOOGLE_CLOUD_API_KEY) || GOOGLE_CLOUD_API_KEY === 'YOUR_GOOGLE_CLOUD_API_KEY') {
+        return '';
+    }
+    
+    $maxLength = 5000; // Google Cloud API 텍스트 길이 제한
+    
+    // 긴 텍스트는 문장 단위로 분할하여 번역
+    if (strlen($text) > $maxLength) {
+        $sentences = preg_split('/(?<=[.!?])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+        $translatedSentences = [];
+        $currentBatch = '';
+        
+        foreach ($sentences as $sentence) {
+            $sentence = trim($sentence);
+            
+            if (strlen($currentBatch . ' ' . $sentence) > $maxLength && !empty($currentBatch)) {
+                // 현재 배치를 번역
+                $translated = translateSingleTextWithGoogleCloud($currentBatch);
+                if ($translated) {
+                    $translatedSentences[] = $translated;
+                }
+                $currentBatch = $sentence;
+                
+                // API 호출 제한을 위한 딜레이
+                usleep(100000); // 0.1초
+            } else {
+                $currentBatch .= ($currentBatch ? ' ' : '') . $sentence;
+            }
+        }
+        
+        // 마지막 배치 번역
+        if (!empty($currentBatch)) {
+            $translated = translateSingleTextWithGoogleCloud($currentBatch);
+            if ($translated) {
+                $translatedSentences[] = $translated;
+            }
+        }
+        
+        $result = implode(' ', $translatedSentences);
+        return $isTitle ? $result : addLineBreaks($result);
+    } else {
+        $translated = translateSingleTextWithGoogleCloud($text);
+        return $isTitle ? $translated : addLineBreaks($translated);
+    }
+}
+
+function translateSingleTextWithGoogleCloud($text) {
+    if (empty($text) || empty(GOOGLE_CLOUD_API_KEY) || GOOGLE_CLOUD_API_KEY === 'YOUR_GOOGLE_CLOUD_API_KEY') {
+        return '';
+    }
+    
+    $url = 'https://translation.googleapis.com/language/translate/v2?key=' . GOOGLE_CLOUD_API_KEY;
+    
+    $data = json_encode([
+        'q' => $text,
+        'source' => 'en',
+        'target' => 'ko',
+        'format' => 'text'
+    ]);
+    
+    $ch = curl_init();
+    curl_setopt_array($ch, [
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $data,
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data)
+        ],
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_SSL_VERIFYPEER => false
+    ]);
+    
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $error = curl_error($ch);
+    curl_close($ch);
+    
+    if ($httpCode !== 200 || !$response || $error) {
+        error_log("Google Cloud Translation API Error: HTTP $httpCode, Error: $error, Response: $response");
+        return '';
+    }
+    
+    $result = json_decode($response, true);
+    
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        error_log("JSON decode error: " . json_last_error_msg());
+        return '';
+    }
+    
+    return $result['data']['translations'][0]['translatedText'] ?? '';
 }
 
 function translateWithGoogle($text, $isTitle = false) {
@@ -410,21 +509,65 @@ function updateBoardContent($bo_table, $wr_id, $newContent, $newTitle = null) {
     
     // 게시물 업데이트 쿼리 준비
     $escapedContent = sql_real_escape_string($finalContent);
+    $escapedBoTable = sql_real_escape_string($bo_table);
+    $escapedWrId = sql_real_escape_string($wr_id);
     
-    if ($newTitle !== null) {
-        // 제목도 함께 업데이트
-        $escapedTitle = sql_real_escape_string($newTitle);
-        $sql = "UPDATE " . $GLOBALS['g5']['write_prefix'] . $bo_table . " 
-                SET wr_content = '{$escapedContent}', wr_subject = '{$escapedTitle}' 
-                WHERE wr_id = '$wr_id'";
-    } else {
-        // 내용만 업데이트
-        $sql = "UPDATE " . $GLOBALS['g5']['write_prefix'] . $bo_table . " 
-                SET wr_content = '{$escapedContent}' 
-                WHERE wr_id = '$wr_id'";
+    // 트랜잭션 시작
+    sql_query("BEGIN");
+    
+    try {
+        if ($newTitle !== null) {
+            // 제목도 함께 업데이트
+            $escapedTitle = sql_real_escape_string($newTitle);
+            
+            // SEO 제목 생성 (그누보드 함수 사용)
+            $write_table = $GLOBALS['g5']['write_prefix'] . $bo_table;
+            $wr_seo_title = exist_seo_title_recursive('bbs', generate_seo_title($newTitle), $write_table, $wr_id);
+            $escapedSeoTitle = sql_real_escape_string($wr_seo_title);
+            
+            // 1. 메인 게시물 테이블 업데이트
+            $sql1 = "UPDATE " . $GLOBALS['g5']['write_prefix'] . $bo_table . " 
+                     SET wr_content = '{$escapedContent}', 
+                         wr_subject = '{$escapedTitle}',
+                         wr_seo_title = '{$escapedSeoTitle}'
+                     WHERE wr_id = '{$escapedWrId}'";
+            
+            // 2. emu_posts 테이블 업데이트 (제목 + 내용)
+            $sql2 = "UPDATE emu_posts 
+                     SET wr_subject = '{$escapedTitle}',
+                         wr_content = '{$escapedContent}'
+                     WHERE bo_table = '{$escapedBoTable}' AND wr_id = '{$escapedWrId}'";
+            
+        } else {
+            // 내용만 업데이트
+            
+            // 1. 메인 게시물 테이블 업데이트
+            $sql1 = "UPDATE " . $GLOBALS['g5']['write_prefix'] . $bo_table . " 
+                     SET wr_content = '{$escapedContent}' 
+                     WHERE wr_id = '{$escapedWrId}'";
+            
+            // 2. emu_posts 테이블 업데이트 (내용만)
+            $sql2 = "UPDATE emu_posts 
+                     SET wr_content = '{$escapedContent}'
+                     WHERE bo_table = '{$escapedBoTable}' AND wr_id = '{$escapedWrId}'";
+        }
+        
+        // 쿼리 실행
+        $result1 = sql_query($sql1);
+        $result2 = sql_query($sql2);
+        
+        if ($result1 && $result2) {
+            sql_query("COMMIT");
+            return true;
+        } else {
+            sql_query("ROLLBACK");
+            return false;
+        }
+        
+    } catch (Exception $e) {
+        sql_query("ROLLBACK");
+        return false;
     }
-    
-    return sql_query($sql);
 }
 
 // ===== 메인 로직 =====
@@ -444,7 +587,22 @@ if (!$fileName || !$system || !$bo_table || !$wr_id) {
 // 게시물 업데이트 처리
 if (isset($_POST['save'])) {
     $updateTitle = !empty($_POST['title_korean']) ? $_POST['title_korean'] : null;
-    $updateContent = $_POST['deepl_content'] ?? '';
+    
+    // 선택된 번역 엔진에 따라 내용 선택
+    $selectedEngine = $_POST['selected_engine'] ?? 'deepl';
+    $updateContent = '';
+    
+    switch ($selectedEngine) {
+        case 'deepl':
+            $updateContent = $_POST['deepl_content'] ?? '';
+            break;
+        case 'google_cloud':
+            $updateContent = $_POST['google_cloud_content'] ?? '';
+            break;
+        case 'google_free':
+            $updateContent = $_POST['google_content'] ?? '';
+            break;
+    }
     
     if (!empty($updateContent)) {
         $updateResult = updateBoardContent($bo_table, $wr_id, $updateContent, $updateTitle);
@@ -505,32 +663,66 @@ if (isset($gameInfo['synopsis']) && is_array($gameInfo['synopsis'])) {
     }
 }
 
-// 제목 번역 실행
+// 번역 실행 - 제목
 $titleDeeplTranslation = '';
+$titleGoogleCloudTranslation = '';
 $titleGoogleTranslation = '';
+
 if (!empty($gameTitle)) {
-    $titleDeeplTranslation = translateWithDeepL($gameTitle, true);
-    $titleGoogleTranslation = translateWithGoogle($gameTitle, true);
+    // DeepL 번역
+    if (!empty(DEEPL_API_KEY) && DEEPL_API_KEY !== 'YOUR_DEEPL_API_KEY') {
+        $titleDeeplTranslation = translateWithDeepL($gameTitle, true);
+        if (!empty($titleDeeplTranslation)) {
+            $titleDeeplTranslation = addCountryToTitle($titleDeeplTranslation, $fileName);
+        }
+    }
     
-    // 번역된 제목에 국가 정보 추가
-    $titleDeeplTranslation = addCountryToTitle($titleDeeplTranslation, $fileName);
-    $titleGoogleTranslation = addCountryToTitle($titleGoogleTranslation, $fileName);
+    // Google Cloud 번역
+    if (!empty(GOOGLE_CLOUD_API_KEY) && GOOGLE_CLOUD_API_KEY !== 'YOUR_GOOGLE_CLOUD_API_KEY') {
+        $titleGoogleCloudTranslation = translateWithGoogleCloud($gameTitle, true);
+        if (!empty($titleGoogleCloudTranslation)) {
+            $titleGoogleCloudTranslation = addCountryToTitle($titleGoogleCloudTranslation, $fileName);
+        }
+    }
+    
+    // Google 무료 번역 (항상 사용 가능)
+    $titleGoogleTranslation = translateWithGoogle($gameTitle, true);
+    if (!empty($titleGoogleTranslation)) {
+        $titleGoogleTranslation = addCountryToTitle($titleGoogleTranslation, $fileName);
+    }
 }
 
-// 설명 번역 실행
-$deeplTranslation = translateWithDeepL($synopsis);
+// 번역 실행 - 설명
+$deeplTranslation = '';
+$googleCloudTranslation = '';
+$googleTranslation = '';
+
+if (!empty(DEEPL_API_KEY) && DEEPL_API_KEY !== 'YOUR_DEEPL_API_KEY') {
+    $deeplTranslation = translateWithDeepL($synopsis);
+}
+
+if (!empty(GOOGLE_CLOUD_API_KEY) && GOOGLE_CLOUD_API_KEY !== 'YOUR_GOOGLE_CLOUD_API_KEY') {
+    $googleCloudTranslation = translateWithGoogleCloud($synopsis);
+}
+
 $googleTranslation = translateWithGoogle($synopsis);
 
 $gameData = [
     'title' => $gameTitle ?: $fileName,
     'title_deepl' => $titleDeeplTranslation,
+    'title_google_cloud' => $titleGoogleCloudTranslation,
     'title_google' => $titleGoogleTranslation,
     'system' => $gameInfo['systeme']['text'] ?? $system,
     'description_en' => $synopsis,
     'description_deepl' => $deeplTranslation,
+    'description_google_cloud' => $googleCloudTranslation,
     'description_google' => $googleTranslation,
     'filename' => $fileName
 ];
+
+// Google Cloud API 키 상태 확인
+$deeplEnabled = (!empty(DEEPL_API_KEY) && DEEPL_API_KEY !== 'YOUR_DEEPL_API_KEY');
+$googleCloudEnabled = (!empty(GOOGLE_CLOUD_API_KEY) && GOOGLE_CLOUD_API_KEY !== 'YOUR_GOOGLE_CLOUD_API_KEY');
 ?>
 
 <!DOCTYPE html>
@@ -539,13 +731,15 @@ $gameData = [
     <title>게임 정보 번역 - <?= htmlspecialchars($gameData['title']) ?></title>
     <meta charset="UTF-8">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; }
         .game-info { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
         .title-section { background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #28a745; }
         .desc { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; }
         .deepl { background: #e3f2fd; border-left: 4px solid #2196f3; }
+        .google-cloud { background: #f3e5f5; border-left: 4px solid #9c27b0; }
         .google { background: #fff3e0; border-left: 4px solid #ff9800; }
+        .api-warning { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; border-radius: 4px; margin: 10px 0; }
         h4 { margin: 0 0 10px 0; }
         .desc-text { line-height: 1.6; margin: 0; white-space: pre-line; }
         .title-text { font-size: 18px; font-weight: bold; margin: 5px 0; }
@@ -562,7 +756,50 @@ $gameData = [
         .radio-group label { display: block; margin: 5px 0; cursor: pointer; }
         .radio-group input[type="radio"] { margin-right: 8px; }
         .selected-title { background: #d4edda; padding: 8px; border-radius: 4px; margin: 5px 0; }
+        .translation-selector { background: #e9ecef; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .translation-option { margin: 10px 0; padding: 10px; border: 2px solid #dee2e6; border-radius: 6px; cursor: pointer; transition: all 0.3s; }
+        .translation-option:hover { border-color: #007bff; background: #f8f9fa; }
+        .translation-option.selected { border-color: #007bff; background: #e7f3ff; }
+        .translation-option input[type="radio"] { margin-right: 10px; }
+        .translation-label { font-weight: bold; color: #495057; }
+        .quality-indicator { 
+            display: inline-block; 
+            padding: 2px 8px; 
+            border-radius: 12px; 
+            font-size: 12px; 
+            margin-left: 8px; 
+        }
+        .quality-premium { background: #d4edda; color: #155724; }
+        .quality-good { background: #cce5ff; color: #004085; }
+        .quality-basic { background: #fff3cd; color: #856404; }
     </style>
+    <script>
+        function selectTranslation(engine) {
+            // 모든 옵션에서 selected 클래스 제거
+            document.querySelectorAll('.translation-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // 선택된 옵션에 selected 클래스 추가
+            document.querySelector(`.translation-option[data-engine="${engine}"]`).classList.add('selected');
+            
+            // 라디오 버튼 선택
+            document.querySelector(`input[name="selected_engine"][value="${engine}"]`).checked = true;
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // 기본 선택 (DeepL)
+            selectTranslation('deepl');
+            
+            // 클릭 이벤트 추가
+            document.querySelectorAll('.translation-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const engine = this.getAttribute('data-engine');
+                    selectTranslation(engine);
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="container">
@@ -573,6 +810,25 @@ $gameData = [
             <p><strong>파일:</strong> <?= htmlspecialchars($gameData['filename']) ?></p>
             <p><strong>게시판:</strong> <?= htmlspecialchars($bo_table) ?> (ID: <?= htmlspecialchars($wr_id) ?>)</p>
         </div>
+        
+        <?php if (!$deeplEnabled && !$googleCloudEnabled): ?>
+            <div class="api-warning">
+                ⚠️ <strong>번역 API가 설정되지 않았습니다.</strong><br>
+                • DeepL API 키를 설정하면 고품질 번역을 사용할 수 있습니다.<br>
+                • Google Cloud Translation API 키를 설정하면 추가 번역 옵션을 사용할 수 있습니다.<br>
+                현재는 Google 무료 번역만 사용 가능합니다.
+            </div>
+        <?php elseif (!$deeplEnabled): ?>
+            <div class="api-warning">
+                ⚠️ <strong>DeepL API가 설정되지 않았습니다.</strong><br>
+                DeepL API 키를 설정하면 더 높은 품질의 번역을 사용할 수 있습니다.
+            </div>
+        <?php elseif (!$googleCloudEnabled): ?>
+            <div class="api-warning">
+                ⚠️ <strong>Google Cloud Translation API가 설정되지 않았습니다.</strong><br>
+                Google Cloud 번역을 사용하려면 소스 파일에서 GOOGLE_CLOUD_API_KEY를 설정해주세요.
+            </div>
+        <?php endif; ?>
         
         <?php if (isset($message)): ?>
             <div class="alert alert-error"><?= htmlspecialchars($message) ?></div>
@@ -595,15 +851,24 @@ $gameData = [
                     <?php endif; ?>
                 </div>
                 
-                <?php if (!empty($gameData['title_deepl'])): ?>
+                <?php if (!empty($gameData['title_deepl']) && $deeplEnabled): ?>
                     <div class="title-translated">
                         <strong>DeepL 번역:</strong> <?= htmlspecialchars($gameData['title_deepl']) ?>
+                        <span class="quality-indicator quality-premium">프리미엄</span>
+                    </div>
+                <?php endif; ?>
+                
+                <?php if (!empty($gameData['title_google_cloud']) && $googleCloudEnabled): ?>
+                    <div class="title-translated">
+                        <strong>Google Cloud 번역:</strong> <?= htmlspecialchars($gameData['title_google_cloud']) ?>
+                        <span class="quality-indicator quality-good">고품질</span>
                     </div>
                 <?php endif; ?>
                 
                 <?php if (!empty($gameData['title_google'])): ?>
                     <div class="title-translated">
-                        <strong>Google 번역:</strong> <?= htmlspecialchars($gameData['title_google']) ?>
+                        <strong>Google 무료 번역:</strong> <?= htmlspecialchars($gameData['title_google']) ?>
+                        <span class="quality-indicator quality-basic">기본</span>
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
@@ -617,16 +882,23 @@ $gameData = [
                 <div class="desc-text"><?= htmlspecialchars($gameData['description_en']) ?></div>
             </div>
             
-            <?php if (!empty($gameData['description_deepl'])): ?>
+            <?php if (!empty($gameData['description_deepl']) && $deeplEnabled): ?>
                 <div class="desc deepl">
-                    <h4>🤖 DeepL 번역</h4>
+                    <h4>🤖 DeepL 번역 <span class="quality-indicator quality-premium">프리미엄</span></h4>
                     <div class="desc-text"><?= htmlspecialchars($gameData['description_deepl']) ?></div>
+                </div>
+            <?php endif; ?>
+            
+            <?php if (!empty($gameData['description_google_cloud']) && $googleCloudEnabled): ?>
+                <div class="desc google-cloud">
+                    <h4>☁️ Google Cloud 번역 <span class="quality-indicator quality-good">고품질</span></h4>
+                    <div class="desc-text"><?= htmlspecialchars($gameData['description_google_cloud']) ?></div>
                 </div>
             <?php endif; ?>
             
             <?php if (!empty($gameData['description_google'])): ?>
                 <div class="desc google">
-                    <h4>🌐 Google 번역 (참고용)</h4>
+                    <h4>🌐 Google 무료 번역 <span class="quality-indicator quality-basic">기본</span></h4>
                     <div class="desc-text"><?= htmlspecialchars($gameData['description_google']) ?></div>
                 </div>
             <?php endif; ?>
@@ -638,21 +910,78 @@ $gameData = [
                         <input type="radio" name="title_korean" value="" checked>
                         원제 유지: <?= htmlspecialchars($gameData['title']) ?>
                     </label>
-                    <?php if (!empty($gameData['title_deepl'])): ?>
+                    <?php if (!empty($gameData['title_deepl']) && $deeplEnabled): ?>
                         <label>
                             <input type="radio" name="title_korean" value="<?= htmlspecialchars($gameData['title_deepl']) ?>">
                             DeepL 번역 사용: <?= htmlspecialchars($gameData['title_deepl']) ?>
                         </label>
                     <?php endif; ?>
+                    <?php if (!empty($gameData['title_google_cloud']) && $googleCloudEnabled): ?>
+                        <label>
+                            <input type="radio" name="title_korean" value="<?= htmlspecialchars($gameData['title_google_cloud']) ?>">
+                            Google Cloud 번역 사용: <?= htmlspecialchars($gameData['title_google_cloud']) ?>
+                        </label>
+                    <?php endif; ?>
                     <?php if (!empty($gameData['title_google'])): ?>
                         <label>
                             <input type="radio" name="title_korean" value="<?= htmlspecialchars($gameData['title_google']) ?>">
-                            Google 번역 사용: <?= htmlspecialchars($gameData['title_google']) ?>
+                            Google 무료 번역 사용: <?= htmlspecialchars($gameData['title_google']) ?>
                         </label>
                     <?php endif; ?>
                 </div>
                 
+                <div class="translation-selector">
+                    <h4>💬 사용할 번역 내용 선택:</h4>
+                    
+                    <?php if (!empty($gameData['description_deepl']) && $deeplEnabled): ?>
+                        <div class="translation-option" data-engine="deepl">
+                            <input type="radio" name="selected_engine" value="deepl" id="engine_deepl">
+                            <label for="engine_deepl" class="translation-label">
+                                🤖 DeepL 번역 사용 <span class="quality-indicator quality-premium">프리미엄</span>
+                            </label>
+                            <div style="margin-top: 8px; color: #666; font-size: 14px;">
+                                가장 자연스럽고 정확한 번역 품질을 제공합니다.
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <?php if (!empty($gameData['description_google_cloud']) && $googleCloudEnabled): ?>
+                        <div class="translation-option" data-engine="google_cloud">
+                            <input type="radio" name="selected_engine" value="google_cloud" id="engine_google_cloud">
+                            <label for="engine_google_cloud" class="translation-label">
+                                ☁️ Google Cloud 번역 사용 <span class="quality-indicator quality-good">고품질</span>
+                            </label>
+                            <div style="margin-top: 8px; color: #666; font-size: 14px;">
+                                Google의 최신 AI 번역 기술을 사용합니다.
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <?php if (!empty($gameData['description_google'])): ?>
+                        <div class="translation-option" data-engine="google_free">
+                            <input type="radio" name="selected_engine" value="google_free" id="engine_google_free">
+                            <label for="engine_google_free" class="translation-label">
+                                🌐 Google 무료 번역 사용 <span class="quality-indicator quality-basic">기본</span>
+                            </label>
+                            <div style="margin-top: 8px; color: #666; font-size: 14px;">
+                                무료로 사용 가능하지만 제한적인 번역 품질입니다.
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <?php if (empty($gameData['description_deepl']) && empty($gameData['description_google_cloud']) && empty($gameData['description_google'])): ?>
+                        <div style="text-align: center; color: #6c757d; padding: 20px;">
+                            사용 가능한 번역이 없습니다.<br>
+                            API 키를 확인하거나 네트워크 연결을 확인해주세요.
+                        </div>
+                    <?php endif; ?>
+                </div>
+                
+                <!-- 숨겨진 필드들 -->
                 <input type="hidden" name="deepl_content" value="<?= htmlspecialchars($gameData['description_deepl']) ?>">
+                <input type="hidden" name="google_cloud_content" value="<?= htmlspecialchars($gameData['description_google_cloud']) ?>">
+                <input type="hidden" name="google_content" value="<?= htmlspecialchars($gameData['description_google']) ?>">
+                
                 <button type="submit" name="save" value="1" class="btn-save">💾 게시물에 번역 내용 저장</button>
                 <button type="button" onclick="history.back()" class="btn-back">← 뒤로</button>
             </form>
@@ -662,7 +991,7 @@ $gameData = [
                 <p style="color: #6c757d; text-align: center;">게임 설명이 없습니다.</p>
             </div>
             
-            <?php if (!empty($gameData['title_deepl']) || !empty($gameData['title_google'])): ?>
+            <?php if (!empty($gameData['title_deepl']) || !empty($gameData['title_google_cloud']) || !empty($gameData['title_google'])): ?>
                 <form method="POST">
                     <h4>적용할 제목 선택:</h4>
                     <div class="radio-group">
@@ -676,15 +1005,25 @@ $gameData = [
                                 DeepL 번역 사용: <?= htmlspecialchars($gameData['title_deepl']) ?>
                             </label>
                         <?php endif; ?>
+                        <?php if (!empty($gameData['title_google_cloud']) && $googleCloudEnabled): ?>
+                            <label>
+                                <input type="radio" name="title_korean" value="<?= htmlspecialchars($gameData['title_google_cloud']) ?>">
+                                Google Cloud 번역 사용: <?= htmlspecialchars($gameData['title_google_cloud']) ?>
+                            </label>
+                        <?php endif; ?>
                         <?php if (!empty($gameData['title_google'])): ?>
                             <label>
                                 <input type="radio" name="title_korean" value="<?= htmlspecialchars($gameData['title_google']) ?>">
-                                Google 번역 사용: <?= htmlspecialchars($gameData['title_google']) ?>
+                                Google 무료 번역 사용: <?= htmlspecialchars($gameData['title_google']) ?>
                             </label>
                         <?php endif; ?>
                     </div>
                     
                     <input type="hidden" name="deepl_content" value="">
+                    <input type="hidden" name="google_cloud_content" value="">
+                    <input type="hidden" name="google_content" value="">
+                    <input type="hidden" name="selected_engine" value="deepl">
+                    
                     <button type="submit" name="save" value="1" class="btn-save">💾 제목만 업데이트</button>
                     <button type="button" onclick="history.back()" class="btn-back">← 뒤로</button>
                 </form>

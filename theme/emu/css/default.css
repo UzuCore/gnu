@@ -44,60 +44,284 @@ border:1px solid #558ab7 !important;
 
 .placeholdersjs {color:#aaa !important}
 
-/* 다크모드 */
-body.dark-mode {
-  background:#212121 !important;
-  color:#fff !important;
-}
-.dark-mode .dark-icon { color:gold }
-
+/* 비-다크모드 공통 */
 .sv_wrap a { color:#888 !important }
 
 /* 로그인판넬 */
 #ol_after_private a { color:#a0a0a1 !important }
 
-/* 현재접속자 */
-.dark-mode a { color:#efefef }
-.dark-mode .lt_more { color:#557799 !important }
-.dark-mode #current_connect ul li:first-child { border-top:2px solid #222f3e }
-.dark-mode #current_connect ul li { border-bottom:1px solid #222f3e }
+/* ============================================================
+   다크모드 — GitHub Dark 컬러셋
+   ============================================================ */
+:root {
+  --ghd-canvas:        #0d1117; /* 페이지 배경 */
+  --ghd-canvas-subtle: #161b22; /* 박스/카드 배경 */
+  --ghd-canvas-inset:  #010409; /* 입력창/푸터 등 더 어두운 영역 */
+  --ghd-border:        #272d36; /* 기본 보더 (배경 대비 은은하게) */
+  --ghd-border-muted:  #1c2128; /* 옅은 보더 */
+  --ghd-fg:            #e6edf3; /* 기본 텍스트 */
+  --ghd-fg-muted:      #7d8590; /* 보조 텍스트 */
+  --ghd-accent:        #2f81f7; /* 링크 */
+  --ghd-accent-hover:  #58a6ff; /* 링크 hover */
+  --ghd-accent-emph:   #1f6feb; /* 강조(현재 페이지 등) */
+  --ghd-success:       #238636; /* primary 버튼 초록 */
+  --ghd-success-hover: #2ea043;
+  --ghd-danger:        #f85149; /* 취소/위험 */
+  --ghd-attention:     #d29922; /* 노랑 아이콘 */
+}
 
-/* 최근게시물 */
-.dark-mode .lat_title a {color:#888 !important }
-.dark-mode .latest_wr li,
-.dark-mode .latest_top_wr li { border-bottom:1px solid #222f3e }
+body.dark-mode {
+  background: var(--ghd-canvas) !important;
+  color: var(--ghd-fg) !important;
+}
+.dark-mode .dark-icon { color: var(--ghd-attention) }
 
-/* 메뉴 */
-.dark-mode #gnb {border-bottom:1px solid #225577}
+/* 링크 — GitHub 방식: 기본 링크는 텍스트색, hover 시에만 파랑+밑줄.
+   본문/댓글 콘텐츠 안의 링크만 항상 파랑(마크다운 링크처럼) */
+.dark-mode a { color: var(--ghd-fg) }
+.dark-mode a:hover { color: var(--ghd-accent-hover); text-decoration:underline }
+.dark-mode #bo_v_con a,
+.dark-mode .wr_content a,
+.dark-mode .view_content a,
+.dark-mode .cmt_contents a,
+.dark-mode #bo_v_link a { color: var(--ghd-accent) }
+.dark-mode #bo_v_con a:hover,
+.dark-mode .wr_content a:hover,
+.dark-mode .cmt_contents a:hover { color: var(--ghd-accent-hover); text-decoration:underline }
+.dark-mode .lt_more { color: var(--ghd-fg-muted) !important }
+
+/* 헤더 / 상단 */
+.dark-mode #hd,
+.dark-mode #hd_wrapper { background: var(--ghd-canvas) !important }
+.dark-mode #tnb { background: var(--ghd-canvas-inset) !important; border-bottom:1px solid var(--ghd-border) }
+.dark-mode #logo a { color: var(--ghd-fg) !important }
+.dark-mode #tnb a,
+.dark-mode .hd_login a,
+.dark-mode #hd_qnb a,
+.dark-mode #hd_define a { color: var(--ghd-fg-muted) !important }
+.dark-mode #tnb a:hover,
+.dark-mode .hd_login a:hover { color: var(--ghd-fg) !important }
+.dark-mode #hd_define li.active a { color: var(--ghd-fg) !important }
+
+/* 메뉴 (GNB) */
+.dark-mode #gnb { border-bottom:1px solid var(--ghd-border) }
 .dark-mode #gnb,
-.dark-mode #gnb .gnb_2dli a
-	{ background:#222f3e !important }
-
-.dark-mode .box,
-.dark-mode #bo_v,
-.dark-mode .tbl_wrap table
-	{ background:#212121 !important }
-
-/* 게시판 */
-.dark-mode .tbl_head01 tr td { background:#212121 !important }
-.dark-mode .tbl_head01 tr.bo_notice td { background:#2c2c2c !important; border-bottom:1px solid #212121 !important }
-.dark-mode .tbl_head01 td { border-bottom:1px solid #2c2c2c !important }
-.dark-mode #bo_list_total
-	{ color:#fff }
+.dark-mode #gnb .gnb_2dli a { background: var(--ghd-canvas-subtle) !important }
+.dark-mode .gnb_1da,
+.dark-mode .gnb_2da { color: var(--ghd-fg) !important }
+.dark-mode .gnb_1da:hover,
+.dark-mode .gnb_2da:hover { background: var(--ghd-border-muted) !important; color: var(--ghd-fg) !important }
+.dark-mode .gnb_2dul { border:1px solid var(--ghd-border) }
+.dark-mode #gnb_all { background: var(--ghd-canvas-subtle) !important; border-right:1px solid var(--ghd-border) }
+.dark-mode #gnb_all a { color: var(--ghd-fg) !important }
+.dark-mode .gnb_menu_btn,
+.dark-mode .gnb_close_btn { color: var(--ghd-fg) }
 
 /* 검색바 */
-.dark-mode #hd_sch #sch_stx,
-.dark-mode #hd_sch #sch_submit{ background:#2c2c2c; color:#fafafa }
+.dark-mode #hd_sch #sch_stx { background: var(--ghd-canvas-inset); color: var(--ghd-fg); border:1px solid var(--ghd-border) }
+.dark-mode #hd_sch #sch_submit { background: var(--ghd-canvas-subtle); color: var(--ghd-fg); border:1px solid var(--ghd-border) }
 
-  
+/* 현재접속자 */
+.dark-mode #current_connect ul li:first-child { border-top:2px solid var(--ghd-border) }
+.dark-mode #current_connect ul li { border-bottom:1px solid var(--ghd-border-muted) }
+
+/* 최근게시물 */
+.dark-mode .lat_title a { color: var(--ghd-fg-muted) !important }
+.dark-mode .latest_wr li,
+.dark-mode .latest_top_wr li { border-bottom:1px solid var(--ghd-border-muted) }
+
+/* 박스 / 게시물 보기 / 테이블 래퍼 */
+.dark-mode .box,
+.dark-mode #bo_v,
+.dark-mode .tbl_wrap table { background: var(--ghd-canvas-subtle) !important; color: var(--ghd-fg) }
+.dark-mode #bo_v_con,
+.dark-mode #bo_v_con * { color: var(--ghd-fg) }
+.dark-mode #aside .box { background: var(--ghd-canvas-subtle) !important; border:0 }
+
+/* 게시판 목록 테이블 */
+.dark-mode .tbl_head01 thead th,
+.dark-mode .tbl_head01 tr th { background: var(--ghd-canvas-inset) !important; color: var(--ghd-fg) !important; border-bottom:1px solid var(--ghd-border) !important }
+.dark-mode .tbl_head01 tr td { background: var(--ghd-canvas-subtle) !important; color: var(--ghd-fg) }
+.dark-mode .tbl_head01 tr.bo_notice td { background: var(--ghd-canvas) !important; border-bottom:1px solid var(--ghd-border-muted) !important }
+.dark-mode .tbl_head01 td { border-bottom:1px solid var(--ghd-border-muted) !important }
+.dark-mode .tbl_head01 a,
+.dark-mode .bo_tit a,
+.dark-mode .bo_tit { color: var(--ghd-fg) !important }
+.dark-mode #bo_list_total { color: var(--ghd-fg-muted) }
+.dark-mode .td_num,
+.dark-mode .td_numbig,
+.dark-mode .td_date,
+.dark-mode .td_datetime,
+.dark-mode .td_name,
+.dark-mode .td_nick,
+.dark-mode .td_mb_id { color: var(--ghd-fg-muted) !important }
+
+/* 게시물 보기 머리/꼬리 */
+.dark-mode #bo_v_top,
+.dark-mode #bo_v_info,
+.dark-mode #bo_v_atc_title,
+.dark-mode #bo_v_file,
+.dark-mode .bo_v_com { border-color: var(--ghd-border-muted) !important }
+.dark-mode .wr_content,
+.dark-mode .write_div,
+.dark-mode .view_content { color: var(--ghd-fg) }
+
+/* 페이징 */
+.dark-mode .pg_page,
+.dark-mode .pg_start,
+.dark-mode .pg_prev,
+.dark-mode .pg_next,
+.dark-mode .pg_end { background: var(--ghd-canvas-subtle); color: var(--ghd-fg-muted); border:1px solid var(--ghd-border) }
+.dark-mode .pg_current { background: var(--ghd-accent-emph); color:#fff; border:1px solid var(--ghd-accent-emph) }
+
+/* 폼 입력 요소 */
+.dark-mode input[type="text"],
+.dark-mode input[type="password"],
+.dark-mode input[type="email"],
+.dark-mode input[type="number"],
+.dark-mode input[type="search"],
+.dark-mode input[type="tel"],
+.dark-mode input[type="url"],
+.dark-mode input[type="date"],
+.dark-mode textarea,
+.dark-mode select,
+.dark-mode .frm_input { background: var(--ghd-canvas-inset) !important; color: var(--ghd-fg) !important; border:1px solid var(--ghd-border) !important }
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder { color: var(--ghd-fg-muted) }
+.dark-mode input[type="checkbox"],
+.dark-mode input[type="radio"] { background: var(--ghd-canvas-inset) !important }
+.dark-mode .tbl_frm01 th { background: var(--ghd-canvas-inset) !important; color: var(--ghd-fg) }
+.dark-mode .tbl_frm01 td { background: var(--ghd-canvas-subtle) !important; color: var(--ghd-fg); border-color: var(--ghd-border-muted) }
+
+/* 버튼 */
+.dark-mode .btn,
+.dark-mode .btn01,
+.dark-mode .btn02,
+.dark-mode .btn_b02,
+.dark-mode .btn_b03,
+.dark-mode .btn_b04 { background: var(--ghd-canvas-subtle); color: var(--ghd-fg); border:1px solid var(--ghd-border) }
+.dark-mode .btn:hover,
+.dark-mode .btn01:hover,
+.dark-mode .btn02:hover,
+.dark-mode .btn_b02:hover,
+.dark-mode .btn_b03:hover { border-color: var(--ghd-fg-muted); color: var(--ghd-fg) }
+.dark-mode .btn_b01,
+.dark-mode .btn_submit,
+.dark-mode .btn_confirm,
+.dark-mode input[type="submit"] { background: var(--ghd-success); color:#fff !important; border:1px solid rgba(240,246,252,0.1) }
+.dark-mode .btn_b01:hover,
+.dark-mode .btn_submit:hover,
+.dark-mode input[type="submit"]:hover { background: var(--ghd-success-hover) }
+.dark-mode .btn_cancel,
+.dark-mode .btn_close { background: var(--ghd-canvas-subtle); color: var(--ghd-danger); border:1px solid var(--ghd-border) }
+
+/* 푸터 */
+.dark-mode #ft { background: var(--ghd-canvas-inset) !important; border-top:1px solid var(--ghd-border); color: var(--ghd-fg-muted) }
+.dark-mode #ft a,
+.dark-mode #ft_link a,
+.dark-mode #ft_company,
+.dark-mode #ft_copy { color: var(--ghd-fg-muted) !important }
+
+/* 컨텐츠 영역 / 구분선 */
+.dark-mode #container_title { color: var(--ghd-fg); border-color: var(--ghd-border) }
+.dark-mode hr { border-color: var(--ghd-border); background: var(--ghd-border) }
+
 /* 툴팁 */
 .dark-mode .bub-tooltip[data-tooltip]:hover::after,
 .dark-mode .bub-tooltip[data-tooltip]:focus::after {
-    color:#21272e;
-    background:#fff;
+    color: var(--ghd-fg);
+    background: var(--ghd-canvas-inset);
+    border:1px solid var(--ghd-border);
 }
 
-.dark-mode input[type="checkbox"] { background:#000 !important }
+/* ===== 회원 스킨 (로그인 / 회원가입 / 비밀번호찾기) ===== */
+.dark-mode .mbskin { color: var(--ghd-fg) }
+.dark-mode .mbskin_box,
+.dark-mode #mb_login,
+.dark-mode #login_fs,
+.dark-mode #register_form,
+.dark-mode .register_form_inner,
+.dark-mode #fregister,
+.dark-mode #fregisterform,
+.dark-mode #reg_result,
+.dark-mode #find_info { background: var(--ghd-canvas-subtle) !important; border:0 !important; color: var(--ghd-fg) }
+.dark-mode .mbskin h1,
+.dark-mode .mbskin h2,
+.dark-mode #mb_login h1,
+.dark-mode #login_fs legend { color: var(--ghd-fg) }
+.dark-mode #login_info,
+.dark-mode .mb_log_cate a,
+.dark-mode #login_auto_login,
+.dark-mode .login_if_lpl { color: var(--ghd-fg-muted) !important }
+.dark-mode .mb_log_cate .join { background: var(--ghd-canvas-inset) }
+.dark-mode #fregister p,
+.dark-mode #fregister_private div,
+.dark-mode #fregister_private table th,
+.dark-mode #fregister textarea,
+.dark-mode #member_cert_refresh textarea,
+.dark-mode #member_cert_refresh_private div,
+.dark-mode #reg_result #result_email { background: var(--ghd-canvas-inset) !important; color: var(--ghd-fg) !important; border-color: var(--ghd-border) }
+.dark-mode .cbg { background: var(--ghd-canvas-inset) !important; color: var(--ghd-fg) !important }
+.dark-mode .new_win_con,
+.dark-mode #find_info .new_win_con { background: var(--ghd-canvas-subtle) !important; color: var(--ghd-fg) }
+
+/* ===== 아웃로그인 (사이드 로그인/회원 박스) ===== */
+.dark-mode #ol_after,
+.dark-mode #ol_before { color: var(--ghd-fg) }
+.dark-mode #ol_after_hd .profile_img img { border:1px solid var(--ghd-border) }
+.dark-mode #ol_after_info { border:1px solid var(--ghd-border); color: var(--ghd-fg-muted) }
+.dark-mode #ol_after_private a,
+.dark-mode #ol_after_private a strong { color: var(--ghd-fg) !important }
+.dark-mode #ol_after_private li a,
+.dark-mode #ol_after_private li { border-color: var(--ghd-border-muted) !important }
+.dark-mode #ol_after_private li a:hover { background: var(--ghd-canvas-subtle) !important; color: var(--ghd-accent-hover) !important }
+.dark-mode #ol_after_logout { color: var(--ghd-fg-muted) !important; border-top:1px solid var(--ghd-border) }
+.dark-mode .ol .join { background: var(--ghd-canvas-inset); color: var(--ghd-fg-muted) }
+.dark-mode #ol_id,
+.dark-mode #ol_pw { background: var(--ghd-canvas-inset) !important; color: var(--ghd-fg) !important; border:1px solid var(--ghd-border) !important }
+.dark-mode #ol_submit { background: var(--ghd-success); color:#fff; border:1px solid rgba(240,246,252,0.1) }
+
+/* ===== 게시판 스킨 보충 ===== */
+.dark-mode #bo_list tbody .even td { background: var(--ghd-canvas) !important }
+.dark-mode #bo_cate a { background: var(--ghd-canvas-subtle); color: var(--ghd-fg-muted); border:1px solid var(--ghd-border); border-radius:30px }
+.dark-mode #bo_cate a:focus,
+.dark-mode #bo_cate a:hover,
+.dark-mode #bo_cate a:active,
+.dark-mode #bo_cate #bo_cate_on { background: var(--ghd-accent-emph) !important; color:#fff !important; border-color: var(--ghd-accent-emph); box-shadow:none !important }
+.dark-mode #bo_gall .gall_img,
+.dark-mode #bo_gall li { background: var(--ghd-canvas-subtle); border:0 }
+.dark-mode #bo_gall .bo_tit,
+.dark-mode #bo_gall .bo_tit a { color: var(--ghd-fg) }
+.dark-mode .btn_bo_adm input { background: var(--ghd-canvas-subtle); color: var(--ghd-fg); border:1px solid var(--ghd-border) }
+.dark-mode #bo_v_title,
+.dark-mode .bo_v_tit { color: var(--ghd-fg) }
+.dark-mode .bo_v_cate a,
+.dark-mode #bo_v_cate a { color: var(--ghd-accent) }
+.dark-mode #bo_v_info { color: var(--ghd-fg-muted) }
+
+/* ===== 글쓰기 / 댓글 영역 ===== */
+.dark-mode .write_div,
+.dark-mode .bo_vc_w,
+.dark-mode #bo_vc,
+.dark-mode #bo_vc li,
+.dark-mode .cmt_contents,
+.dark-mode #char_count_wrap { background: var(--ghd-canvas-subtle) !important; color: var(--ghd-fg) !important; border-color: var(--ghd-border-muted) }
+.dark-mode #bo_vc_empty { background: var(--ghd-canvas-subtle); color: var(--ghd-fg-muted) }
+.dark-mode .bo_vc_act a,
+.dark-mode #bo_vc .sound_only + a { color: var(--ghd-fg-muted) }
+.dark-mode #bo_v_atc_title,
+.dark-mode #bo_vc h2 { color: var(--ghd-fg) }
+
+/* ===== 라이트 테마 잔여 밝은 테두리/배경 정리 (GitHub식: 테두리 최소화) ===== */
+.dark-mode .mbskin .mbskin_box { background: var(--ghd-canvas-subtle) !important; border:0 !important }
+.dark-mode #bo_gall .gall_img { border-bottom:1px solid var(--ghd-border-muted) }
+.dark-mode #bo_v_file li { border:1px solid var(--ghd-border-muted) !important; background: var(--ghd-canvas-subtle) }
+.dark-mode #bo_v_info { border-bottom:1px solid var(--ghd-border-muted) !important; color: var(--ghd-fg-muted) }
+.dark-mode #ol_svc a { border:1px solid var(--ghd-border) !important; color: var(--ghd-fg-muted) !important }
+.dark-mode .bo_sch { background: var(--ghd-canvas-subtle) !important; border:1px solid var(--ghd-border) !important; color: var(--ghd-fg) }
+.dark-mode .bo_sch select,
+.dark-mode .bo_sch input { background: var(--ghd-canvas-inset) !important; border:1px solid var(--ghd-border) !important; color: var(--ghd-fg) }
+.dark-mode .chk_box input[type="checkbox"] + label span { background: var(--ghd-canvas-inset) !important; border:1px solid var(--ghd-border) !important }
 
 
 

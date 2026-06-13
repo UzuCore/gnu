@@ -122,6 +122,16 @@ jQuery(function($){
         ?>
     </section>
 
+    <?php
+    $cnt = 0;
+    if ($view['file']['count']) {
+        for ($i=0; $i<count($view['file']); $i++) {
+            if (isset($view['file'][$i]['source']) && $view['file'][$i]['source'] && !$view['file'][$i]['view'])
+                $cnt++;
+        }
+    }
+    ?>
+
     <?php if($cnt) { ?>
     <section id="bo_v_file">
         <h2>첨부파일</h2>

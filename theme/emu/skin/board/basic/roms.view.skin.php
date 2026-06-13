@@ -123,10 +123,10 @@ add_stylesheet('<link rel="stylesheet" href="'.$board_skin_url.'/style.css">', 0
                 'MSX' => 'msx',                    // MSX
                 'C64' => 'c64',                    // Commodore 64
                 'AMIGA' => 'amiga',                // Commodore Amiga
-                'CPS1' => 'fbalpha2012_cps1',
-                'CPS2' => 'fbalpha2012_cps2',
+                'CPS' => 'fbneo',
                 'NEOGEO' => 'fbneo',
                 'DOS' => 'dos',
+                'WS' => 'ws',
             ];
             $selCore = $view['wr_1'] ? $view['wr_1'] : $emulatorjsCategories[$view['ca_name']];
             //if (!in_array($selCore, ['arcade', 'fbneo', 'mame2003_plus', 'fbalpha2012_cps1', 'fbalpha2012_cps2']))
@@ -142,19 +142,104 @@ add_stylesheet('<link rel="stylesheet" href="'.$board_skin_url.'/style.css">', 0
             echo '<div style="float:left;width:750px">';
             include_once("emujs.php");
             echo '</div>';
-            echo '<div style="float:right;width:275px;padding-left:10px">';
+            echo '<div class="gameInfo">';
             preg_match('/<!--\s*SCREENSHOT_START\s*-->(.*?)<!--\s*SCREENSHOT_END\s*-->/s', $view['wr_content'], $matches);
             echo $matches[1] ?? '';
             preg_match('/<img[^>]*src=["\'][^"\']*\/([^"\'\/]+\.(jpg|jpeg|png|gif|webp|bmp|svg))["\']/', $matches[1], $matches);
-            echo '<a href="'.$board_skin_url.'/roms.info.php?game='.urlencode($view['wr_subject']).'&bo_table='.$bo_table.'&wr_id='.$wr_id.'&system='.$selCore.'">스크랩</a>';
-            echo '<a href="'.$board_skin_url.'/roms.img.rotate.php?img='.$matches[1].'">회전</a>';
-            echo '</div>';
+            if ($is_admin) {
+                echo '<button onclick=location.href="'.$board_skin_url.'/roms.info.php?game='.urlencode($view['wr_subject']).'&bo_table='.$bo_table.'&wr_id='.$wr_id.'&system='.$selCore.'">게임정보 가져오기</button>';
+                echo '<button onclick=location.href="'.$board_skin_url.'/roms.img.rotate.php?img='.$matches[1].'">이미지 회전</button>';
+            }
         }
         ?>
 
+
+            <button id="saveToServer">서버에 상태 저장하기</button>
+            <button id="loadFromServer">서버에 상태 불러오기</button>
+
+            <script>
+            // 서버에 저장하는 함수
+            async function saveToServer() {
+                if (!window.EJS_emulator || !window.EJS_emulator.gameManager) {
+                    alert('게임이 실행되지 않았습니다.');
+                    return;
+                }
+                
+                let state;
+                try {
+                    state = window.EJS_emulator.gameManager.getState();
+                } catch(e) {
+                    console.error('상태 저장 실패:', e);
+                    alert('저장에 실패했습니다.');
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('gameId', window.EJS_emulator.getBaseFileName());
+                formData.append('saveData', new Blob([state]));
+                
+                try {
+                    const response = await fetch('/api/state_save.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    if (response.ok) {
+                        alert('서버에 저장되었습니다!');
+                    } else {
+                        alert(result.error || '저장에 실패했습니다.');
+                    }
+                } catch (error) {
+                    console.error('서버 저장 실패:', error);
+                    alert('서버 연결에 실패했습니다.');
+                }
+            }
+
+            // 서버에서 불러오는 함수
+            async function loadFromServer() {
+                if (!window.EJS_emulator || !window.EJS_emulator.gameManager) {
+                    alert('게임이 로드되지 않았습니다.');
+                    return;
+                }
+                
+                try {
+                    const gameId = window.EJS_emulator.getBaseFileName();
+                    const response = await fetch(`/api/state_load.php?gameId=${gameId}`);
+                    
+                    if (response.ok) {
+                        const arrayBuffer = await response.arrayBuffer();
+                        const state = new Uint8Array(arrayBuffer);
+                        window.EJS_emulator.gameManager.loadState(state);
+                        alert('서버에서 불러왔습니다!');
+                    } else if (response.status === 404) {
+                        alert('저장된 데이터가 없습니다.');
+                    } else if (response.status === 401) {
+                        alert('로그인이 필요합니다.');
+                    } else {
+                        alert('서버에서 불러오기에 실패했습니다.');
+                    }
+                } catch (error) {
+                    console.error('서버 로드 실패:', error);
+                    alert('서버 연결에 실패했습니다.');
+                }
+            }
+
+            <?php if ($is_member) { ?>
+            // 버튼에 이벤트 리스너 연결 (회원만)
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('saveToServer').addEventListener('click', saveToServer);
+                document.getElementById('loadFromServer').addEventListener('click', loadFromServer);
+            });
+            <?php } ?>
+            </script>
+        </div>
+
+
         <!-- 본문 내용 시작 { -->
-        <div id="bo_v_con"><?php echo preg_replace('/<!--\s*SCREENSHOT_START\s*-->.*?<!--\s*SCREENSHOT_END\s*-->\s*/s', '', $view['wr_content']);
- ?></div>
+        <div id="bo_v_con">
+            <?php echo preg_replace('/<!--\s*SCREENSHOT_START\s*-->.*?<!--\s*SCREENSHOT_END\s*-->\s*/s', '', $view['wr_content']) ?>
+        </div>
         <!-- } 본문 내용 끝 -->
 
         <?php if ($is_signature) { ?><p><?php echo $signature ?></p><?php } ?>

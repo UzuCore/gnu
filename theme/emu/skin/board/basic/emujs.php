@@ -1,9 +1,11 @@
 <?php
+$gameName = str_replace(' ', '_', pathinfo(basename($gameUrl), PATHINFO_FILENAME));
 $sysRatio = [
-    'psp' => '16/9',
+    'psp' => '160/144',
     'gb' => '10/9',
-    'gba' => '3/2', 
-    'nds' => '21/8'
+    'gba' => '3/2',
+    'ngp' => '160/152',
+    'ws' => '224/144',
 ];
 $sysRatio = $sysRatio[$selCore] ?? "4/3";
 //$sysRatio = $view['wr_3'] ?? $sysRatio;
@@ -14,10 +16,6 @@ $sysRatio = $sysRatio[$selCore] ?? "4/3";
   aspect-ratio: <?php echo $sysRatio?>;
   margin-bottom:15px;
 }
-.ejs_parent canvas {
-  width: 100%;
-  height: auto;
-}
 
 .ejs_start_button {
     text-shadow: none;
@@ -26,7 +24,6 @@ $sysRatio = $sysRatio[$selCore] ?? "4/3";
     color: #fff !important;
     border-radius: 22px;
 }
-
 
 .ejs_start_button:active,
 .ejs_start_button:hover {
@@ -62,6 +59,10 @@ nesOptions = {
     "nestopia_overscan_h_right": "0"
 }
 
+pceOptions = {
+    "pce_aspect_ratio": "4:3"
+}
+
 fbnOptions = {
     "fbneo-neogeo-mode": "UNIBIOS"
 }
@@ -78,6 +79,7 @@ const coreOptions = {
     "nes": nesOptions,
     "fceumm": nesOptions,
     "nestopia": nesOptions,
+    "pce": pceOptions,
     "fbneo": fbnOptions,
     "mame2003_plus" : mame2003pOptions,
     "nds": {
@@ -86,7 +88,7 @@ const coreOptions = {
 };
 
 // EmulatorJS 설정
-EJS_DEBUG_XX = true;
+EJS_DEBUG_XX = false;
 EJS_threads = true;
 EJS_player = "#game";
 EJS_core = "<?php echo $selCore?>";
@@ -94,7 +96,8 @@ if (selParent)
     EJS_gameParentUrl = "/api/" + selParent + ".zip";
 EJS_gameUrl = "<?php echo $gameUrl?>";
 EJS_pathtodata = "/emujs/";
-EJS_language = "ko-KO";
+EJS_language = "ko";
+EJS_gameName = "<?php echo $gameName?>";
 EJS_gameTitle = "<?php echo $view["wr_subject"]?>";
 EJS_startOnLoaded = false;
 EJS_alignStartButton = "center";
@@ -107,6 +110,8 @@ EJS_defaultOptions = {
 }
 if (selCa == "NEOGEO")
     EJS_biosUrl = '/api/neogeo.zip';
+if (EJS_core == "bluemsx")
+    EJS_biosUrl = '/api/msx.zip';
 
 // 스크린샷 서버 업로드 함수
 async function uploadScreenshotAndUpdatePost(blob) {
@@ -165,7 +170,7 @@ async function takeScreenshotLowVersion() {
         const screenshotData = await window.EJS_emulator.gameManager.screenshot();
         
         // DOS 코어인 경우 4/3 비율로 강제 변환
-        if (EJS_core === 'dos') {
+        if (['dos', 'pce', 'fbneo', 'mame2003_plus', 'arcade'].includes(EJS_core)) {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             const img = new Image();
@@ -237,6 +242,8 @@ async function takeScreenshotLowVersion() {
 EJS_Buttons = {
     saveSavFiles: false,
     loadSavFiles: false,
+    cacheManager: false,
+    exitEmulation: false,
     contextMenu: false,
     customDownload: {
         visible: true,

@@ -50,18 +50,7 @@ function getLoadAverage() {
     ];
 }
 
-// 출력
-echo "<h3>💻 서버 부하율 (Load Average)</h3>";
-$load = getLoadAverage();
-echo number_format($load['1min'], 3)."<br><br>";
 
-echo "<h3>🌡️ CPU 코어 온도 (Sensors)</h3>";
-$temps = getCoreTempsOnlyFromSensors();
-if (empty($temps)) {
-    echo "❌ sensors 데이터를 읽을 수 없습니다. 웹서버 권한 또는 sensors 설치 확인 필요.";
-} else {
-    echo $temps['Package'];
-}
 ?>
 
 <!-- 상단 시작 { -->
@@ -110,7 +99,23 @@ if (empty($temps)) {
         <h2>메인메뉴</h2>
         <div class="gnb_wrap">
             <ul id="gnb_1dul">
-                <li class="gnb_1dli gnb_mnal"><button type="button" class="gnb_menu_btn" title="전체메뉴"><i class="fa fa-bars" aria-hidden="true"></i><span class="sound_only">전체메뉴열기</span></button></li>
+                <li class="gnb_1dli gnb_mnal" style='line-height:55px;'>
+                    <?php
+echo "<div class='gnb_1da' style='float:right'>💻 서버 부하율 (Load Average) ";
+$load = getLoadAverage();
+echo number_format($load['1min'], 3);
+echo "</div>";
+
+echo "<div class='gnb_1da' style='float:right'>🌡️ CPU 코어 온도 (Sensors) ";
+$temps = getCoreTempsOnlyFromSensors();
+if (empty($temps)) {
+    echo "❌ sensors 데이터를 읽을 수 없습니다.";
+} else {
+    echo $temps['Package'];
+}
+echo "</div>";
+?>
+                </li>
                 <?php
 				$menu_datas = get_menu_db(0, true);
 				$gnb_zindex = 999; // gnb_1dli z-index 값 설정용
@@ -147,55 +152,9 @@ if (empty($temps)) {
                     <li class="gnb_empty">메뉴 준비 중입니다.<?php if ($is_admin) { ?> <a href="<?php echo G5_ADMIN_URL; ?>/menu_list.php">관리자모드 &gt; 환경설정 &gt; 메뉴설정</a>에서 설정하실 수 있습니다.<?php } ?></li>
                 <?php } ?>
             </ul>
-            <div id="gnb_all">
-                <h2>전체메뉴</h2>
-                <ul class="gnb_al_ul">
-                    <?php
-                    
-                    $i = 0;
-                    foreach( $menu_datas as $row ){
-                    ?>
-                    <li class="gnb_al_li">
-                        <a href="<?php echo $row['me_link']; ?>" target="_<?php echo $row['me_target']; ?>" class="gnb_al_a"><?php echo $row['me_name'] ?></a>
-                        <?php
-                        $k = 0;
-                        foreach( (array) $row['sub'] as $row2 ){
-                            if($k == 0)
-                                echo '<ul>'.PHP_EOL;
-                        ?>
-                            <li><a href="<?php echo $row2['me_link']; ?>" target="_<?php echo $row2['me_target']; ?>"><?php echo $row2['me_name'] ?></a></li>
-                        <?php
-                        $k++;
-                        }   //end foreach $row2
-
-                        if($k > 0)
-                            echo '</ul>'.PHP_EOL;
-                        ?>
-                    </li>
-                    <?php
-                    $i++;
-                    }   //end foreach $row
-
-                    if ($i == 0) {  ?>
-                        <li class="gnb_empty">메뉴 준비 중입니다.<?php if ($is_admin) { ?> <br><a href="<?php echo G5_ADMIN_URL; ?>/menu_list.php">관리자모드 &gt; 환경설정 &gt; 메뉴설정</a>에서 설정하실 수 있습니다.<?php } ?></li>
-                    <?php } ?>
-                </ul>
-                <button type="button" class="gnb_close_btn"><i class="fa fa-times" aria-hidden="true"></i></button>
-            </div>
-            <div id="gnb_all_bg"></div>
         </div>
     </nav>
-    <script>
-    
-    $(function(){
-        $(".gnb_menu_btn").click(function(){
-            $("#gnb_all, #gnb_all_bg").show();
-        });
-        $(".gnb_close_btn, #gnb_all_bg").click(function(){
-            $("#gnb_all, #gnb_all_bg").hide();
-        });
-    });
-    
+    <script>    
     // 다크모드 적용(페이지 로드시)
     document.addEventListener('DOMContentLoaded', function () {
         const savedTheme = localStorage.getItem('theme');

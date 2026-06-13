@@ -31,7 +31,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$board_skin_url.'/style.css">', 0
     <!-- 게시판 페이지 정보 및 버튼 시작 { -->
     <div id="bo_btn_top">
         <div id="bo_list_total">
-            <span>Total <?php echo number_format($total_count) ?>건</span>
+            <span>전체 <?php echo number_format($total_count) ?>건</span>
             <?php echo $page ?> 페이지
         </div>
 
@@ -110,19 +110,17 @@ add_stylesheet('<link rel="stylesheet" href="'.$board_skin_url.'/style.css">', 0
                     <div class="gall_img" style="<?php if ($board['bo_gallery_height'] > 0) echo 'height:'.$board['bo_gallery_height'].'px;max-height:'.$board['bo_gallery_height'].'px'; ?>">
                         <a href="<?php echo $list[$i]['href'] ?>">
                         <?php
-                        if ($list[$i]['is_notice']) { // 공지사항  ?>
-                            <span class="is_notice" style="<?php echo $line_height_style; ?>">공지</span>
-                        <?php } else {
-                            $thumb = get_list_nothumb($board['bo_table'], $list[$i]['wr_id']);
+                        if ($list[$i]['is_notice']) {} //공지사항
 
-                            if($thumb['src']) {
-                                $img_content = '<img src="'.$thumb['src'].'" alt="'.$thumb['alt'].'" width="100%">';
-                            } else {
-                                $img_content = '<span class="no_image" style="'.$line_height_style.'">no image</span>';
-                            }
+                        $thumb = get_list_nothumb($board['bo_table'], $list[$i]['wr_id']);
 
-                            echo run_replace('thumb_image_tag', $img_content, $thumb);
+                        if($thumb['src']) {
+                            $img_content = '<img src="'.$thumb['src'].'" alt="'.$thumb['alt'].'" width="100%">';
+                        } else {
+                            $img_content = '<span class="no_image" style="'.$line_height_style.'">no image</span>';
                         }
+
+                        echo run_replace('thumb_image_tag', $img_content, $thumb);
                          ?>
                         </a>
                     </div>

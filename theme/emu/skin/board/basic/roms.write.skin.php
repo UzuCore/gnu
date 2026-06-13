@@ -173,6 +173,50 @@ add_stylesheet('<link rel="stylesheet" href="'.$board_skin_url.'/style.css">', 0
     </form>
 
     <script>
+    // 파일첨부시 제목과 내용 채우기
+    document.addEventListener('DOMContentLoaded', () => {
+        const fileInput = document.getElementById('bf_file_1');
+        const subjectInput = document.getElementById('wr_subject');
+        const w = document.querySelector('input[name="w"]');
+
+        if (!fileInput || !subjectInput || !w) return;
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files?.[0];
+            if (!file || w.value.trim()) return; // 파일 없거나 수정모드면 종료
+
+            const filename = file.name;
+            subjectInput.value = filename;
+
+            const editor = tinymce?.get('wr_content');
+            if (editor && !editor.getContent().includes(filename)) {
+                editor.setContent(editor.getContent() + `<p>${filename}</p>`);
+            }
+        });
+    });
+    
+    // 작성시 카테고리 자동 쿠키
+    document.addEventListener('DOMContentLoaded', () => {
+        const category = document.getElementById('ca_name');
+        const writeMode = document.querySelector('input[name="w"]');
+        if (!category || !writeMode || writeMode.value.trim() !== '') return;
+
+        // 쿠키에서 이전 선택값 불러오기
+        const match = document.cookie.match(/(?:^|;\s*)ca_name=([^;]+)/);
+        if (match) {
+            const saved = decodeURIComponent(match[1]);
+            if (category.querySelector(`option[value="${saved}"]`)) {
+                category.value = saved;
+            }
+        }
+
+        // 선택 시 쿠키 저장
+        category.addEventListener('change', () => {
+            const value = encodeURIComponent(category.value);
+            document.cookie = `ca_name=${value}; path=/; max-age=31536000`; // 1년 유지
+        });
+    });
+
     <?php if($write_min || $write_max) { ?>
     // 글자수 제한
     var char_min = parseInt(<?php echo $write_min; ?>); // 최소
